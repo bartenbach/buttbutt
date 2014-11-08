@@ -16,33 +16,57 @@ package net.alureon.ircbutt;
         along with this program.  If not, see <http://www.gnu.org/licenses/>
       */
 
+import net.alureon.ircbutt.file.YAMLConfigurationFile;
 import net.alureon.ircbutt.handler.*;
 import net.alureon.ircbutt.listener.ChatListener;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class IRCbutt {
 
 
+    /* Program-related constants */
+    private final String programName = this.getClass().getPackage().getImplementationTitle();
+    private final String programVersion = this.getClass().getPackage().getImplementationVersion();
+    private final String sourceRepository = "https://github.com/proxa/IRCbutt";
+
+    /* Class instantiation */
     private ButtNameResponseHandler buttNameResponseHandler = new ButtNameResponseHandler(this);
     private ButtChatHandler buttChatHandler = new ButtChatHandler();
     private ButtFormatHandler buttFormatHandler = new ButtFormatHandler();
-    private ChatListener chatListener = new ChatListener(this);
+    private CommandHandler commandHandler = new CommandHandler(this);
+    private LoggingHandler loggingHandler = new LoggingHandler();
+
+    /* Logger */
+    public final static Logger log = LoggerFactory.getLogger(IRCbutt.class);
 
 
     public IRCbutt () {
-        Configuration configuration = new Configuration.Builder()
+        /* Create/parse configuration file */
+        YAMLConfigurationFile yamlConfigurationFile = new YAMLConfigurationFile();
+
+        /* Set the bot's configuration variables */
+        Configuration<PircBotX> configuration = new Configuration.Builder<PircBotX>()
                 .setName("buttbutt")
                 .setLogin("buttbutt")
-                .setServerHostname("chat.freenode.net")
+                .setServerHostname("irc.esper.net")
                 .addAutoJoinChannel("#oatpaste")
-                .addListener(chatListener)
+                .setAutoReconnect(true)
+                .setMessageDelay(10L)
+                .setNickservPassword("you think i'd leave this in here?")
+                .setVersion(programVersion)
+                .addListener(new ChatListener(this))
                 .buildConfiguration();
 
+        /* Create the bot with our configuration */
         PircBotX bot = new PircBotX(configuration);
+
+        /* Start the bot */
         try {
             bot.startBot();
         } catch (IOException ex) {
@@ -62,6 +86,22 @@ public class IRCbutt {
 
     public ButtFormatHandler getButtFormatHandler() {
         return this.buttFormatHandler;
+    }
+
+    public String getProgramName() {
+        return this.programName;
+    }
+
+    public String getProgramVersion() {
+        return this.programVersion;
+    }
+
+    public String getSourceRepository() {
+        return this.sourceRepository;
+    }
+
+    public CommandHandler getCommandHandler() {
+        return this.commandHandler;
     }
 
 }

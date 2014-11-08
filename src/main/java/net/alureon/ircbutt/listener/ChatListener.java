@@ -4,7 +4,7 @@ import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.ButtMath;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.pircbotx.hooks.events.MessageEvent;
 
 public class ChatListener extends ListenerAdapter<PircBotX> {
 
@@ -15,10 +15,12 @@ public class ChatListener extends ListenerAdapter<PircBotX> {
     }
 
     @Override
-    public void onGenericMessage(GenericMessageEvent<PircBotX> event) {
+    public void onMessage(MessageEvent<PircBotX> event) {
+        /* Handle a command */
         if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
-            //these are reserved for commands.
+            butt.getCommandHandler().handleButtCommand(event, event.getMessage().split(" "));
         } else {
+        /* Anything that isn't a command */
             boolean reply = ButtMath.isRandomResponseTime();
             String message = event.getMessage();
             if (reply || message.contains("butt")) {

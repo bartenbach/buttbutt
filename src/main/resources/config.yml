@@ -1,0 +1,11 @@
+Bot:
+    Name: buttbutt
+    Login: buttbutt
+    Password:
+    Message-Delay: 10
+Channels:
+    - '#oatpaste'
+    - '##poopheads'
+Server:
+    Hostname: 'irc.esper.net'
+    Auto-Reconnect: true

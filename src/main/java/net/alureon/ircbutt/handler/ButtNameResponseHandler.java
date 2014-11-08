@@ -1,7 +1,8 @@
 package net.alureon.ircbutt.handler;
 
 import net.alureon.ircbutt.IRCbutt;
-import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.pircbotx.PircBotX;
+import org.pircbotx.hooks.events.MessageEvent;
 
 public class ButtNameResponseHandler {
 
@@ -11,7 +12,7 @@ public class ButtNameResponseHandler {
         this.butt = butt;
     }
 
-    public void buttRespond(GenericMessageEvent event) {
+    public void buttRespond(MessageEvent<PircBotX> event) {
         int random = (int) (Math.random()*10);
         switch (random) {
             case 0:
