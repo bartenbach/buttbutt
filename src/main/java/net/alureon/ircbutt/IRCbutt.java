@@ -19,9 +19,12 @@ package net.alureon.ircbutt;
 import net.alureon.ircbutt.file.YAMLConfigurationFile;
 import net.alureon.ircbutt.handler.*;
 import net.alureon.ircbutt.listener.ChatListener;
+import net.alureon.ircbutt.sql.SqlManager;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
+import org.pircbotx.hooks.managers.ListenerManager;
+import org.pircbotx.hooks.managers.ThreadedListenerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,33 +38,32 @@ public class IRCbutt {
     private final String programVersion = this.getClass().getPackage().getImplementationVersion();
     private final String sourceRepository = "https://github.com/proxa/IRCbutt";
 
+    /* Logger */
+    public final static Logger log = LoggerFactory.getLogger(IRCbutt.class);
+
     /* Class instantiation */
     private ButtNameResponseHandler buttNameResponseHandler = new ButtNameResponseHandler(this);
     private ButtChatHandler buttChatHandler = new ButtChatHandler();
     private ButtFormatHandler buttFormatHandler = new ButtFormatHandler();
     private CommandHandler commandHandler = new CommandHandler(this);
     private LoggingHandler loggingHandler = new LoggingHandler();
+    private YAMLConfigurationFile yamlConfigurationFile = new YAMLConfigurationFile();
+    private BotConfigurationHandler botConfigurationHandler = new BotConfigurationHandler(this);
+    private SqlManager sqlManager = new SqlManager(this);
 
-    /* Logger */
-    public final static Logger log = LoggerFactory.getLogger(IRCbutt.class);
 
 
     public IRCbutt () {
-        /* Create/parse configuration file */
-        YAMLConfigurationFile yamlConfigurationFile = new YAMLConfigurationFile();
+        /* Create / parse yaml configuration file */
+        yamlConfigurationFile.createConfigIfNotExists();
+        yamlConfigurationFile.parseConfig();
+
+        /* Add event listeners */
+        ListenerManager<PircBotX> listenerManager = new ThreadedListenerManager<PircBotX>();
+        listenerManager.addListener(new ChatListener(this));
 
         /* Set the bot's configuration variables */
-        Configuration<PircBotX> configuration = new Configuration.Builder<PircBotX>()
-                .setName("buttbutt")
-                .setLogin("buttbutt")
-                .setServerHostname("irc.esper.net")
-                .addAutoJoinChannel("#oatpaste")
-                .setAutoReconnect(true)
-                .setMessageDelay(10L)
-                .setNickservPassword("you think i'd leave this in here?")
-                .setVersion(programVersion)
-                .addListener(new ChatListener(this))
-                .buildConfiguration();
+        Configuration<PircBotX> configuration = botConfigurationHandler.getConfiguration();
 
         /* Create the bot with our configuration */
         PircBotX bot = new PircBotX(configuration);
@@ -102,6 +104,10 @@ public class IRCbutt {
 
     public CommandHandler getCommandHandler() {
         return this.commandHandler;
+    }
+
+    public YAMLConfigurationFile getYamlConfigurationFile() {
+        return this.yamlConfigurationFile;
     }
 
 }

@@ -9,3 +9,11 @@ Channels:
 Server:
     Hostname: 'irc.esper.net'
     Auto-Reconnect: true
+SQL:
+    Username: poop
+    Password:
+    IP:
+    Port:
+    Database:
+    Table-Prefix:
+
