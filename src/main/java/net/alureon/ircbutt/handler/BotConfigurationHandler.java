@@ -20,6 +20,7 @@ public class BotConfigurationHandler {
                 .setAutoReconnect(butt.getYamlConfigurationFile().getServerAutoReconnect())
                 .setMessageDelay(butt.getYamlConfigurationFile().getBotMessageDelay())
                 .setNickservPassword(butt.getYamlConfigurationFile().getBotPassword())
+                .setListenerManager(butt.getListenerManager())
                 .setVersion(butt.getProgramVersion());
         for (String x : butt.getYamlConfigurationFile().getChannelList()) {
             configBuilder.addAutoJoinChannel(x);

@@ -2,6 +2,16 @@ package net.alureon.ircbutt.util;
 
 public class StringUtils {
 
+    public static String arrayToString(String[] args) {
+        StringBuilder sb = new StringBuilder();
+        for (String x : args) {
+            if (!x.isEmpty()) {
+                sb.append(x).append(" ");
+            }
+        }
+        return sb.toString().trim();
+    }
+
     public static String getArgs(String[] args) {
         args[0] = "";
         StringBuilder sb = new StringBuilder();
@@ -10,8 +20,7 @@ public class StringUtils {
                 sb.append(x).append(" ");
             }
         }
-        sb.deleteCharAt(sb.length()-1);
-        return sb.toString();
+        return sb.toString().trim();
     }
 
     public static String concatenateArgs(String[] args) {
@@ -21,8 +30,7 @@ public class StringUtils {
                 sb.append(x).append(" ");
             }
         }
-        sb.deleteCharAt(sb.length()-1);
-        return sb.toString();
+        return sb.toString().trim();
     }
 
     public static String getArgsOverOne(String[] args) {
@@ -34,8 +42,7 @@ public class StringUtils {
                 sb.append(x).append(" ");
             }
         }
-        sb.deleteCharAt(sb.length()-1);
-        return sb.toString();
+        return sb.toString().trim();
     }
 
     public static String concatenateUrlArgs(String[] args) {
@@ -46,8 +53,7 @@ public class StringUtils {
                 sb.append(x).append("+");
             }
         }
-        sb.deleteCharAt(sb.length()-1);
-        return sb.toString();
+        return sb.deleteCharAt(sb.length()-1).toString();
     }
 
 }

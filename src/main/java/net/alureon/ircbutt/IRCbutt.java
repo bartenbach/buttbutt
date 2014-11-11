@@ -1,24 +1,27 @@
 package net.alureon.ircbutt;
 
-      /*
-        Copyright Blake Bartenbach 2014
-        This program is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
+/*
+    Copyright Blake Bartenbach 2014
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-        You should have received a copy of the GNU General Public License
-        along with this program.  If not, see <http://www.gnu.org/licenses/>
-      */
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>
+*/
 
 import net.alureon.ircbutt.file.YAMLConfigurationFile;
 import net.alureon.ircbutt.handler.*;
 import net.alureon.ircbutt.listener.ChatListener;
+import net.alureon.ircbutt.listener.PrivateMessageListener;
+import net.alureon.ircbutt.sql.KnowledgeTable;
+import net.alureon.ircbutt.sql.QuoteGrabTable;
 import net.alureon.ircbutt.sql.SqlManager;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
@@ -39,31 +42,41 @@ public class IRCbutt {
     private final String sourceRepository = "https://github.com/proxa/IRCbutt";
 
     /* Logger */
-    public final static Logger log = LoggerFactory.getLogger(IRCbutt.class);
+    final static Logger log = LoggerFactory.getLogger(IRCbutt.class);
 
     /* Class instantiation */
     private ButtNameResponseHandler buttNameResponseHandler = new ButtNameResponseHandler(this);
     private ButtChatHandler buttChatHandler = new ButtChatHandler();
     private ButtFormatHandler buttFormatHandler = new ButtFormatHandler();
     private CommandHandler commandHandler = new CommandHandler(this);
-    private LoggingHandler loggingHandler = new LoggingHandler();
     private YAMLConfigurationFile yamlConfigurationFile = new YAMLConfigurationFile();
-    private BotConfigurationHandler botConfigurationHandler = new BotConfigurationHandler(this);
     private SqlManager sqlManager = new SqlManager(this);
-
+    private KnowledgeTable knowledgeTable = new KnowledgeTable(this);
+    private QuoteGrabTable quoteGrabTable = new QuoteGrabTable(this);
+    private KnowledgeHandler knowledgeHandler = new KnowledgeHandler(this);
+    private ListenerManager<PircBotX> listenerManager = new ThreadedListenerManager<PircBotX>();
+    private MessageHandler messageHandler = new MessageHandler(this);
 
 
     public IRCbutt () {
+        /* Log initiation and current logging level */
+        log.info("Starting IRCButt version " + programVersion);
+        LoggingHandler.logCurrentLogLevel();
+
         /* Create / parse yaml configuration file */
         yamlConfigurationFile.createConfigIfNotExists();
         yamlConfigurationFile.parseConfig();
 
+        /* Connect to SQL database */
+        sqlManager.connectToDatabase();
+        sqlManager.createTablesIfNotExists();
+
         /* Add event listeners */
-        ListenerManager<PircBotX> listenerManager = new ThreadedListenerManager<PircBotX>();
         listenerManager.addListener(new ChatListener(this));
+        listenerManager.addListener(new PrivateMessageListener(this));
 
         /* Set the bot's configuration variables */
-        Configuration<PircBotX> configuration = botConfigurationHandler.getConfiguration();
+        Configuration<PircBotX> configuration = new BotConfigurationHandler(this).getConfiguration();
 
         /* Create the bot with our configuration */
         PircBotX bot = new PircBotX(configuration);
@@ -71,10 +84,8 @@ public class IRCbutt {
         /* Start the bot */
         try {
             bot.startBot();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (IrcException ex) {
-            ex.printStackTrace();
+        } catch (IOException | IrcException ex) {
+            log.error("Unable to start bot.  StackTrace: ", ex);
         }
     }
 
@@ -108,6 +119,26 @@ public class IRCbutt {
 
     public YAMLConfigurationFile getYamlConfigurationFile() {
         return this.yamlConfigurationFile;
+    }
+
+    public SqlManager getSqlManager() {
+        return this.sqlManager;
+    }
+
+    public KnowledgeTable getKnowledgeTable() {
+        return this.knowledgeTable;
+    }
+
+    public KnowledgeHandler getKnowledgeHandler() {
+        return this.knowledgeHandler;
+    }
+
+    public ListenerManager<PircBotX> getListenerManager() {
+        return this.listenerManager;
+    }
+
+    public MessageHandler getMessageHandler() {
+        return this.messageHandler;
     }
 
 }

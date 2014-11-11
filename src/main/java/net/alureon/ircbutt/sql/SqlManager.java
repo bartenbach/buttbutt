@@ -1,50 +1,50 @@
 package net.alureon.ircbutt.sql;
 
 import net.alureon.ircbutt.IRCbutt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-
-import static net.alureon.ircbutt.IRCbutt.log;
 
 public class SqlManager {
 
 
     private Connection connection;
-    private String username;
-    private String password;
-    private String ip;
-    private String port;
-    private String tablePrefix;
-    private String database;
+    private IRCbutt butt;
+    final static Logger log = LoggerFactory.getLogger(SqlManager.class);
 
 
     public SqlManager(IRCbutt butt) {
-        this.ip = butt.getYamlConfigurationFile().getSqlIp();
-        this.username = butt.getYamlConfigurationFile().getSqlUsername();
-        this.password = butt.getYamlConfigurationFile().getSqlPassword();
-        this.port = butt.getYamlConfigurationFile().getSqlPort();
-        this.tablePrefix = butt.getYamlConfigurationFile().getSqlTablePrefix();
-        this.database = butt.getYamlConfigurationFile().getSqlDatabase();
+        this.butt = butt;
     }
 
     public void connectToDatabase() {
-        String url = "jdbc:mysql://" + this.ip + ":" + this.port + "/" + this.database;
+        String ip = butt.getYamlConfigurationFile().getSqlIp();
+        String username = butt.getYamlConfigurationFile().getSqlUsername();
+        String password = butt.getYamlConfigurationFile().getSqlPassword();
+        int port = butt.getYamlConfigurationFile().getSqlPort();
+        String database = butt.getYamlConfigurationFile().getSqlDatabase();
+        String url = "jdbc:mysql://" + ip + ":" + port + "/" + database;
+        log.debug(url);
         try {
-            this.connection = DriverManager.getConnection(url, this.username, this.password);
+            this.connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException ex) {
             log.error("Failed to establish SQL connection: ", ex);
         }
+        log.info("[SQL backend connected]");
     }
-    public void createTablesIfNeeded() {
-        sqlUpdate("CREATE TABLE IF NOT EXISTS `" + this.tablePrefix + "_quotes` " +
+
+    public void createTablesIfNotExists() {
+        sqlUpdate("CREATE TABLE IF NOT EXISTS `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` " +
                 "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `user` VARCHAR(16) NOT NULL," +
-                "`quote` VARCHAR(100) NOT NULL, `grabbed_by` VARCHAR(16) NOT NULL," +
+                "`quote` VARCHAR(200) NOT NULL, `grabbed_by` VARCHAR(16) NOT NULL," +
                 "`timestamp` DATETIME NOT NULL) ENGINE=MyISAM");
-        sqlUpdate("CREATE TABLE IF NOT EXISTS `" + this.tablePrefix + "_knowledge` " +
+        sqlUpdate("CREATE TABLE IF NOT EXISTS `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` " +
                 "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `item` VARCHAR(32) NOT NULL UNIQUE," +
                 "`data` VARCHAR(200) NOT NULL, `added_by` VARCHAR(16) NOT NULL," +
                 "`timestamp` DATETIME NOT NULL) ENGINE=MyISAM");
     }
+
     public boolean sqlUpdate(String sql) {
         if (this.isConnected()) {
             try {
@@ -60,18 +60,18 @@ public class SqlManager {
         }
         return false;
     }
+
     public void reconnect() {
         log.error("Disconnected from SQL Database. Reconnecting...");
         if (!this.isConnected()) {
             this.connectToDatabase();
         }
     }
-    public String getTablePrefix() {
-        return this.tablePrefix;
-    }
+
     public Connection getConnection() {
         return this.connection;
     }
+
     public PreparedStatement getPreparedStatement(String query) {
         try {
             return this.connection.prepareStatement(query);
@@ -81,6 +81,7 @@ public class SqlManager {
             return null;
         }
     }
+
     public void prepareStatement(PreparedStatement ps, Object ... objects) {
         try {
             for (int i = 0 ; i < objects.length ; i++) {
@@ -96,6 +97,7 @@ public class SqlManager {
             ex.printStackTrace();
         }
     }
+
     public ResultSet getResultSet(PreparedStatement ps) {
         try {
             return ps.executeQuery();
@@ -105,6 +107,7 @@ public class SqlManager {
             return null;
         }
     }
+
     public boolean isConnected() {
         try {
             return connection.isValid(10);
@@ -113,4 +116,5 @@ public class SqlManager {
             return isConnected();
         }
     }
+
 }

@@ -1,8 +1,8 @@
 package net.alureon.ircbutt.handler;
 
 import net.alureon.ircbutt.IRCbutt;
-import org.pircbotx.PircBotX;
-import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.Channel;
+import org.pircbotx.User;
 
 public class ButtNameResponseHandler {
 
@@ -12,42 +12,42 @@ public class ButtNameResponseHandler {
         this.butt = butt;
     }
 
-    public void buttRespond(MessageEvent<PircBotX> event) {
+    public void buttRespond(Channel channel, User user) {
         int random = (int) (Math.random()*10);
         switch (random) {
             case 0:
-                butt.getButtChatHandler().buttChat(event, "yes butt here");
+                butt.getButtChatHandler().buttChat(channel, "yes butt here");
                 break;
             case 1:
-                butt.getButtChatHandler().buttChat(event, "butt never was too great at mc");
+                butt.getButtChatHandler().buttChat(channel, "butt never was too great at mc");
                 break;
             case 2:
-                butt.getButtChatHandler().buttChat(event, "butt never eatin blazin wing again");
+                butt.getButtChatHandler().buttChat(channel, "butt never eatin blazin wing again...whew");
                 break;
             case 3:
-                butt.getButtChatHandler().buttChat(event, "tryin to code....butt not havin good luck here");
+                butt.getButtChatHandler().buttChat(channel, "tryin to code....butt not havin good luck here...");
                 break;
             case 4:
-                butt.getButtChatHandler().buttChat(event, "hello " + event.getUser().getNick().toLowerCase());
-                butt.getButtChatHandler().buttChat(event, "how r u?");
+                butt.getButtChatHandler().buttChat(channel, "hello " + user.getNick().toLowerCase());
+                butt.getButtChatHandler().buttChat(channel, "how r u?");
                 break;
             case 5:
-                butt.getButtChatHandler().buttChat(event, "how r u " + event.getUser().getNick().toLowerCase());
+                butt.getButtChatHandler().buttChat(channel, "how r u " + user.getNick().toLowerCase());
                 break;
             case 6:
-                butt.getButtChatHandler().buttChat(event, "butt have very fast connection :)");
+                butt.getButtChatHandler().buttChat(channel, "butt have good net connection hbu");
                 break;
             case 7:
-                butt.getButtChatHandler().buttChat(event, "hey mate");
+                butt.getButtChatHandler().buttChat(channel, "hey mate");
                 break;
             case 8:
-                butt.getButtChatHandler().buttChat(event, "butt poopin brb k");
+                butt.getButtChatHandler().buttChat(channel, "butt poopin brb k");
                 break;
             case 9:
-                butt.getButtChatHandler().buttChat(event, "hey");
+                butt.getButtChatHandler().buttChat(channel, "hey");
                 break;
             case 10:
-                butt.getButtChatHandler().buttChat(event, "butt use to play mc a lot");
+                butt.getButtChatHandler().buttChat(channel, "butt use to play mc a lot not no more tho");
                 break;
             default:
                 break;

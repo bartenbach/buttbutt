@@ -1,17 +1,18 @@
 package net.alureon.ircbutt.file;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
 import java.util.List;
 import java.util.Map;
 
-import static net.alureon.ircbutt.IRCbutt.log;
-
 public class YAMLConfigurationFile {
 
 
     private final static File config = new File("config.yml");
+    final static Logger log = LoggerFactory.getLogger(YAMLConfigurationFile.class);
     private String botName;
     private String botLogin;
     private String botPassword;
@@ -22,7 +23,7 @@ public class YAMLConfigurationFile {
     private String sqlUsername;
     private String sqlPassword;
     private String sqlIp;
-    private String sqlPort;
+    private int sqlPort;
     private String sqlDatabase;
     private String sqlTablePrefix;
 
@@ -31,6 +32,7 @@ public class YAMLConfigurationFile {
         if (!config.exists()) {
             try {
                 exportResource("/config.yml");
+                log.info("Created new config.yml file in the current directory.");
             } catch (Exception ex) {
                 log.error("Unable to copy configuration file: ", ex);
             }
@@ -56,13 +58,14 @@ public class YAMLConfigurationFile {
             this.sqlUsername = (String) sqlSettings.get("Username");
             this.sqlPassword = (String) sqlSettings.get("Password");
             this.sqlIp = (String) sqlSettings.get("IP");
-            this.sqlPort = (String) sqlSettings.get("Port");
+            this.sqlPort = Integer.parseInt(String.valueOf(sqlSettings.get("Port")));
             this.sqlDatabase = (String) sqlSettings.get("Database");
             this.sqlTablePrefix = (String) sqlSettings.get("Table-Prefix");
         } catch (FileNotFoundException ex) {
             log.error("config.yml not found!", ex);
             System.exit(1);
         }
+        log.info("[Configuration file loaded]");
     }
 
     private void exportResource(String resourceName) throws Exception {
@@ -133,7 +136,7 @@ public class YAMLConfigurationFile {
         return sqlIp;
     }
 
-    public String getSqlPort() {
+    public int getSqlPort() {
         return sqlPort;
     }
 
