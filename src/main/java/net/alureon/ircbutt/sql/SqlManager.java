@@ -47,12 +47,11 @@ public class SqlManager {
 
     public boolean sqlUpdate(String sql) {
         if (this.isConnected()) {
-            try {
-                PreparedStatement ps = connection.prepareStatement(sql);
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.executeUpdate();
                 return true;
             } catch (SQLException ex) {
-                log.error("Unable to update SQL database.");
+                log.error("Unable to update SQL database. Stacktrace: ", ex);
             }
         } else {
             reconnect();
@@ -62,7 +61,7 @@ public class SqlManager {
     }
 
     public void reconnect() {
-        log.error("Disconnected from SQL Database. Reconnecting...");
+        log.warn("Disconnected from SQL Database. Reconnecting...");
         if (!this.isConnected()) {
             this.connectToDatabase();
         }
@@ -76,8 +75,7 @@ public class SqlManager {
         try {
             return this.connection.prepareStatement(query);
         } catch (SQLException ex) {
-            log.error("Unable to prepare SQL statement. Stacktrace:");
-            ex.printStackTrace();
+            log.error("Unable to prepare SQL statement. Stacktrace: ", ex);
             return null;
         }
     }
@@ -93,17 +91,15 @@ public class SqlManager {
                 i++;
             }
         } catch (SQLException ex) {
-            log.error("Failed to set parameter in PreparedStatement. StackTrace:");
-            ex.printStackTrace();
+            log.error("Failed to set parameter in PreparedStatement. StackTrace: ", ex);
         }
     }
 
     public ResultSet getResultSet(PreparedStatement ps) {
         try {
             return ps.executeQuery();
-        } catch (SQLException e) {
-            log.error("Failed to execute query from PreparedStatement. StackTrace:");
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            log.error("Failed to execute query from PreparedStatement. StackTrace: ", ex);
             return null;
         }
     }
@@ -112,6 +108,7 @@ public class SqlManager {
         try {
             return connection.isValid(10);
         } catch (SQLException ex) {
+            log.warn("Disconnected from SQL database, attempting reconnection...", ex);
             reconnect();
             return isConnected();
         }

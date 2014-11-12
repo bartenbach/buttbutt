@@ -11,6 +11,8 @@ import org.pircbotx.hooks.events.MessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
+
 public class CommandHandler {
 
     private IRCbutt butt;
@@ -35,117 +37,111 @@ public class CommandHandler {
                 String link = "http://www.google.com/search?q=" + StringUtils.concatenateUrlArgs(cmd);
                 butt.getButtChatHandler().buttChat(channel, link);
             }
-/*        } else if (cmd[0].equals("!grab")){
+        } else if (cmd[0].equals("!grab")){
             if (cmd.length == 2) {
                 if (cmd[1].equalsIgnoreCase(event.getUser().getNick())) {
-                    butt.getButtChatHandler().buttChat(event, "You like grabbing yourself, " + event.getUser().getNick() + "?");
+                    butt.getButtChatHandler().buttChat(channel, "You like grabbing yourself, " + event.getUser().getNick() + "?");
                 } else {
                     if (butt.getChatLoggingManager().hasQuoteFrom(cmd[1])) {
                         String quote = butt.getChatLoggingManager().getLastQuoteFrom(cmd[1]);
                         try {
                             if (!butt.getQuoteGrabTable().quoteAlreadyExists(cmd[1], quote)) {
-                                butt.getQuoteGrabTable().addQuote(cmd[1], quote, sender.getName());
-                                butt.getButtChatHandler().buttChat(sender.getName() + ": Tada!", 30L);
+                                butt.getQuoteGrabTable().addQuote(cmd[1], quote, nick);
+                                butt.getButtChatHandler().buttChat(channel, nick + ": Tada!");
                             } else {
-                                butt.getLogger().info("Attempted to add duplicate quote - not adding duplicate.");
+                                log.info("Attempted to add duplicate quote - not adding duplicate.");
                             }
                         } catch (SQLException ex) {
-                            System.out.println("SQL Exception encountered.");
-                            ex.printStackTrace();
+                            log.error("Exception accessing database: ", ex);
                         }
                     } else {
-                        butt.getButtChatHandler().buttChat(sender.getName() + ": i don't believe I've met " + cmd[1], 30L);
+                        butt.getButtChatHandler().buttChat(channel, "i don't believe I've met " + cmd[1]);
                     }
                 }
             } else {
-                butt.getButtChatHandler().buttMe("!grab <player>");
+                butt.getButtChatHandler().buttPM(user, "!grab <player>");
             }
         } else if (cmd[0].equals("!rq")) {
             if (cmd.length == 1) {
                 String quote = butt.getQuoteGrabTable().getRandomQuote();
                 if (quote != null) {
-                    butt.getButtChatHandler().buttMe(quote);
+                    butt.getButtChatHandler().buttMe(channel, quote);
                 } else {
-                    butt.getButtChatHandler().buttChat("Error: couldn't retrieve any quotes!");
+                    butt.getButtChatHandler().buttPM(user, "Error: couldn't retrieve any quotes!");
                 }
             } else {
                 try {
                     String quote = butt.getQuoteGrabTable().getRandomQuoteFromPlayer(cmd[1]);
                     if (quote != null) {
-                        butt.getButtChatHandler().buttMe(quote);
+                        butt.getButtChatHandler().buttMe(channel, quote);
                     } else {
-                        butt.getButtChatHandler().buttChat("butt don't know " + cmd[1]);
+                        butt.getButtChatHandler().buttPM(user, "butt don't know " + cmd[1]);
                     }
                 } catch (SQLException ex) {
-                    butt.getButtChatHandler().buttChat("error - butt find nothing... :(");
-                    ex.printStackTrace();
+                    log.error("Exception accessing database: ", ex);
                 }
             }
         } else if (cmd[0].equals("!q")) {
             if (cmd.length == 1) {
-                butt.getButtChatHandler().buttMe("!q <player>");
+                butt.getButtChatHandler().buttPM(user, "!q <player>");
             } else {
                 try {
                     String quote = butt.getQuoteGrabTable().getLastQuoteFromPlayer(cmd[1]);
                     if (quote != null) {
-                        butt.getButtChatHandler().buttMe(quote);
+                        butt.getButtChatHandler().buttMe(channel, quote);
                     } else {
-                        butt.getButtChatHandler().buttChat("butt don't know " + cmd[1]);
+                        butt.getButtChatHandler().buttPM(user, "butt don't know " + cmd[1]);
                     }
                 } catch (SQLException ex) {
-                    butt.getButtChatHandler().buttChat("error - butt find nothing... :(");
-                    ex.printStackTrace();
+                    log.error("Exception accessing database: ", ex);
                 }
             }
         } else if (cmd[0].equals("!qinfo")) {
             if (cmd.length == 1) {
-                butt.getButtChatHandler().buttMe("!q <id>");
+                butt.getButtChatHandler().buttPM(user, "!q <id>");
             } else {
                 try {
                     String[] quote = butt.getQuoteGrabTable().getQuoteInfo(Integer.parseInt(cmd[1]));
                     if (quote != null) {
-                        butt.getButtChatHandler().buttMe(quote[0]);
-                        butt.getButtChatHandler().buttMe(quote[1]);
+                        butt.getButtChatHandler().buttMe(channel, quote[0]);
+                        butt.getButtChatHandler().buttMe(channel, quote[1]);
                     } else {
-                        butt.getButtChatHandler().buttChat("no quote record with id of " + ChatColor.DARK_RED + cmd[1] + ChatColor.RESET);
+                        butt.getButtChatHandler().buttPM(user, "no quote record with id of " + Colors.RED + cmd[1]);
                     }
                 } catch (SQLException ex) {
-                    butt.getButtChatHandler().buttChat("error - butt find nothing... :(");
-                    ex.printStackTrace();
+                    log.error("Exception accessing database: ", ex);
                 }
             }
         } else if (cmd[0].equals("!qsay")) {
             if (cmd.length == 1) {
-                butt.getButtChatHandler().buttMe("!qsay <id>");
+                butt.getButtChatHandler().buttPM(user, "!qsay <id>");
             } else {
                 try {
                     String quote = butt.getQuoteGrabTable().getQuoteById(Integer.parseInt(cmd[1]));
                     if (quote != null) {
-                        butt.getButtChatHandler().buttMe(quote);
+                        butt.getButtChatHandler().buttMe(channel, quote);
                     } else {
-                        butt.getButtChatHandler().buttChat("no quote record with id of " + ChatColor.DARK_RED + cmd[1] + ChatColor.RESET);
+                        butt.getButtChatHandler().buttPM(user, "no quote record with id of " + Colors.RED + cmd[1]);
                     }
                 } catch (SQLException ex) {
-                    butt.getButtChatHandler().buttChat("error - butt find nothing... :(");
-                    ex.printStackTrace();
+                    log.error("Exception accessing database: ", ex);
                 }
             }
         } else if (cmd[0].equals("!qfind") || cmd[0].equals("!qsearch")) {
             if (cmd.length == 1) {
-                butt.getButtChatHandler().buttMe("!qfind <string>");
+                butt.getButtChatHandler().buttPM(user, "!qfind <string>");
             } else {
                 try {
                     String quote = butt.getQuoteGrabTable().findQuote(StringUtils.getArgs(cmd));
                     if (quote != null) {
-                        butt.getButtChatHandler().buttMe(quote);
+                        butt.getButtChatHandler().buttMe(channel, quote);
                     } else {
-                        butt.getButtChatHandler().buttChat("sry butt find noting");
+                        butt.getButtChatHandler().buttPM(user, "sry butt find noting");
                     }
                 } catch (SQLException ex) {
-                    butt.getButtChatHandler().buttChat("error - butt find nothing... :(");
-                    ex.printStackTrace();
+                    log.error("Exception accessing database: ", ex);
                 }
-            }*/
+            }
         } else if (cmd[0].equals("!yt")) {
             String link = "http://www.youtube.com/results?search_query=" + StringUtils.concatenateUrlArgs(cmd);
             butt.getButtChatHandler().buttMe(channel, link);
@@ -232,8 +228,12 @@ public class CommandHandler {
             butt.getButtChatHandler().buttChat(channel, random + " is a random number");
         } else if (cmd[0].equals("!learn")) {
             if (channel.isOp(user)) {
-                butt.getKnowledgeHandler().addKnowledge(nick, cmd);
-                butt.getButtChatHandler().buttHighlightChat(event, "ok got it!");
+                boolean added = butt.getKnowledgeHandler().addKnowledge(nick, cmd);
+                if (added) {
+                    butt.getButtChatHandler().buttHighlightChat(event, "ok got it!");
+                } else {
+                    butt.getButtChatHandler().buttPM(user, "either ur format sux or i already kno wat that is");
+                }
             }
         } else if (cmd[0].equals("!forget")) {
             if (channel.isOp(user)) {
@@ -247,9 +247,8 @@ public class CommandHandler {
                log.trace(event.getUser().getNick() + " is not an IRC op");
             }
         } else if (cmd[0].startsWith("~")) {
-            cmd[0] = cmd[0].substring(1, cmd[0].length());
-            log.debug(cmd[0]);
-            String info = butt.getKnowledgeHandler().getKnowledge(cmd);
+            cmd[0] = cmd[0].substring(1, cmd[0].length()); // remove the tilde
+            String info = butt.getKnowledgeHandler().getKnowledge(StringUtils.arrayToString(cmd));
             if (info != null) {
                 butt.getButtChatHandler().buttChat(channel, info);
             } else {

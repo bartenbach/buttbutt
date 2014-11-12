@@ -22,6 +22,7 @@ public class MessageHandler {
             butt.getCommandHandler().handleButtCommand(event, event.getMessage().split(" "));
         } else {
         /* Anything that isn't a command */
+            butt.getChatLoggingManager().logMessage(event.getUser().getNick(), event.getMessage());
             boolean reply = ButtMath.isRandomResponseTime();
             String message = event.getMessage();
             if (reply || message.contains("butt")) {

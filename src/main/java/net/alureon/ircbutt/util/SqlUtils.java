@@ -30,4 +30,14 @@ public class SqlUtils {
         }
     }
 
+    public static void close(PreparedStatement ps) {
+        if (ps != null) {
+            try {
+                ps.close();
+            } catch (SQLException ex) {
+                log.warn("PreparedStatement could not be closed. ", ex);
+            }
+        }
+    }
+
 }

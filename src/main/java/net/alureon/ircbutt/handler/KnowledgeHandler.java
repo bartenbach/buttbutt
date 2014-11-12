@@ -5,8 +5,6 @@ import net.alureon.ircbutt.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.SQLException;
-
 public class KnowledgeHandler {
 
 
@@ -18,27 +16,26 @@ public class KnowledgeHandler {
         this.butt = butt;
     }
 
-    public void addKnowledge(String commandSender, String[] data) {
+    public boolean addKnowledge(String commandSender, String[] data) {
         if (data[1].endsWith(":") && data.length > 2) {
             String command = StringUtils.getArgs(data);
             String[] split = command.split(":");
             String item = split[0].substring(0, split[0].length()).trim();  // @TESTING - trimming initial whitespace
-            String information = StringUtils.getArgsOverOne(data);
-            log.debug("Item: " + item);
-            log.debug("Data: " + information);
-            try {
+            if (getKnowledge(item) == null) {
+                String information = StringUtils.getArgsOverOne(data);
+                log.trace("Item: " + item);
+                log.trace("Data: " + information);
                 butt.getKnowledgeTable().insertKnowledge(item, information, commandSender);
-            } catch (SQLException ex) {
-                log.error("Failed to add knowledge to database.  Stacktrace: ", ex);
+                return true;
             }
         }
+        return false;
     }
 
-    public String getKnowledge(String[] item) {
-        if (item.length > 0) {
-            String itemName = StringUtils.arrayToString(item);
-            log.debug("Item: " + itemName);
-            return butt.getKnowledgeTable().queryKnowledge(itemName);
+    public String getKnowledge(String item) {
+        if (!item.isEmpty()) {
+            log.trace("Item: " + item);
+            return butt.getKnowledgeTable().queryKnowledge(item);
         }
         return null;
     }
