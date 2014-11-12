@@ -18,7 +18,7 @@ public class LoggingHandler {
         System.setProperty(SimpleLogger.SHOW_THREAD_NAME_KEY, "false");
         System.setProperty(SimpleLogger.SHOW_LOG_NAME_KEY, "false");
         System.setProperty(SimpleLogger.WARN_LEVEL_STRING_KEY, "WARNING");
-        /* If I log to file, SimpleLogger no longer logs to the console */
+        /* If I log to file, SimpleLogger no longer logs to the console... */
         //System.setProperty(SimpleLogger.LOG_FILE_KEY, "bot.log");
         log = LoggerFactory.getLogger(LoggingHandler.class);
     }
