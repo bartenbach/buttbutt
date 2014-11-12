@@ -57,6 +57,8 @@ public class IRCbutt {
     private ListenerManager<PircBotX> listenerManager = new ThreadedListenerManager<PircBotX>();
     private MessageHandler messageHandler = new MessageHandler(this);
     private ChatLoggingManager chatLoggingManager = new ChatLoggingManager();
+    private QuoteGrabHandler quoteGrabHandler = new QuoteGrabHandler(this);
+    public DiceHandler diceHandler = new DiceHandler(this);
 
 
     public IRCbutt () {
@@ -149,5 +151,9 @@ public class IRCbutt {
     public QuoteGrabTable getQuoteGrabTable() {
         return this.quoteGrabTable;
     }
+
+    public QuoteGrabHandler getQuoteGrabHandler() { return this.quoteGrabHandler; }
+
+    public DiceHandler getDiceHandler() { return this.diceHandler; }
 
 }

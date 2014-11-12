@@ -1,4 +1,5 @@
-package net.alureon.ircbutt.util;
+package net.alureon.ircbutt;
 
 public class IRCbuttTest {
+
 }
