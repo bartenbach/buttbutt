@@ -21,14 +21,15 @@ public class QuoteGrabHandler {
         this.butt = butt;
     }
 
-    public void handleQuoteGrab(String[] cmd, Channel channel, User user, String nick) {
-        if (cmd[0].equals("!grab")){
+    public void handleQuoteGrabs(String[] cmd, Channel channel, User user, String nick) {
+        if (cmd[0].equals("grab")){
             if (cmd.length == 2) {
                 if (cmd[1].equalsIgnoreCase(nick)) {
                     butt.getButtChatHandler().buttChat(channel, "You like grabbing yourself, " + nick + "?");
                 } else {
                     if (butt.getChatLoggingManager().hasQuoteFrom(cmd[1])) {
                         String quote = butt.getChatLoggingManager().getLastQuoteFrom(cmd[1]);
+                        log.trace("Quote grabbed: " + quote);
                         try {
                             if (!butt.getQuoteGrabTable().quoteAlreadyExists(cmd[1], quote)) {
                                 butt.getQuoteGrabTable().addQuote(cmd[1], quote, nick);
@@ -46,7 +47,7 @@ public class QuoteGrabHandler {
             } else {
                 butt.getButtChatHandler().buttPM(user, "!grab <player>");
             }
-        } else if (cmd[0].equals("!rq")) {
+        } else if (cmd[0].equals("rq")) {
             if (cmd.length == 1) {
                 String quote = butt.getQuoteGrabTable().getRandomQuote();
                 if (quote != null) {
@@ -66,7 +67,7 @@ public class QuoteGrabHandler {
                     log.error("Exception accessing database: ", ex);
                 }
             }
-        } else if (cmd[0].equals("!q")) {
+        } else if (cmd[0].equals("q")) {
             if (cmd.length == 1) {
                 butt.getButtChatHandler().buttPM(user, "!q <player>");
             } else {
@@ -81,7 +82,7 @@ public class QuoteGrabHandler {
                     log.error("Exception accessing database: ", ex);
                 }
             }
-        } else if (cmd[0].equals("!qinfo")) {
+        } else if (cmd[0].equals("qinfo")) {
             if (cmd.length == 1) {
                 butt.getButtChatHandler().buttPM(user, "!q <id>");
             } else {
@@ -97,7 +98,7 @@ public class QuoteGrabHandler {
                     log.error("Exception accessing database: ", ex);
                 }
             }
-        } else if (cmd[0].equals("!qsay")) {
+        } else if (cmd[0].equals("qsay")) {
             if (cmd.length == 1) {
                 butt.getButtChatHandler().buttPM(user, "!qsay <id>");
             } else {
@@ -112,7 +113,7 @@ public class QuoteGrabHandler {
                     log.error("Exception accessing database: ", ex);
                 }
             }
-        } else if (cmd[0].equals("!qfind") || cmd[0].equals("!qsearch")) {
+        } else if (cmd[0].equals("qfind") || cmd[0].equals("qsearch")) {
             if (cmd.length == 1) {
                 butt.getButtChatHandler().buttPM(user, "!qfind <string>");
             } else {

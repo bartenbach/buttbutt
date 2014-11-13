@@ -19,9 +19,9 @@ public class KnowledgeHandler {
     }
 
     public void handleKnowledge(String[] cmd, Channel channel, User user, String nick) {
-        if (cmd[0].equals("!learn")) {
+        if (cmd[0].equals("learn")) {
             if (channel.isOp(user)) {
-                boolean added = butt.getKnowledgeHandler().addKnowledge(nick, cmd);
+                boolean added = addKnowledge(nick, cmd);
                 if (added) {
                     butt.getButtChatHandler().buttChat(channel, nick + ": ok got it!");
                 } else {
@@ -29,9 +29,9 @@ public class KnowledgeHandler {
                     butt.getButtChatHandler().buttPM(user, "either ur format sux or i already kno wat that is");
                 }
             }
-        } else if (cmd[0].equals("!forget")) {
+        } else if (cmd[0].equals("forget")) {
             if (channel.isOp(user)) {
-                boolean success = butt.getKnowledgeHandler().removeKnowledge(cmd);
+                boolean success = removeKnowledge(cmd);
                 if (success) {
                     butt.getButtChatHandler().buttChat(channel, "ok butt wont member that no more");
                 } else {
@@ -41,8 +41,8 @@ public class KnowledgeHandler {
                 log.trace(nick + " is not a channel op");
             }
         } else if (cmd[0].startsWith("~")) {
-            cmd[0] = cmd[0].substring(1, cmd[0].length()); // remove the tilde
-            String info = butt.getKnowledgeHandler().getKnowledge(StringUtils.arrayToString(cmd));
+            cmd[0] = cmd[0].replaceFirst("~", "");
+            String info = getKnowledge(StringUtils.arrayToString(cmd));
             if (info != null) {
                 butt.getButtChatHandler().buttChat(channel, info);
             } else {
@@ -55,7 +55,7 @@ public class KnowledgeHandler {
         if (data[1].endsWith(":") && data.length > 2) {
             String command = StringUtils.getArgs(data);
             String[] split = command.split(":");
-            String item = split[0].substring(0, split[0].length()).trim();  // @TESTING - trimming initial whitespace
+            String item = split[0].substring(0, split[0].length()).trim();
             if (getKnowledge(item) == null) {
                 String information = StringUtils.getArgsOverOne(data);
                 log.trace("Item: " + item);

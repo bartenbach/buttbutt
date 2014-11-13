@@ -25,7 +25,7 @@ dependencies {
 }
 
 sourceCompatibility = 1.7
-version = '0.0.4-indev'
+version = '0.0.5-indev'
 
 jar {
   dependsOn configurations.runtime

@@ -84,11 +84,12 @@ public class SqlManager {
         try {
             for (int i = 0 ; i < objects.length ; i++) {
                 if (objects[i] instanceof String) {
+                    log.trace("Setting string: " + i + " " + objects[i]);
                     ps.setString((i+1), (String) objects[i]);
                 } else {
+                    log.trace("Setting an int: " + i + " " + objects[i]);
                     ps.setInt((i+1), Integer.parseInt(String.valueOf(objects[i])));
                 }
-                i++;
             }
         } catch (SQLException ex) {
             log.error("Failed to set parameter in PreparedStatement. StackTrace: ", ex);

@@ -21,7 +21,7 @@ public class QuoteGrabTable {
         this.butt = butt;
     }
 
-    public void addQuote(String playerName, String quote, String grabber) {
+    public void addQuote(String nick, String quote, String grabber) {
         if (butt.getSqlManager().isConnected()) {
             java.util.Date date = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -29,7 +29,8 @@ public class QuoteGrabTable {
             String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` (user,quote,grabbed_by,timestamp) VALUES(?,?,?,?)";
             PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update);
             if (ps != null) {
-                Object[] objects = { playerName, quote, grabber, timestamp };
+                log.trace(nick + quote + grabber + timestamp);
+                Object[] objects = { nick, quote, grabber, timestamp };
                 butt.getSqlManager().prepareStatement(ps, objects);
                 try {
                     ps.executeUpdate();
@@ -39,7 +40,7 @@ public class QuoteGrabTable {
             } // null PreparedStatement is handled by getPreparedStatement();
         } else {
             butt.getSqlManager().reconnect();
-            addQuote(playerName, quote, grabber);
+            addQuote(nick, quote, grabber);
         }
     }
 
@@ -104,7 +105,7 @@ public class QuoteGrabTable {
             PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
             ps.setString(1, "%" + search + "%");
             ResultSet rs = ps.executeQuery();
-//TODO this could certainly return more than one item
+            //TODO this could certainly return more than one item
             if (rs.next()) {
                 int id = rs.getInt("id");
                 String user = rs.getString("user");
