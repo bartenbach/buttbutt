@@ -10,11 +10,11 @@ public class LoggingHandler {
     static Logger log;
 
 
-    public LoggingHandler() {
+    public LoggingHandler(String loglevel) {
         System.setProperty(SimpleLogger.SHOW_DATE_TIME_KEY, "true");
         System.setProperty(SimpleLogger.LEVEL_IN_BRACKETS_KEY, "true");
         System.setProperty(SimpleLogger.DATE_TIME_FORMAT_KEY, "[MM/dd/yy HH:mm]");
-        System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE");
+        System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, loglevel);
         System.setProperty(SimpleLogger.SHOW_THREAD_NAME_KEY, "false");
         System.setProperty(SimpleLogger.SHOW_LOG_NAME_KEY, "false");
         System.setProperty(SimpleLogger.WARN_LEVEL_STRING_KEY, "WARNING");

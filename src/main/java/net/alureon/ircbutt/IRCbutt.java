@@ -1,6 +1,6 @@
 package net.alureon.ircbutt;
 
-/*
+/**
     Copyright Blake Bartenbach 2014
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@ package net.alureon.ircbutt;
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
-*/
+**/
 
 import net.alureon.ircbutt.file.YAMLConfigurationFile;
 import net.alureon.ircbutt.handler.*;
@@ -58,14 +58,10 @@ public class IRCbutt {
     private MessageHandler messageHandler = new MessageHandler(this);
     private ChatLoggingManager chatLoggingManager = new ChatLoggingManager();
     private QuoteGrabHandler quoteGrabHandler = new QuoteGrabHandler(this);
-    public DiceHandler diceHandler = new DiceHandler(this);
+    private DiceHandler diceHandler = new DiceHandler(this);
 
 
     public IRCbutt () {
-        /* Log initiation and current logging level */
-        log.info("Starting IRCButt version " + programVersion);
-        LoggingHandler.logCurrentLogLevel();
-
         /* Create / parse yaml configuration file */
         yamlConfigurationFile.createConfigIfNotExists();
         yamlConfigurationFile.parseConfig();
@@ -73,6 +69,12 @@ public class IRCbutt {
         /* Connect to SQL database */
         sqlManager.connectToDatabase();
         sqlManager.createTablesIfNotExists();
+    }
+
+    public void start() {
+        /* Log initiation and current logging level */
+        log.info("Starting IRCButt version " + programVersion);
+        LoggingHandler.logCurrentLogLevel();
 
         /* Add event listeners */
         listenerManager.addListener(new ChatListener(this));
