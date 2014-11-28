@@ -53,7 +53,10 @@ public class KnowledgeTable {
             if (rs != null) {
                 try {
                     if (rs.next()) {
-                        return rs.getString("data");
+                        /** this is a temp way for debugging **/
+                        String temp = rs.getString("data");
+                        log.debug("String data from database: " + temp);
+                        return temp;
                     }
                 } catch (SQLException ex) {
                     log.error("Failed to query knowledge database. StackTrace:", ex);

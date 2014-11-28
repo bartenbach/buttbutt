@@ -18,7 +18,7 @@ public class PrivateMessageListener extends ListenerAdapter<PircBotX> {
 
     @Override
     public void onPrivateMessage(PrivateMessageEvent<PircBotX> event) {
-        event.respond("butt");
+        butt.getMessageHandler().handlePrivateMessage(event);
     }
 
 }

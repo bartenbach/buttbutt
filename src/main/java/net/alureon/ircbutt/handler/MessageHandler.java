@@ -6,6 +6,7 @@ import net.alureon.ircbutt.util.ButtMath;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +33,34 @@ public class MessageHandler {
             String message = event.getMessage();
             if (reply || message.contains("butt")) {
                 if (message.equalsIgnoreCase("butt") || message.startsWith("buttsbutt:")) {
-                    butt.getButtNameResponseHandler().buttRespond(event.getChannel(), event.getUser());
+                    butt.getButtChatHandler().buttChat(event.getChannel(), butt.getButtNameResponseHandler().getButtRespose(event.getUser()));
                 } else {
                     final String buttFormat = butt.getButtFormatHandler().buttformat(message).trim();
                     if (!buttFormat.equals(message)) {
                         butt.getButtChatHandler().buttChat(event.getChannel(), buttFormat);
+                    }
+                }
+            }
+        }
+    }
+
+    public void handlePrivateMessage(PrivateMessageEvent<PircBotX> event) {
+        /* Handle a command */
+        if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
+            //butt.getCommandHandler().handleButtCommand(event, event.getMessage().split(" "));
+        } else {
+            /* Anything that isn't a command */
+            Preconditions.checkArgument(event.getUser().getNick() != null, "event.getUser().getNick() was null");
+            butt.getChatLoggingManager().logMessage(event.getUser().getNick(), event.getMessage());
+            boolean reply = ButtMath.isRandomResponseTime();
+            String message = event.getMessage();
+            if (reply || message.contains("butt")) {
+                if (message.equalsIgnoreCase("butt") || message.startsWith("buttsbutt:")) {
+                    butt.getButtChatHandler().buttPM(event.getUser(), butt.getButtNameResponseHandler().getButtRespose(event.getUser()));
+                } else {
+                    final String buttFormat = butt.getButtFormatHandler().buttformat(message).trim();
+                    if (!buttFormat.equals(message)) {
+                        butt.getButtChatHandler().buttPM(event.getUser(), buttFormat);
                     }
                 }
             }

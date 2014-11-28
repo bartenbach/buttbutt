@@ -7,6 +7,7 @@ import org.pircbotx.Colors;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,14 @@ public class CommandHandler {
 
     public CommandHandler(IRCbutt butt) {
         this.butt = butt;
+    }
+
+    public void handleChatCommand(MessageEvent<PircBotX> event, String[] cmd) {
+
+    }
+
+    public void handlePMCommand(PrivateMessageEvent<PircBotX> event, String[] cmd) {
+
     }
 
     public void handleButtCommand(MessageEvent<PircBotX> event, String[] cmd) {
@@ -48,66 +57,87 @@ public class CommandHandler {
                 return;
             case "learn":
             case "forget":
+            case "fact":
                 butt.getKnowledgeHandler().handleKnowledge(cmd, channel, user, nick);
                 return;
         }
 
         /*  Other functions, and odds and ends that are easier hard-coded than adding to a database.. */
-        if (cmd[0].equals("bot")) {
-            butt.getButtChatHandler().buttMe(channel, "is a bot!  *does the robot*");
-        } else if (cmd[0].equals("g")) {
-            if (cmd.length > 1) {
-                String link = "http://www.google.com/search?q=" + StringUtils.concatenateUrlArgs(cmd);
-                butt.getButtChatHandler().buttChat(channel, link);
-            }
-        } else if (cmd[0].equals("yt")) {
-            String link = "http://www.youtube.com/results?search_query=" + StringUtils.concatenateUrlArgs(cmd);
-            butt.getButtChatHandler().buttMe(channel, link);
-        } else if (cmd[0].equals("slap")) {
-            if (cmd.length == 1) {
-                butt.getButtChatHandler().buttMe(channel, "slaps " + nick + " with a large trout");
-            } else {
+        switch (cmd[0]) {
+            case "bot":
+                butt.getButtChatHandler().buttMe(channel, "is a bot!  *does the robot*");
+                break;
+            case "g":
+                if (cmd.length > 1) {
+                    String link = "http://www.google.com/search?q=" + StringUtils.concatenateUrlArgs(cmd);
+                    butt.getButtChatHandler().buttChat(channel, link);
+                }
+                break;
+            case "yt":
+                String link = "http://www.youtube.com/results?search_query=" + StringUtils.concatenateUrlArgs(cmd);
+                butt.getButtChatHandler().buttMe(channel, link);
+                break;
+            case "slap":
+                if (cmd.length == 1) {
+                    butt.getButtChatHandler().buttMe(channel, "slaps " + nick + " with a large trout");
+                } else {
                     butt.getButtChatHandler().buttMe(channel, "slaps " + StringUtils.getArgs(cmd) + " with a large trout");
+                }
+                break;
+            case "sexy":
+                if (cmd.length == 1) {
+                    butt.getButtChatHandler().buttChat(channel, nick + " is a sexy beast! Meeeow!");
+                } else {
+                    butt.getButtChatHandler().buttChat(channel, StringUtils.getArgs(cmd) + " is a sexy beast! Meeeow!");
+                }
+                break;
+            case "version":
+                butt.getButtChatHandler().buttChat(channel, butt.getProgramName() + " " + butt.getProgramVersion());
+                break;
+            case "dice":
+            case "roll":
+                butt.getDiceHandler().handleDice(channel, event.getChannel().getUsers());
+                break;
+            case "bloat":
+                if (cmd.length == 1) {
+                    butt.getButtChatHandler().buttChat(channel, "Everything is bloat.");
+                } else {
+                    butt.getButtChatHandler().buttChat(channel, StringUtils.getArgs(cmd) + " is bloat.");
+                }
+                break;
+            case "gn":
+                butt.getButtChatHandler().buttChat(channel, "Good night to all from " + nick);
+                break;
+            case "gm":
+                butt.getButtChatHandler().buttChat(channel, "Good morning to all from " + nick);
+                break;
+            case "oss":
+                butt.getButtChatHandler().buttMe(channel, "is an open source project");
+                butt.getButtChatHandler().buttMe(channel, butt.getSourceRepository());
+                break;
+            case "fd": {
+                int random = (int) (Math.random() * 7) + 2;
+                butt.getButtChatHandler().buttChat(channel, Colors.TEAL + "buttbutt found " + random + " diamonds!");
+                break;
             }
-        } else if (cmd[0].equals("sexy")) {
-            if (cmd.length == 1) {
-                butt.getButtChatHandler().buttChat(channel, nick + " is a sexy beast! Meeeow!");
-            } else {
-                butt.getButtChatHandler().buttChat(channel, StringUtils.getArgs(cmd) + " is a sexy beast! Meeeow!");
+            case "dance":
+                butt.getButtChatHandler().buttMe(channel, "does the robot");
+                break;
+            case "random": {
+                int random = (int) (Math.random() * 1000000);
+                butt.getButtChatHandler().buttChat(channel, random + " is a random number");
+                break;
             }
-        } else if (cmd[0].equals("version")) {
-            butt.getButtChatHandler().buttChat(channel, butt.getProgramName() + " " + butt.getProgramVersion());
-        } else if (cmd[0].equals("dice") || cmd[0].equals("roll")) {
-            butt.getDiceHandler().handleDice(channel, event.getChannel().getUsers());
-        } else if (cmd[0].equals("bloat")) {
-            if (cmd.length == 1) {
-                butt.getButtChatHandler().buttChat(channel, "Everything is bloat.");
-            } else {
-                butt.getButtChatHandler().buttChat(channel, StringUtils.getArgs(cmd) + " is bloat.");
-            }
-        } else if (cmd[0].equals("gn")) {
-            butt.getButtChatHandler().buttChat(channel, "Good night to all from " + nick);
-        } else if (cmd[0].equals("gm")) {
-            butt.getButtChatHandler().buttChat(channel, "Good morning to all from " + nick);
-        } else if (cmd[0].equals("oss")) {
-            butt.getButtChatHandler().buttMe(channel, "is an open source project");
-            butt.getButtChatHandler().buttMe(channel, butt.getSourceRepository());
-        } else if (cmd[0].equals("fd")) {
-            int random = (int) (Math.random()*7)+2;
-            butt.getButtChatHandler().buttChat(channel, Colors.TEAL + "buttbutt found " + random + " diamonds!");
-        } else if (cmd[0].equals("dance")) {
-            butt.getButtChatHandler().buttMe(channel, "does the robot");
-        } else if (cmd[0].equals("random")) {
-            int random = (int) (Math.random() * 1000000);
-            butt.getButtChatHandler().buttChat(channel, random + " is a random number");
-        } else if (cmd[0].equals("drink")) {
-            if (cmd.length < 2) {
-                butt.getButtChatHandler().buttChat(channel, "Have a drink, " + nick);
-            } else {
-                butt.getButtChatHandler().buttChat(channel, "Have a drink, " + StringUtils.getArgs(cmd));
-            }
-        } else if (cmd[0].equals("poop")) {
-            butt.getButtChatHandler().buttMe(channel, "lets out a big slicker *plop!*");
+            case "drink":
+                if (cmd.length < 2) {
+                    butt.getButtChatHandler().buttChat(channel, "Have a drink, " + nick);
+                } else {
+                    butt.getButtChatHandler().buttChat(channel, "Have a drink, " + StringUtils.getArgs(cmd));
+                }
+                break;
+            case "poop":
+                butt.getButtChatHandler().buttMe(channel, "lets out a big slicker *plop!*");
+                break;
         }
     }
 }

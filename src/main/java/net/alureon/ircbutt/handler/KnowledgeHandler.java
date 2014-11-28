@@ -48,6 +48,14 @@ public class KnowledgeHandler {
             } else {
                 butt.getMessageHandler().handleInvalidCommand(user);
             }
+        } else if (cmd[0].equals("fact")) {
+            cmd[0] = cmd[0].replaceFirst("~", "");
+            String info = butt.getKnowledgeTable().getRandomData();
+            if (info != null) {
+                butt.getButtChatHandler().buttChat(channel, info);
+            } else {
+                butt.getMessageHandler().handleInvalidCommand(user);
+            }
         }
     }
 
