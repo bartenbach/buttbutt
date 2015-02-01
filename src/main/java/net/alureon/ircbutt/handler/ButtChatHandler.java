@@ -1,7 +1,6 @@
 package net.alureon.ircbutt.handler;
 
 import org.pircbotx.Channel;
-import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 
@@ -12,7 +11,7 @@ public class ButtChatHandler {
         channel.send().message(x);
     }
 
-    public void buttHighlightChat(MessageEvent<PircBotX> event, String x) {
+    public void buttHighlightChat(MessageEvent event, String x) {
         event.respond(x);
     }
 

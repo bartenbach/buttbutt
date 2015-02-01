@@ -3,7 +3,6 @@ package net.alureon.ircbutt.handler;
 import com.google.common.base.Preconditions;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.ButtMath;
-import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
@@ -21,7 +20,7 @@ public class MessageHandler {
         this.butt = butt;
     }
 
-    public void handleMessage(MessageEvent<PircBotX> event) {
+    public void handleMessage(MessageEvent event) {
         /* Handle a command */
         if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
             butt.getCommandHandler().handleButtCommand(event, event.getMessage().split(" "));
@@ -44,7 +43,7 @@ public class MessageHandler {
         }
     }
 
-    public void handlePrivateMessage(PrivateMessageEvent<PircBotX> event) {
+    public void handlePrivateMessage(PrivateMessageEvent event) {
         /* Handle a command */
         if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
             //butt.getCommandHandler().handleButtCommand(event, event.getMessage().split(" "));

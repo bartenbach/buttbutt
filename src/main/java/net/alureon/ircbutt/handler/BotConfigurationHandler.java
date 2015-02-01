@@ -2,7 +2,6 @@ package net.alureon.ircbutt.handler;
 
 import net.alureon.ircbutt.IRCbutt;
 import org.pircbotx.Configuration;
-import org.pircbotx.PircBotX;
 
 public class BotConfigurationHandler {
 
@@ -12,8 +11,8 @@ public class BotConfigurationHandler {
         this.butt = butt;
     }
 
-    public Configuration<PircBotX> getConfiguration() {
-        Configuration.Builder<PircBotX> configBuilder = new Configuration.Builder<PircBotX>();
+    public Configuration getConfiguration() {
+        Configuration.Builder configBuilder = new Configuration.Builder();
         configBuilder.setName(butt.getYamlConfigurationFile().getBotName())
                 .setLogin(butt.getYamlConfigurationFile().getBotLogin())
                 .setServerHostname(butt.getYamlConfigurationFile().getServerHostname())

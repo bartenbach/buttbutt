@@ -1,10 +1,11 @@
 package net.alureon.ircbutt.handler;
 
 import net.alureon.ircbutt.IRCbutt;
+import net.alureon.ircbutt.libmath.Trigonometry;
+import net.alureon.ircbutt.util.GoogleResults;
 import net.alureon.ircbutt.util.StringUtils;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
-import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
@@ -22,15 +23,15 @@ public class CommandHandler {
         this.butt = butt;
     }
 
-    public void handleChatCommand(MessageEvent<PircBotX> event, String[] cmd) {
+    public void handleChatCommand(MessageEvent event, String[] cmd) {
 
     }
 
-    public void handlePMCommand(PrivateMessageEvent<PircBotX> event, String[] cmd) {
+    public void handlePMCommand(PrivateMessageEvent event, String[] cmd) {
 
     }
 
-    public void handleButtCommand(MessageEvent<PircBotX> event, String[] cmd) {
+    public void handleButtCommand(MessageEvent event, String[] cmd) {
         /* For the sake of clearer code, let's just set these immediately */
         User user = event.getUser();
         Channel channel = event.getChannel();
@@ -69,8 +70,10 @@ public class CommandHandler {
                 break;
             case "g":
                 if (cmd.length > 1) {
-                    String link = "http://www.google.com/search?q=" + StringUtils.concatenateUrlArgs(cmd);
-                    butt.getButtChatHandler().buttChat(channel, link);
+                    GoogleResults results = GoogleSearch.getMyGoogHoles(StringUtils.getArgs(cmd));
+                    butt.getButtChatHandler().buttChat(channel, results.getResponseData().getResults().get(0).getTitle());
+                    butt.getButtChatHandler().buttChat(channel, results.getResponseData().getResults().get(0).getUrl());
+
                 }
                 break;
             case "yt":
@@ -137,6 +140,9 @@ public class CommandHandler {
                 break;
             case "poop":
                 butt.getButtChatHandler().buttMe(channel, "lets out a big slicker *plop!*");
+                break;
+            case "sin":
+                butt.getButtChatHandler().buttMe(channel, Trigonometry.getSin(cmd[1]));
                 break;
         }
     }

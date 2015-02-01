@@ -54,7 +54,7 @@ public class IRCbutt {
     private KnowledgeTable knowledgeTable = new KnowledgeTable(this);
     private QuoteGrabTable quoteGrabTable = new QuoteGrabTable(this);
     private KnowledgeHandler knowledgeHandler = new KnowledgeHandler(this);
-    private ListenerManager<PircBotX> listenerManager = new ThreadedListenerManager<PircBotX>();
+    private ListenerManager listenerManager = new ThreadedListenerManager();
     private MessageHandler messageHandler = new MessageHandler(this);
     private ChatLoggingManager chatLoggingManager = new ChatLoggingManager();
     private QuoteGrabHandler quoteGrabHandler = new QuoteGrabHandler(this);
@@ -81,7 +81,7 @@ public class IRCbutt {
         listenerManager.addListener(new PrivateMessageListener(this));
 
         /* Set the bot's configuration variables */
-        Configuration<PircBotX> configuration = new BotConfigurationHandler(this).getConfiguration();
+        Configuration configuration = new BotConfigurationHandler(this).getConfiguration();
 
         /* Create the bot with our configuration */
         PircBotX bot = new PircBotX(configuration);
@@ -138,7 +138,7 @@ public class IRCbutt {
         return this.knowledgeHandler;
     }
 
-    public ListenerManager<PircBotX> getListenerManager() {
+    public ListenerManager getListenerManager() {
         return this.listenerManager;
     }
 
