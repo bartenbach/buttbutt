@@ -23,7 +23,11 @@ public class DefineHandler {
         try {
             Document doc = Jsoup.connect("http://www.merriam-webster.com/dictionary/"+word).userAgent(userAgent).get();
             Elements definition = doc.getElementsByClass("ld_on_collegiate");
-            response.chat(definition.first().text());
+            if (definition != null) {
+                response.chat(definition.first().text());
+            } else {
+                response.chat("no definition found for " + word);
+            }
         } catch (IOException ex) {
             log.error("We suck. ", ex);
             response.chat("couldn't get a definition for " + word);
