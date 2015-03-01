@@ -5,6 +5,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -13,6 +15,8 @@ import java.io.IOException;
  */
 
 public class WeatherHandler {
+
+    final static Logger log = LoggerFactory.getLogger(WeatherHandler.class);
 
     public void getFuckingWeather(BotResponse response, String place) {
         StringBuilder sb = new StringBuilder();
@@ -26,6 +30,7 @@ public class WeatherHandler {
             sb.append(location.text()).append(" Weather: ").append(temperature.first().text()).append("°F ").append(remark.first().text());
             response.chat(sb.toString());
         } catch (IOException ex) {
+            log.error("We suck. ", ex);
             response.chat("couldn't get the fucking weather");
         }
     }

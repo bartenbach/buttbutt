@@ -123,7 +123,8 @@ public class CommandHandler {
             case "check":
                 butt.getCheckHandler().handleCheck(response, StringUtils.getArgs(cmd));
                 break;
-            case "define": //todo impossible
+            case "define":
+                butt.getDefineHandler().handleDefine(response, cmd[1]);
                 break;
             case "weather":
                 butt.getWeatherHandler().getFuckingWeather(response, cmd[1]);
