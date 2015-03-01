@@ -8,7 +8,7 @@ public class Main {
         /* Parse command line arguments for log level */
         String loglevel = "INFO";
         if (args.length > 0) {
-            switch (args[0]) {
+            switch (args[0].toUpperCase()) {
                 case "TRACE":
                 case "DEBUG":
                 case "INFO":

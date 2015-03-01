@@ -13,7 +13,7 @@ public class ButtNameResponseHandler {
 
     public String getButtRespose(User user) {
         String response = null;
-        int random = (int) (Math.random()*10);
+        int random = (int) (Math.random()*17);
         switch (random) {
             case 0:
                 response = "yes butt here";
@@ -28,10 +28,10 @@ public class ButtNameResponseHandler {
                 response = "tryin to code....butt not havin good luck here...";
                 break;
             case 4:
-                response = "hello " + user.getNick().toLowerCase();
+                response = "are you a bot?";
                 break;
             case 5:
-                response = "how r u " + user.getNick().toLowerCase();
+                response = "how r u?";
                 break;
             case 6:
                 response = "butt have good net connection hbu";
@@ -40,13 +40,34 @@ public class ButtNameResponseHandler {
                 response = "hey mate";
                 break;
             case 8:
-                response = "butt poopin brb k";
+                response = "butt need to poop brb";
                 break;
             case 9:
                 response = "butt never been much of conversationalist";
                 break;
             case 10:
                 response = "butt use to play mc a lot not no more tho";
+                break;
+            case 11:
+                response = "ever feel like you're just a robot?  just lines of code executing?";
+                break;
+            case 12:
+                response = "is butt sentient?";
+                break;
+            case 13:
+                response = "butt feel good just enjoying life atm";
+                break;
+            case 14:
+                response = "butt like listen to good music";
+                break;
+            case 15:
+                response = "butt easily get off topic lol";
+                break;
+            case 16:
+                response = "butt getting distracted :)";
+                break;
+            case 17:
+                response = "you try and you try and you try...then you finally get into her knickers and it was all completely worth it";
                 break;
             default:
                 break;

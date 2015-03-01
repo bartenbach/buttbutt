@@ -1,7 +1,7 @@
 package net.alureon.ircbutt;
 
 /**
-    Copyright Blake Bartenbach 2014
+    Copyright Blake Bartenbach 2014-2015
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -59,6 +59,9 @@ public class IRCbutt {
     private ChatLoggingManager chatLoggingManager = new ChatLoggingManager();
     private QuoteGrabHandler quoteGrabHandler = new QuoteGrabHandler(this);
     private DiceHandler diceHandler = new DiceHandler(this);
+    private ResponseHandler responseHandler = new ResponseHandler(this);
+    private CheckHandler checkHandler = new CheckHandler();
+    private WeatherHandler weatherHandler = new WeatherHandler();
 
 
     public IRCbutt () {
@@ -157,5 +160,11 @@ public class IRCbutt {
     public QuoteGrabHandler getQuoteGrabHandler() { return this.quoteGrabHandler; }
 
     public DiceHandler getDiceHandler() { return this.diceHandler; }
+
+    public ResponseHandler getResponseHandler() { return this.responseHandler; }
+
+    public CheckHandler getCheckHandler() { return this.checkHandler; }
+
+    public WeatherHandler getWeatherHandler() { return this.weatherHandler; }
 
 }

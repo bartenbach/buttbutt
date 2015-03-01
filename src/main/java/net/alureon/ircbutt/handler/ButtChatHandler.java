@@ -5,7 +5,7 @@ import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 
 public class ButtChatHandler {
-    //TODO implement a scheduler
+    //todo maybe: implement a scheduler?
 
     public void buttChat(Channel channel, String x) {
         channel.send().message(x);

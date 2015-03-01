@@ -17,7 +17,7 @@ public class PrivateMessageListener extends ListenerAdapter {
 
     @Override
     public void onPrivateMessage(PrivateMessageEvent event) {
-        butt.getMessageHandler().handlePrivateMessage(event);
+        // how the fuck is this going to work?
     }
 
 }

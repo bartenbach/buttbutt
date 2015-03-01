@@ -39,49 +39,106 @@ public class ButtFormatHandler {
         if(!isAWordWeDontReplace(split[replace])) {
             if (split[replace].equalsIgnoreCase("buttbutt")) {
                 split[replace] = "";
-            } else if (split[replace].endsWith("?")) {
-                split[replace] = "butt?";
-            } else if (split[replace].endsWith("ed")) {
-                split[replace] = "butted";
-            } else if (split[replace].endsWith("ing")) {
-                split[replace] = "butting";
-            } else if (split[replace].endsWith("ify")) {
-                split[replace] = "buttify";
-            } else if (split[replace].endsWith("ly")) {
-                split[replace] = "buttly";
-            } else if (split[replace].endsWith("er")) {
-                split[replace] = "butter";
-            } else if (split[replace].endsWith("'s")) {
-                split[replace] = "butt's";
-            } else if (split[replace].endsWith("s")) {
-                split[replace] = "butts";
-            } else if (split[replace].endsWith("!")) {
-                split[replace] = "butt!";
-            } else if (split[replace].endsWith(".")) {
-                split[replace] = "butt.";
-            } else if (split[replace].endsWith("()")) {
-                split[replace] = "butt()";
-            } else if (split[replace].endsWith(")")) {
-                split[replace] = "butt)";
-            } else if (split[replace].endsWith(");")) {
-                split[replace] = "butt);";
-            } else if (split[replace].endsWith(":")) {
-                split[replace] = "butt:";
-            } else if (split[replace].endsWith(";")) {
-                split[replace] = "butt;";
-            } else if (split[replace].endsWith("\"")) {
-                split[replace] = "butt\"";
-            } else if (split[replace].endsWith("'")) {
-                split[replace] = "butt'";
-            } else if (split[replace].endsWith("*")) {
-                split[replace] = "butt*";
-            } else if (split[replace].startsWith("#")) {
-                split[replace] = "#buttbutt";
-            } else if (split[replace].startsWith("/")) {
-                split[replace] = "/butt";
-            } else {
-                split[replace] = "butt";
+                return true;
             }
+
+            StringBuilder sb = new StringBuilder("butt");
+            String suffix = "";
+            if (split[replace].endsWith("?")) {
+                suffix = "?";
+            } else if (split[replace].endsWith("ed")) {
+                suffix = "ed";
+            } else if (split[replace].endsWith("ing")) {
+                suffix = "ing";
+            } else if (split[replace].endsWith("ify")) {
+                suffix = "ify";
+            } else if (split[replace].endsWith("ly")) {
+                suffix = "ly";
+            } else if (split[replace].endsWith("er")) {
+                suffix = "er";
+            } else if (split[replace].endsWith("'s")) {
+                suffix = "'s";
+            } else if (split[replace].endsWith("s")) {
+                suffix = "s";
+            } else if (split[replace].endsWith("!")) {
+                suffix = "!";
+            } else if (split[replace].endsWith(".")) {
+                suffix = ".";
+            } else if (split[replace].endsWith("()")) {
+                suffix = "()";
+            } else if (split[replace].endsWith(")")) {
+                suffix = ")";
+            } else if (split[replace].endsWith(");")) {
+                suffix = ");";
+            } else if (split[replace].endsWith(":")) {
+                suffix = ":";
+            } else if (split[replace].endsWith(";")) {
+                suffix = ";";
+            } else if (split[replace].endsWith("\"")) {
+                suffix = "\"";
+            } else if (split[replace].endsWith("'")) {
+                suffix = "'";
+            } else if (split[replace].endsWith("*")) {
+                suffix = "*";
+            }
+            sb.append(suffix);
+
+            String prefix = "";
+            if (split[replace].startsWith("#")) {
+                prefix = "#";
+            } else if (split[replace].startsWith("/")) {
+                prefix = "/";
+            } else if (split[replace].startsWith("'")) {
+                prefix = "'";
+            } else if (split[replace].startsWith("\"")) {
+                prefix = "\"";
+            } else if (split[replace].startsWith("$")) {
+                prefix = "$";
+            } else if (split[replace].startsWith("%")) {
+                prefix = "%";
+            } else if (split[replace].startsWith("@")) {
+                prefix = "@";
+            } else if (split[replace].startsWith("^")) {
+                prefix = "^";
+            } else if (split[replace].startsWith("*")) {
+                prefix = "*";
+            } else if (split[replace].startsWith("!")) {
+                prefix = "!";
+            } else if (split[replace].startsWith("&")) {
+                prefix = "&";
+            } else if (split[replace].startsWith("('")) {
+                prefix = "('";
+            } else if (split[replace].startsWith(".(")) {
+                prefix = ".(";
+            } else if (split[replace].startsWith("(")) {
+                prefix = "(";
+            } else if (split[replace].startsWith("+")) {
+                prefix = "+";
+            } else if (split[replace].startsWith("+=")) {
+                prefix = "+=";
+            } else if (split[replace].startsWith("`")) {
+                prefix = "`";
+            } else if (split[replace].startsWith("~")) {
+                prefix = "~";
+            } else if (split[replace].startsWith("|")) {
+                prefix = "|";
+            } else if (split[replace].startsWith("[")) {
+                prefix = "[";
+            } else if (split[replace].startsWith("{")) {
+                prefix = "{";
+            } else if (split[replace].startsWith("<")) {
+                prefix = "<";
+            } else if (split[replace].startsWith(".")) {
+                prefix = ".";
+            } else if (split[replace].startsWith("-")) {
+                prefix = "-";
+            } else if (split[replace].startsWith("_")) {
+                prefix = "_";
+            }
+            sb.insert(0, prefix);
+
+
+            split[replace] = sb.toString();
             return true;
         }
         return false;
