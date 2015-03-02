@@ -67,8 +67,7 @@ public class QuoteGrabTable {
                 if (rs.next()) {
                     String user = rs.getString("user");
                     String quote = rs.getString("quote");
-                    int id = rs.getInt("id");
-                    return restructureQuote(id, user, quote);
+                    return restructureQuote(user, quote);
                 }
             } catch (SQLException ex) {
                 log.error("SQL Exception has occurred. StackTrace:", ex);
@@ -126,13 +125,12 @@ public class QuoteGrabTable {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                int id = rs.getInt("id");
                 String quote = rs.getString("quote");
-                return restructureQuote(id, username, quote);
+                return restructureQuote(username, quote);
             }
         } else {
             butt.getSqlManager().reconnect();
-            getRandomQuoteFromPlayer(username);
+            return getRandomQuoteFromPlayer(username);
         }
         return null;
     }
@@ -157,7 +155,7 @@ public class QuoteGrabTable {
             }
         } else {
             butt.getSqlManager().reconnect();
-            getQuoteInfo(id);
+            return getQuoteInfo(id);
         }
         return null;
     }
@@ -169,13 +167,12 @@ public class QuoteGrabTable {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                int id = rs.getInt("id");
                 String quote = rs.getString("quote");
-                return restructureQuote(id, username, quote);
+                return restructureQuote(username, quote);
             }
         } else {
             butt.getSqlManager().reconnect();
-            getLastQuoteFromPlayer(username);
+            return getLastQuoteFromPlayer(username);
         }
         return null;
     }
@@ -183,6 +180,12 @@ public class QuoteGrabTable {
     private String restructureQuote(int id, String username, String quote) {
         StringBuilder sb = new StringBuilder();
         sb.append("(").append(id).append(") ").append(username).append(": ").append(quote);
+        return sb.toString();
+    }
+
+    private String restructureQuote(String username, String quote) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(username).append(": ").append(quote);
         return sb.toString();
     }
 

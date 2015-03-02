@@ -63,6 +63,7 @@ public class IRCbutt {
     private CheckHandler checkHandler = new CheckHandler();
     private WeatherHandler weatherHandler = new WeatherHandler();
     private DefineHandler defineHandler = new DefineHandler();
+    private EchoHandler echoHandler = new EchoHandler(this);
 
 
     public IRCbutt () {
@@ -170,4 +171,5 @@ public class IRCbutt {
 
     public DefineHandler getDefineHandler() { return this.defineHandler; }
 
+    public EchoHandler getEchoHandler() { return this.echoHandler; }
 }

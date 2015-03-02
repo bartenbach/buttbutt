@@ -62,9 +62,7 @@ public class SqlManager {
 
     public void reconnect() {
         log.warn("Disconnected from SQL Database. Reconnecting...");
-        if (!this.isConnected()) {
-            this.connectToDatabase();
-        }
+        this.connectToDatabase();
     }
 
     public Connection getConnection() {

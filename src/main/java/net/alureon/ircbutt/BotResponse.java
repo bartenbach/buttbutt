@@ -12,18 +12,15 @@ public class BotResponse {
 
     private String message;
     private String additionalMessage;
-    private String commandSender;
     private User recipient;
     private BotIntention intention;
     private MessageEvent messageEvent;
     private boolean success;
 
-    public BotResponse() {
-
-    }
 
     public BotResponse(MessageEvent messageEvent) {
         this.messageEvent = messageEvent;
+        this.recipient = messageEvent.getUser();
     }
 
     private void setRecipient(User user) {
@@ -32,10 +29,6 @@ public class BotResponse {
 
     private void setMessage(String message) {
         this.message = message;
-    }
-
-    public void setCommandSender(String commandSender) {
-        this.commandSender = commandSender;
     }
 
     private void setIntention(BotIntention intention) {
@@ -60,10 +53,6 @@ public class BotResponse {
 
     public BotIntention getIntention() {
         return this.intention;
-    }
-
-    public String getCommandSender() {
-        return this.commandSender;
     }
 
     public User getRecipient() {

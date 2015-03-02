@@ -52,7 +52,7 @@ public class CommandHandler {
             case "fact":
                 return butt.getKnowledgeHandler().handleKnowledge(response, cmd, channel, user, nick);
             case "echo":
-
+                return butt.getEchoHandler().handleEcho(response, cmd);
         }
 
         /*  Other functions, and odds and ends that are easier hard-coded than adding to a database.. */

@@ -23,7 +23,7 @@ public class DefineHandler {
         try {
             Document doc = Jsoup.connect("http://www.merriam-webster.com/dictionary/"+word).userAgent(userAgent).get();
             Elements definition = doc.getElementsByClass("ld_on_collegiate");
-            if (definition != null) {
+            if (definition.first().text() != null) {
                 response.chat(definition.first().text());
             } else {
                 response.chat("no definition found for " + word);
@@ -31,6 +31,9 @@ public class DefineHandler {
         } catch (IOException ex) {
             log.error("We suck. ", ex);
             response.chat("couldn't get a definition for " + word);
+        } catch (NullPointerException ex) {
+            log.error("#NPE4LYFE", ex);
+            response.privateMessage(response.getRecipient(), "couldn't find definition for '" + word + "'");
         }
     }
 }

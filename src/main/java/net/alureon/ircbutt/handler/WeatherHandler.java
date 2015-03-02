@@ -27,11 +27,20 @@ public class WeatherHandler {
             Element location = doc.getElementById("locationDisplaySpan");
             Elements temperature = doc.getElementsByClass("temperature");
             Elements remark = doc.getElementsByClass("remark");
-            sb.append(location.text()).append(" Weather: ").append(temperature.first().text()).append("°F ").append(remark.first().text());
+            Elements flavor = doc.getElementsByClass("flavor");
+            sb.append("(")
+                    .append(location.text())
+                    .append(")  ")
+                    .append(temperature.first().text())
+                    .append("°F  ")
+                    .append(remark.first().text())
+                    .append(".  ")
+                    .append(flavor.first().text())
+                    .append(".");
             response.chat(sb.toString());
-        } catch (IOException ex) {
-            log.error("We suck. ", ex);
-            response.chat("couldn't get the fucking weather");
+        } catch (IOException | NullPointerException ex) {
+            log.error("Failed to get the fucking weather", ex);
+            response.privateMessage(response.getRecipient(), "couldn't get the fucking weather for " + place);
         }
     }
 
