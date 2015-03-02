@@ -15,36 +15,11 @@ public class BotResponse {
     private User recipient;
     private BotIntention intention;
     private MessageEvent messageEvent;
-    private boolean success;
 
 
     public BotResponse(MessageEvent messageEvent) {
         this.messageEvent = messageEvent;
         this.recipient = messageEvent.getUser();
-    }
-
-    private void setRecipient(User user) {
-        this.recipient = user;
-    }
-
-    private void setMessage(String message) {
-        this.message = message;
-    }
-
-    private void setIntention(BotIntention intention) {
-        this.intention = intention;
-    }
-
-    private void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    private void setAdditionalMessage(String additionalMessage) {
-        this.additionalMessage = additionalMessage;
-    }
-
-    public boolean getSuccess() {
-        return this.success;
     }
 
     public String getMessage() {
@@ -111,5 +86,15 @@ public class BotResponse {
 
     public boolean hasAdditionalMessage() {
         return !(this.additionalMessage == null);
+    }
+
+    @Override
+    public String toString() {
+        if (this.hasAdditionalMessage()) {
+            StringBuilder sb = new StringBuilder(this.message);
+            sb.append(" ").append(this.additionalMessage);
+            return sb.toString();
+        }
+        return this.message;
     }
 }

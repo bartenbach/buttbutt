@@ -31,9 +31,17 @@ public class DiceHandler {
                 break;
             }
         }
-        String message1 = "rolls a huge " + totalUsers + " sided die and it flattens " + victimName;
-        String message2 = "before coming to a halt on " + Colors.RED + "YOU LOSE";
-        response.me(message1, message2);
+
+        String message1;
+        double rand = Math.random()*100;
+        if (rand < 50) {
+            message1 = Colors.WHITE + "rolls a huge " + totalUsers + " sided die and it flattens " + Colors.YELLOW + victimName
+                    + Colors.WHITE + " before coming to a halt on " + Colors.RED + "YOU LOSE" + Colors.NORMAL;
+        } else {
+            message1 = Colors.WHITE + "rolls a huge " + totalUsers + " sided die and it lands near " + Colors.YELLOW + victimName
+                    + Colors.WHITE + " before coming to a halt on " + Colors.GREEN + "YOU WIN" + Colors.NORMAL;
+        }
+        response.me(message1);
         return response;
     }
 }

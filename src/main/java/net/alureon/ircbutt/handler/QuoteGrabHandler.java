@@ -25,7 +25,9 @@ public class QuoteGrabHandler {
         if (cmd[0].equals("grab")){
             if (cmd.length == 2) {
                 if (cmd[1].equalsIgnoreCase(nick)) {
-                    response.chat("You like grabbing yourself " + nick + "?");
+                    response.highlightChat(response.getRecipient(), "You like grabbing yourself " + nick + "?");
+                } else if (cmd[1].equalsIgnoreCase(butt.getYamlConfigurationFile().getBotName())) {
+                    response.highlightChat(response.getRecipient(), "get your hands off me, creep!");
                 } else {
                     if (butt.getChatLoggingManager().hasQuoteFrom(cmd[1])) {
                         String quote = butt.getChatLoggingManager().getLastQuoteFrom(cmd[1]);
