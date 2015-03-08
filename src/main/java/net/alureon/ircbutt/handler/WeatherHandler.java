@@ -35,8 +35,7 @@ public class WeatherHandler {
                     .append("°F  ")
                     .append(remark.first().text())
                     .append(".  ")
-                    .append(flavor.first().text())
-                    .append(".");
+                    .append(flavor.first().text());
             response.chat(sb.toString());
         } catch (IOException | NullPointerException ex) {
             log.error("Failed to get the fucking weather", ex);

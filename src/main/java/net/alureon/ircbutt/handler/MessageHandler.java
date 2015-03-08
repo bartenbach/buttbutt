@@ -26,6 +26,9 @@ public class MessageHandler {
         if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
             response = butt.getCommandHandler().handleCommand(event, event.getMessage().split(" "), response);
             butt.getResponseHandler().handleResponse(response);
+        } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")
+                || event.getMessage().endsWith("--;")) {
+            // todo handle karma
         } else {
             /* Anything that isn't a command */
             Preconditions.checkArgument(event.getUser().getNick() != null, "event.getUser().getNick() was null");

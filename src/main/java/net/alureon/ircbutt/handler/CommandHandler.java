@@ -62,7 +62,6 @@ public class CommandHandler {
                 break;
             case "g":
                 if (cmd.length > 1) {
-                    // Todo strip html tags  - Testing
                     GoogleResults results = GoogleSearch.getMyGoogHoles(StringUtils.getArgs(cmd));
                     String title = results.getResponseData().getResults().get(0).getTitle().replaceAll("\\<.*?\\>", "");
                     String url = results.getResponseData().getResults().get(0).getUrl();
@@ -70,9 +69,8 @@ public class CommandHandler {
                 }
                 break;
             case "yt":
-                // todo this is a joke.
                 String link = "http://www.youtube.com/results?search_query=" + StringUtils.concatenateUrlArgs(cmd);
-                response.chat(link);
+                butt.getYouTubeHandler().getYouTubeVideo(response, link);
                 break;
             case "slap":
                 if (cmd.length == 1) {
