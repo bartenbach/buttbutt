@@ -35,10 +35,10 @@ public class MessageHandler {
             butt.getChatLoggingManager().logMessage(event.getUser().getNick(), event.getMessage());
             boolean reply = ButtMath.isRandomResponseTime();
             String message = event.getMessage();
-            if (reply || message.contains("butt")) {
-                if (message.startsWith("buttbutt:")) {
-                    butt.getButtChatHandler().buttHighlightChat(event, butt.getButtNameResponseHandler().getButtRespose(event.getUser()));
-                } else {
+            if (message.startsWith("buttbutt:")) {
+                butt.getButtChatHandler().buttHighlightChat(event, butt.getButtNameResponseHandler().getButtRespose(event.getUser()));
+            } else {
+                if (reply) {
                     final String buttFormat = butt.getButtFormatHandler().buttformat(message).trim();
                     if (!buttFormat.equals(message)) {
                         butt.getButtChatHandler().buttChat(event.getChannel(), buttFormat);

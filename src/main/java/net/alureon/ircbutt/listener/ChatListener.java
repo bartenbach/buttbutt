@@ -18,6 +18,8 @@ public class ChatListener extends ListenerAdapter {
         this.butt = butt;
     }
 
+    /* I need to figure out what I'm doing here... not sure how to proceed */
+
     @Override
     public void onMessage(MessageEvent event) {
         butt.getMessageHandler().handleMessage(event);
