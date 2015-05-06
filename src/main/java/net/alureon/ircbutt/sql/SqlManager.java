@@ -28,8 +28,10 @@ public class SqlManager {
         log.debug(url);
         try {
             this.connection = DriverManager.getConnection(url, username, password);
+            //fixme why am I timing out?
         } catch (SQLException ex) {
             log.error("Failed to establish SQL connection: ", ex);
+            return;
         }
         log.info("[SQL backend connected]");
     }
@@ -37,25 +39,21 @@ public class SqlManager {
     public void createTablesIfNotExists() {
         sqlUpdate("CREATE TABLE IF NOT EXISTS `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` " +
                 "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `user` VARCHAR(16) NOT NULL," +
-                "`quote` VARCHAR(200) NOT NULL, `grabbed_by` VARCHAR(16) NOT NULL," +
+                "`quote` VARCHAR(300) NOT NULL, `grabbed_by` VARCHAR(16) NOT NULL," +
                 "`timestamp` DATETIME NOT NULL) ENGINE=MyISAM");
         sqlUpdate("CREATE TABLE IF NOT EXISTS `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` " +
                 "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `item` VARCHAR(32) NOT NULL UNIQUE," +
-                "`data` VARCHAR(200) NOT NULL, `added_by` VARCHAR(16) NOT NULL," +
+                "`data` VARCHAR(300) NOT NULL, `added_by` VARCHAR(16) NOT NULL," +
                 "`timestamp` DATETIME NOT NULL) ENGINE=MyISAM");
     }
 
     public boolean sqlUpdate(String sql) {
-        if (this.isConnected()) {
-            try (PreparedStatement ps = connection.prepareStatement(sql)) {
-                ps.executeUpdate();
-                return true;
-            } catch (SQLException ex) {
-                log.error("Unable to update SQL database. Stacktrace: ", ex);
-            }
-        } else {
-            reconnect();
-            sqlUpdate(sql);
+        checkConnection();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            log.error("Unable to update SQL database. Stacktrace: ", ex);
         }
         return false;
     }
@@ -70,6 +68,7 @@ public class SqlManager {
     }
 
     public PreparedStatement getPreparedStatement(String query) {
+        checkConnection();
         try {
             return this.connection.prepareStatement(query);
         } catch (SQLException ex) {
@@ -79,6 +78,7 @@ public class SqlManager {
     }
 
     public void prepareStatement(PreparedStatement ps, Object ... objects) {
+        checkConnection();
         try {
             for (int i = 0 ; i < objects.length ; i++) {
                 if (objects[i] instanceof String) {
@@ -95,6 +95,7 @@ public class SqlManager {
     }
 
     public ResultSet getResultSet(PreparedStatement ps) {
+        checkConnection();
         try {
             return ps.executeQuery();
         } catch (SQLException ex) {
@@ -107,9 +108,14 @@ public class SqlManager {
         try {
             return connection.isValid(10);
         } catch (SQLException ex) {
-            log.warn("Disconnected from SQL database, attempting reconnection...", ex);
+            log.warn("Exception checking connection validity, ", ex);
+            return false;
+        }
+    }
+
+    public void checkConnection() {
+        if (!isConnected()) {
             reconnect();
-            return isConnected();
         }
     }
 

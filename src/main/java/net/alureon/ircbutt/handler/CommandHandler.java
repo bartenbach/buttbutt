@@ -26,12 +26,14 @@ public class CommandHandler {
     public BotResponse handleCommand(MessageEvent event, String[] cmd, BotResponse response) {
         /* For the sake of clearer code, let's just set these immediately */
         User user = event.getUser();
+
+
         Channel channel = event.getChannel();
         String nick = user.getNick();
 
         /* if it's prefixed with a tilde it's a knowledge request */
         if (cmd[0].startsWith("~")) {
-            return butt.getKnowledgeHandler().handleKnowledge(response, cmd, channel, user, nick);
+            return butt.getFactHandler().handleKnowledge(response, cmd, channel, user, nick);
         }
 
         /* remove the '!' from the command */
@@ -50,7 +52,8 @@ public class CommandHandler {
             case "learn":
             case "forget":
             case "fact":
-                return butt.getKnowledgeHandler().handleKnowledge(response, cmd, channel, user, nick);
+            case "factinfo":
+                return butt.getFactHandler().handleKnowledge(response, cmd, channel, user, nick);
             case "echo":
                 return butt.getEchoHandler().handleEcho(response, cmd);
         }

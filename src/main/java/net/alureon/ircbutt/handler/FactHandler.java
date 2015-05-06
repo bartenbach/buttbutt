@@ -8,14 +8,14 @@ import org.pircbotx.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KnowledgeHandler {
+public class FactHandler {
 
 
     private IRCbutt butt;
-    public final static Logger log = LoggerFactory.getLogger(KnowledgeHandler.class);
+    public final static Logger log = LoggerFactory.getLogger(FactHandler.class);
 
 
-    public KnowledgeHandler(IRCbutt butt) {
+    public FactHandler(IRCbutt butt) {
         this.butt = butt;
     }
 
@@ -31,6 +31,7 @@ public class KnowledgeHandler {
                 }
             }
         } else if (cmd[0].equals("forget")) {
+            if (user.getChannelsOpIn().contains(butt.getYamlConfigurationFile().getChannelList()))
             if (channel.isOp(user)) {
                 boolean success = removeKnowledge(cmd);
                 if (success) {
@@ -52,8 +53,15 @@ public class KnowledgeHandler {
                 butt.getMessageHandler().handleInvalidCommand(user);
             }
         } else if (cmd[0].equals("fact")) {
-            cmd[0] = cmd[0].replaceFirst("~", "");
-            String info = butt.getKnowledgeTable().getRandomData();
+            String info = butt.getFactTable().getRandomData();
+            if (info != null) {
+                response.chat(info);
+            } else {
+                response.noResponse();
+                butt.getMessageHandler().handleInvalidCommand(user);
+            }
+        } else if (cmd[0].equals("factinfo")) {
+            String info = butt.getFactTable().getKnowledgeInfo(StringUtils.getArgs(cmd));
             if (info != null) {
                 response.chat(info);
             } else {
@@ -73,7 +81,7 @@ public class KnowledgeHandler {
                 String information = StringUtils.getArgsOverOne(data);
                 log.trace("Item: " + item);
                 log.trace("Data: " + information);
-                butt.getKnowledgeTable().insertKnowledge(item, information, commandSender);
+                butt.getFactTable().insertKnowledge(item, information, commandSender);
                 return true;
             }
         }
@@ -83,13 +91,13 @@ public class KnowledgeHandler {
     public String getKnowledge(String item) {
         if (!item.isEmpty()) {
             log.trace("Item: " + item);
-            return butt.getKnowledgeTable().queryKnowledge(item);
+            return butt.getFactTable().queryKnowledge(item);
         }
         return null;
     }
 
     public boolean removeKnowledge(String[] item) {
-        return item.length > 0 && butt.getKnowledgeTable().deleteKnowledge(StringUtils.getArgs(item));
+        return item.length > 0 && butt.getFactTable().deleteKnowledge(StringUtils.getArgs(item));
     }
 
 }

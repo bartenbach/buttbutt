@@ -3,6 +3,7 @@ package net.alureon.ircbutt;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
 
 /**
  * Created by alureon on 2/28/15.
@@ -15,11 +16,18 @@ public class BotResponse {
     private User recipient;
     private BotIntention intention;
     private MessageEvent messageEvent;
+    private PrivateMessageEvent privateMessageEvent;
 
 
     public BotResponse(MessageEvent messageEvent) {
         this.messageEvent = messageEvent;
         this.recipient = messageEvent.getUser();
+    }
+
+    public BotResponse(PrivateMessageEvent privateMessageEvent) {
+        this.privateMessageEvent = privateMessageEvent;
+        this.recipient = privateMessageEvent.getUser();
+        this.intention = BotIntention.PRIVATE_MESSAGE_NO_OVERRIDE;
     }
 
     public String getMessage() {

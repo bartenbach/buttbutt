@@ -9,5 +9,6 @@ public enum BotIntention {
     NO_REPLY,
     CHAT,
     PRIVATE_MESSAGE,
-    ME;
+    ME,
+    PRIVATE_MESSAGE_NO_OVERRIDE;
 }

@@ -20,9 +20,11 @@ import net.alureon.ircbutt.file.YAMLConfigurationFile;
 import net.alureon.ircbutt.handler.*;
 import net.alureon.ircbutt.listener.ChatListener;
 import net.alureon.ircbutt.listener.PrivateMessageListener;
-import net.alureon.ircbutt.sql.KnowledgeTable;
+import net.alureon.ircbutt.listener.UserJoinListener;
+import net.alureon.ircbutt.sql.FactTable;
 import net.alureon.ircbutt.sql.QuoteGrabTable;
 import net.alureon.ircbutt.sql.SqlManager;
+import net.alureon.ircbutt.util.IRCUtils;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
@@ -51,9 +53,9 @@ public class IRCbutt {
     private CommandHandler commandHandler = new CommandHandler(this);
     private YAMLConfigurationFile yamlConfigurationFile = new YAMLConfigurationFile();
     private SqlManager sqlManager = new SqlManager(this);
-    private KnowledgeTable knowledgeTable = new KnowledgeTable(this);
+    private FactTable factTable = new FactTable(this);
     private QuoteGrabTable quoteGrabTable = new QuoteGrabTable(this);
-    private KnowledgeHandler knowledgeHandler = new KnowledgeHandler(this);
+    private FactHandler factHandler = new FactHandler(this);
     private ListenerManager listenerManager = new ThreadedListenerManager();
     private MessageHandler messageHandler = new MessageHandler(this);
     private ChatLoggingManager chatLoggingManager = new ChatLoggingManager();
@@ -65,6 +67,7 @@ public class IRCbutt {
     private DefineHandler defineHandler = new DefineHandler();
     private EchoHandler echoHandler = new EchoHandler(this);
     private YouTubeHandler youTubeHandler = new YouTubeHandler();
+    private IRCUtils ircUtils = new IRCUtils(this);
 
 
     public IRCbutt () {
@@ -85,6 +88,7 @@ public class IRCbutt {
         /* Add event listeners */
         listenerManager.addListener(new ChatListener(this));
         listenerManager.addListener(new PrivateMessageListener(this));
+        listenerManager.addListener(new UserJoinListener());
 
         /* Set the bot's configuration variables */
         Configuration configuration = new BotConfigurationHandler(this).getConfiguration();
@@ -136,12 +140,12 @@ public class IRCbutt {
         return this.sqlManager;
     }
 
-    public KnowledgeTable getKnowledgeTable() {
-        return this.knowledgeTable;
+    public FactTable getFactTable() {
+        return this.factTable;
     }
 
-    public KnowledgeHandler getKnowledgeHandler() {
-        return this.knowledgeHandler;
+    public FactHandler getFactHandler() {
+        return this.factHandler;
     }
 
     public ListenerManager getListenerManager() {
@@ -175,4 +179,6 @@ public class IRCbutt {
     public EchoHandler getEchoHandler() { return this.echoHandler; }
 
     public YouTubeHandler getYouTubeHandler() { return this.youTubeHandler; }
+
+    public IRCUtils getIrcUtils() { return this.ircUtils; }
 }

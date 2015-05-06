@@ -31,6 +31,8 @@ public class ResponseHandler {
                 break;
             case NO_REPLY:
                 break;
+            case PRIVATE_MESSAGE_NO_OVERRIDE:
+                handlePrivateMessage(response);
             default:
                 break;
         }
