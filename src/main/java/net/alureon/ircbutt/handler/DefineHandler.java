@@ -22,11 +22,16 @@ public class DefineHandler {
 
         try {
             Document doc = Jsoup.connect("http://www.merriam-webster.com/dictionary/"+word).userAgent(userAgent).get();
-            Elements definition = doc.getElementsByClass("ld_on_collegiate");
-            if (definition.first().text() != null) {
-                response.chat(definition.first().text());
-            } else {
-                response.chat("no definition found for " + word);
+            try {
+                Elements definition = doc.getElementsByClass("ld_on_collegiate");
+                response.chat(word + definition.first().text());
+            } catch (NullPointerException ex) {
+                try {
+                    Elements definition2 = doc.getElementsByClass("ssens");
+                    response.chat(word + ": " + definition2.first().text().replaceFirst(":", " ").trim());
+                } catch (NullPointerException ex2) {
+                    response.chat("no definition found for " + word);
+                }
             }
         } catch (IOException ex) {
             log.error("We suck. ", ex);

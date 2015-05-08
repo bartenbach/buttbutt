@@ -36,7 +36,7 @@ public class MessageHandler {
             butt.getChatLoggingManager().logMessage(event.getUser().getNick(), event.getMessage());
             boolean reply = ButtMath.isRandomResponseTime();
             String message = event.getMessage();
-            if (message.startsWith("buttbutt:")) {
+            if (message.startsWith(butt.getYamlConfigurationFile().getBotName())) {
                 butt.getButtChatHandler().buttHighlightChat(event, butt.getButtNameResponseHandler().getButtRespose(event.getUser()));
             } else {
                 if (reply) {
@@ -52,35 +52,16 @@ public class MessageHandler {
 
     public void handlePrivateMessage(PrivateMessageEvent event) {
         BotResponse response = new BotResponse(event);
-        event.respond("butt don't have code to chat with u privately sry...maybe soon");
-        if (butt.getIrcUtils().isOpInBotChannel(event.getUser())) {
-            event.respond("but you're an op!");
-        } else {
-            event.respond("but you're not an op :(");
-        }
-/*        if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
-            response = butt.getCommandHandler().handleCommand(event, event.getMessage().split(" "), response);
-            butt.getResponseHandler().handleResponse(response);
-        } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")
-                || event.getMessage().endsWith("--;")) {
-            // todo handle karma
-        } else {
-            *//* Anything that isn't a command *//*
-            Preconditions.checkArgument(event.getUser().getNick() != null, "event.getUser().getNick() was null");
-            butt.getChatLoggingManager().logMessage(event.getUser().getNick(), event.getMessage());
-            boolean reply = ButtMath.isRandomResponseTime();
-            String message = event.getMessage();
-            if (message.startsWith("buttbutt:")) {
-                butt.getButtChatHandler().buttHighlightChat(event, butt.getButtNameResponseHandler().getButtRespose(event.getUser()));
-            } else {
-                if (reply) {
-                    final String buttFormat = butt.getButtFormatHandler().buttformat(message).trim();
-                    if (!buttFormat.equals(message)) {
-                        butt.getButtChatHandler().buttChat(event.getChannel(), buttFormat);
-                    }
-                }
+        if (event.getUser().isVerified()) {
+            if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
+                response = butt.getCommandHandler().handleCommand(event, event.getMessage().split(" "), response);
+                response.setPrivateMessageNoOverride();
+                butt.getResponseHandler().handleResponse(response);
+            } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")
+                    || event.getMessage().endsWith("--;")) {
+                // todo handle karma
             }
-        }*/
+        }
     }
 
     public void handleInvalidCommand(User user) {

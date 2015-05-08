@@ -152,7 +152,7 @@ public class ButtFormatHandler {
                 || replace.equalsIgnoreCase("her") || replace.equalsIgnoreCase("his") || replace.equalsIgnoreCase("was")
                 || replace.equalsIgnoreCase("lol") || replace.equalsIgnoreCase("wtf") || replace.equalsIgnoreCase("tbh")
                 || replace.equalsIgnoreCase("haha") || replace.equalsIgnoreCase("it's") || replace.equalsIgnoreCase("for")
-                || replace.equalsIgnoreCase("has") || replace.equalsIgnoreCase("if");
+                || replace.equalsIgnoreCase("has") || replace.equalsIgnoreCase("if") || replace.equalsIgnoreCase("are");
     }
 
     private void buttRetry(String[] split) {

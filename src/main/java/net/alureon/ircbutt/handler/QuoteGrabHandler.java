@@ -3,7 +3,6 @@ package net.alureon.ircbutt.handler;
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.StringUtils;
-import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,7 @@ public class QuoteGrabHandler {
         this.butt = butt;
     }
 
-    public BotResponse handleQuoteGrabs(BotResponse response, String[] cmd, Channel channel, User user, String nick) {
+    public BotResponse handleQuoteGrabs(BotResponse response, String[] cmd, User user, String nick) {
         if (cmd[0].equals("grab")){
             if (cmd.length == 2) {
                 if (cmd[1].equalsIgnoreCase(nick)) {

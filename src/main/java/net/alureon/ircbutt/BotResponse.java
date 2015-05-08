@@ -91,6 +91,7 @@ public class BotResponse {
     public void noResponse() {
         this.intention = BotIntention.NO_REPLY;
     }
+    public void setPrivateMessageNoOverride() { this.intention = BotIntention.PRIVATE_MESSAGE_NO_OVERRIDE; }
 
     public boolean hasAdditionalMessage() {
         return !(this.additionalMessage == null);

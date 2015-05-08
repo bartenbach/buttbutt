@@ -15,7 +15,7 @@ public class UserJoinListener extends ListenerAdapter {
                 case "[alureon]":
                 case "nyherba":
                 case "ebolahats":
-                    event.getChannel().send().op(event.getUser());
+                    event.getChannel().send().voice(event.getUser());
                 default:
                     break;
             }

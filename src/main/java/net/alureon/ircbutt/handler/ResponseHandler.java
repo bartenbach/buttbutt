@@ -17,22 +17,23 @@ public class ResponseHandler {
 
     public void handleResponse(BotResponse response) {
         switch (response.getIntention()) {
-            case CHAT:
-                handleChat(response);
-                break;
-            case HIGHLIGHT:
-                handleHighlight(response);
+            case PRIVATE_MESSAGE_NO_OVERRIDE:
+                handlePrivateMessage(response);
                 break;
             case PRIVATE_MESSAGE:
                 handlePrivateMessage(response);
+                break;
+            case HIGHLIGHT:
+                handleHighlight(response);
                 break;
             case ME:
                 handleMe(response);
                 break;
             case NO_REPLY:
                 break;
-            case PRIVATE_MESSAGE_NO_OVERRIDE:
-                handlePrivateMessage(response);
+            case CHAT:
+                handleChat(response);
+                break;
             default:
                 break;
         }

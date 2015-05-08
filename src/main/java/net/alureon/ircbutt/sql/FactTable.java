@@ -75,19 +75,14 @@ public class FactTable {
     }
 
     public String getRandomData() {
-        if (butt.getSqlManager().isConnected()) {
-            String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` ORDER BY RAND() LIMIT 1";
-            try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
-                 ResultSet rs = butt.getSqlManager().getResultSet(ps)) {
-                if (rs.next()) {
-                    return rs.getString("data");
-                }
-            } catch (SQLException ex) {
-                log.error("SQL Exception has occurred. StackTrace:", ex);
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` ORDER BY RAND() LIMIT 1";
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
+             ResultSet rs = butt.getSqlManager().getResultSet(ps)) {
+            if (rs.next()) {
+                return rs.getString("data");
             }
-        } else {
-            butt.getSqlManager().reconnect();
-            getRandomData();
+        } catch (SQLException ex) {
+            log.error("SQL Exception has occurred. StackTrace:", ex);
         }
         return null;
     }
@@ -109,6 +104,26 @@ public class FactTable {
             }
         } catch (SQLException ex) {
             log.error("SQL Exception.  StackTrace:", ex);
+        }
+        return null;
+    }
+
+    public String findFact(String search) {
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE data LIKE ?";
+        try(PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query)) {
+            ps.setString(1, "%" + search + "%");
+            ResultSet rs = ps.executeQuery();
+            //TODO this could certainly return more than one item
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String item = rs.getString("item");
+                String data = rs.getString("data");
+                return "(" + id + ") " + item + ": " + data;
+            } else {
+                //todo try to find a fact with similar name?
+            }
+        } catch (SQLException ex) {
+            log.error("SQL Exception, ", ex);
         }
         return null;
     }

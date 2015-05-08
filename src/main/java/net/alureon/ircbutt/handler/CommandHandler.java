@@ -8,6 +8,7 @@ import net.alureon.ircbutt.util.StringUtils;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,17 +24,14 @@ public class CommandHandler {
     }
 
 
-    public BotResponse handleCommand(MessageEvent event, String[] cmd, BotResponse response) {
+    public BotResponse handleCommand(GenericMessageEvent event, String[] cmd, BotResponse response) {
         /* For the sake of clearer code, let's just set these immediately */
         User user = event.getUser();
-
-
-        Channel channel = event.getChannel();
         String nick = user.getNick();
 
         /* if it's prefixed with a tilde it's a knowledge request */
         if (cmd[0].startsWith("~")) {
-            return butt.getFactHandler().handleKnowledge(response, cmd, channel, user, nick);
+            return butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
         }
 
         /* remove the '!' from the command */
@@ -45,15 +43,21 @@ public class CommandHandler {
             case "grab":
             case "q":
             case "qinfo":
+            case "qi":
             case "qsay":
             case "qsearch":
             case "qfind":
-                return butt.getQuoteGrabHandler().handleQuoteGrabs(response, cmd, channel, user, nick);
+                return butt.getQuoteGrabHandler().handleQuoteGrabs(response, cmd, user, nick);
             case "learn":
             case "forget":
             case "fact":
             case "factinfo":
-                return butt.getFactHandler().handleKnowledge(response, cmd, channel, user, nick);
+            case "factfind":
+            case "factsearch":
+            case "ffind":
+            case "fsearch":
+            case "finfo":
+                return butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
             case "echo":
                 return butt.getEchoHandler().handleEcho(response, cmd);
         }
@@ -87,7 +91,10 @@ public class CommandHandler {
                 break;
             case "dice":
             case "roll":
-                response = butt.getDiceHandler().handleDice(response, event.getChannel().getUsers());
+                if (event instanceof MessageEvent) {
+                    Channel channel = ((MessageEvent) event).getChannel();
+                    response = butt.getDiceHandler().handleDice(response, channel.getUsers());
+                }
                 break;
             case "bloat":
                 if (cmd.length > 1) {
@@ -130,6 +137,9 @@ public class CommandHandler {
             case "weather":
                 butt.getWeatherHandler().getFuckingWeather(response, cmd[1]);
                 break;
+        }
+        if (response.getIntention() == null) {
+            response.noResponse();
         }
         return response;
     }

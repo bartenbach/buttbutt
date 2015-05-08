@@ -21,10 +21,7 @@ public class IRCUtils {
     public boolean isOpInBotChannel(User user) {
         for (String x : butt.getYamlConfigurationFile().getChannelList()) {
             for (Channel y : user.getChannelsOpIn()) {
-                if (y.getChannelKey().equals(x)) {
-                    System.out.println("key: " + y.getChannelKey());
-                    System.out.println(y.getChannelId().toString());
-                    System.out.println(y.toString());
+                if (y.getName().equalsIgnoreCase(x)) {
                     return true;
                 }
             }
