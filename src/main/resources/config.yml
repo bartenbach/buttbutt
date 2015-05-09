@@ -4,10 +4,10 @@ Bot:
     Password:
     Message-Delay: 10
 Channels:
-    - '#oatpaste'
-    - '##poopheads'
+    - '#gsbros'
+    - '##anotherchannel'
 Server:
-    Hostname: 'irc.esper.net'
+    Hostname: 'chat.freenode.net'
     Auto-Reconnect: true
 SQL:
     Username: poop

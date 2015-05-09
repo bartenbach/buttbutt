@@ -54,9 +54,13 @@ public class ResponseHandler {
     }
 
     private void handlePrivateMessage(BotResponse response) {
-        response.getRecipient().send().message(response.getMessage());
-        if (response.hasAdditionalMessage()) {
+        if (response.getMessage() != null) {
             response.getRecipient().send().message(response.getMessage());
+            if (response.hasAdditionalMessage()) {
+                response.getRecipient().send().message(response.getMessage());
+            }
+        } else {
+            System.out.println("Recieved null message");
         }
     }
 

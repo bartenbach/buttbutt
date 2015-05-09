@@ -27,13 +27,10 @@ import net.alureon.ircbutt.sql.SqlManager;
 import net.alureon.ircbutt.util.IRCUtils;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
-import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.managers.ListenerManager;
 import org.pircbotx.hooks.managers.ThreadedListenerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 
 public class IRCbutt {
 
@@ -99,7 +96,7 @@ public class IRCbutt {
         /* Start the bot */
         try {
             bot.startBot();
-        } catch (IOException | IrcException ex) {
+        } catch (Exception ex) {  // several exceptions can be thrown here
             log.error("Unable to start bot.  StackTrace: ", ex);
         }
     }
