@@ -46,8 +46,12 @@ public class FactHandler {
             cmd[0] = cmd[0].replaceFirst("~", "");
             String info = getKnowledge(StringUtils.arrayToString(cmd));
             if (info != null) {
-                String mInfo = info.replaceAll("%user%", user.getNick());
-                response.chat(mInfo);
+                if (info.startsWith("%me%")) {
+                    String meinfo = info.replaceFirst("%me%", "");
+                    response.me(meinfo.replaceAll("%user%", user.getNick()));
+                } else {
+                    response.chat(info.replaceAll("%user%", user.getNick()));
+                }
             } else {
                 response.noResponse();
                 butt.getMessageHandler().handleInvalidCommand(user);

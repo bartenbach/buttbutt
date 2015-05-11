@@ -65,6 +65,8 @@ public class IRCbutt {
     private EchoHandler echoHandler = new EchoHandler(this);
     private YouTubeHandler youTubeHandler = new YouTubeHandler();
     private IRCUtils ircUtils = new IRCUtils(this);
+    private GiveHandler giveHandler = new GiveHandler(this);
+    private Rot13Handler rot13Handler = new Rot13Handler();
 
 
     public IRCbutt () {
@@ -101,9 +103,7 @@ public class IRCbutt {
         }
     }
 
-    public ButtChatHandler getButtChatHandler() {
-        return this.buttChatHandler;
-    }
+    public ButtChatHandler getButtChatHandler() { return this.buttChatHandler; }
 
     public ButtNameResponseHandler getButtNameResponseHandler() {
         return this.buttNameResponseHandler;
@@ -178,4 +178,8 @@ public class IRCbutt {
     public YouTubeHandler getYouTubeHandler() { return this.youTubeHandler; }
 
     public IRCUtils getIrcUtils() { return this.ircUtils; }
+
+    public GiveHandler getGiveHandler() { return this.giveHandler; }
+
+    public Rot13Handler getRot13Handler() { return this.rot13Handler; }
 }

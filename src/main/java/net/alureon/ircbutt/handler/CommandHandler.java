@@ -5,12 +5,16 @@ import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.libmath.Trigonometry;
 import net.alureon.ircbutt.util.GoogleResults;
 import net.alureon.ircbutt.util.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 public class CommandHandler {
 
@@ -62,22 +66,31 @@ public class CommandHandler {
                 return butt.getEchoHandler().handleEcho(response, cmd);
         }
 
-        /*  Other functions, and odds and ends that are easier hard-coded than adding to a database.. */
+        /*  Other functions, and odds and ends that are easier hard-coded */
+        // todo code creeping in here should be refactored to its respective class
         switch (cmd[0]) {
-            case "bot":
-                response.me("is a bot!");
-                break;
             case "g":
                 if (cmd.length > 1) {
                     GoogleResults results = GoogleSearch.getMyGoogHoles(StringUtils.getArgs(cmd));
                     String title = results.getResponseData().getResults().get(0).getTitle().replaceAll("\\<.*?\\>", "");
                     String url = results.getResponseData().getResults().get(0).getUrl();
-                    response.chat(title, url);
+                    try {
+                        response.chat(URLDecoder.decode(StringEscapeUtils.unescapeHtml4(title)), URLDecoder.decode(url, "utf8"));
+                    } catch (UnsupportedEncodingException ex) {
+                        log.error("Failed decoding URL ", ex);
+                    }
+                } else {
+                    response.privateMessage(user, "!g <search term>");
                 }
                 break;
+            case "give":
+                //butt.getGiveHandler().handleGive(response, user, cmd);
+                break;
+            case "rot13":
+                butt.getRot13Handler().handleRot13(response, StringUtils.getArgs(cmd));
+                break;
             case "yt":
-                String link = "http://www.youtube.com/results?search_query=" + StringUtils.concatenateUrlArgs(cmd);
-                butt.getYouTubeHandler().getYouTubeVideo(response, link);
+                butt.getYouTubeHandler().getYouTubeVideo(response, cmd);
                 break;
             case "slap":
                 if (cmd.length == 1) {
@@ -101,30 +114,11 @@ public class CommandHandler {
                     response.chat(StringUtils.getArgs(cmd) + " is bloat.");
                 }
                 break;
-            case "gn":
-                response.chat("Good night to all from " + nick + "!");
-                break;
-            case "gm":
-                response.chat("Good morning to all from " + nick + "!");
-                break;
-            case "source":
-                response.chat(butt.getSourceRepository());
-                break;
-            case "dance":
-                response.me("does the robot");
-                break;
             case "random": {
                 int random = (int) (Math.random() * 1000000);
                 response.chat(String.valueOf(random));
                 break;
             }
-            case "drink":
-                if (cmd.length < 2) {
-                    response.chat("Have a drink, " + nick);
-                } else {
-                    response.chat("Have a drink, " + StringUtils.getArgs(cmd));
-                }
-                break;
             case "sin":  // todo this doesn't work for shit lol
                 response.chat(Trigonometry.getSin(cmd[1]));
                 break;
