@@ -27,19 +27,21 @@ public class MessageHandler {
         if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
             response = butt.getCommandHandler().handleCommand(event, event.getMessage().split(" "), response);
             butt.getResponseHandler().handleResponse(response);
+
+        /* Handle karma */
         } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")
                 || event.getMessage().endsWith("--;")) {
             // todo handle karma
         } else {
-            /* Anything that isn't a command */
+            /* Check for URL or troll them */
             Preconditions.checkArgument(event.getUser().getNick() != null, "event.getUser().getNick() was null");
             butt.getChatLoggingManager().logMessage(event.getUser().getNick(), event.getMessage());
-            boolean reply = ButtMath.isRandomResponseTime();
             String message = event.getMessage();
+            butt.getUrlTitleHandler().checkForUrl(event.getChannel(), message);
             if (message.startsWith(butt.getYamlConfigurationFile().getBotName())) {
                 butt.getButtChatHandler().buttHighlightChat(event, butt.getButtNameResponseHandler().getButtRespose(event.getUser()));
             } else {
-                if (reply) {
+                if (ButtMath.isRandomResponseTime()) {
                     final String buttFormat = butt.getButtFormatHandler().buttformat(message).trim();
                     if (!buttFormat.equals(message)) {
                         butt.getButtChatHandler().buttChat(event.getChannel(), buttFormat);

@@ -1,4 +1,4 @@
-package net.alureon.ircbutt.handler;
+package net.alureon.ircbutt.handler.command;
 
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
@@ -46,12 +46,14 @@ public class FactHandler {
             cmd[0] = cmd[0].replaceFirst("~", "");
             String info = getKnowledge(StringUtils.arrayToString(cmd));
             if (info != null) {
-                if (info.startsWith("%me%")) {
-                    String meinfo = info.replaceFirst("%me%", "");
-                    response.me(meinfo.replaceAll("%user%", user.getNick()));
-                } else {
-                    response.chat(info.replaceAll("%user%", user.getNick()));
+                if (info.contains("%args%")) {
+                    info = info.replaceAll("%args%", StringUtils.getArgs(cmd));
                 }
+                if (info.startsWith("%me%")) {
+                    info = info.replaceFirst("%me%", "");
+                    response.me(info.replaceAll("%user%", user.getNick()));
+                }
+                response.chat(info.replaceAll("%user%", user.getNick()));
             } else {
                 response.noResponse();
                 butt.getMessageHandler().handleInvalidCommand(user);
@@ -64,7 +66,7 @@ public class FactHandler {
                     response.noResponse();
                     butt.getMessageHandler().handleInvalidCommand(user);
                 }
-        } else if (cmd[0].equals("factinfo") || cmd[0].equals("finfo")) {
+        } else if (cmd[0].equals("factinfo") || cmd[0].equals("finfo") || cmd[0].equals("fi")) {
             String info = butt.getFactTable().getKnowledgeInfo(StringUtils.getArgs(cmd));
             if (info != null) {
                 response.chat(info);
@@ -73,7 +75,8 @@ public class FactHandler {
                 butt.getMessageHandler().handleInvalidCommand(user);
             }
         } else if (cmd[0].equalsIgnoreCase("factfind") || cmd[0].equalsIgnoreCase("factsearch")
-                || cmd[0].equalsIgnoreCase("fsearch") || cmd[0].equalsIgnoreCase("ffind")) {
+                || cmd[0].equalsIgnoreCase("fsearch") || cmd[0].equalsIgnoreCase("ffind")
+                || cmd[0].equals("ff") || cmd[0].equals("fs")) {
             String info = butt.getFactTable().findFact(StringUtils.getArgs(cmd));
             if (info != null) {
                 response.chat(info);

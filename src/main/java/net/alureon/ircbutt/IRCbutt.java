@@ -18,10 +18,12 @@ package net.alureon.ircbutt;
 
 import net.alureon.ircbutt.file.YAMLConfigurationFile;
 import net.alureon.ircbutt.handler.*;
+import net.alureon.ircbutt.handler.command.*;
 import net.alureon.ircbutt.listener.ChatListener;
 import net.alureon.ircbutt.listener.PrivateMessageListener;
 import net.alureon.ircbutt.listener.UserJoinListener;
 import net.alureon.ircbutt.sql.FactTable;
+import net.alureon.ircbutt.sql.KarmaTable;
 import net.alureon.ircbutt.sql.QuoteGrabTable;
 import net.alureon.ircbutt.sql.SqlManager;
 import net.alureon.ircbutt.util.IRCUtils;
@@ -63,10 +65,18 @@ public class IRCbutt {
     private WeatherHandler weatherHandler = new WeatherHandler();
     private DefineHandler defineHandler = new DefineHandler();
     private EchoHandler echoHandler = new EchoHandler(this);
-    private YouTubeHandler youTubeHandler = new YouTubeHandler();
+    private YouTubeHandler youTubeHandler = new YouTubeHandler(this);
     private IRCUtils ircUtils = new IRCUtils(this);
     private GiveHandler giveHandler = new GiveHandler(this);
     private Rot13Handler rot13Handler = new Rot13Handler();
+    private UrlTitleHandler urlTitleHandler = new UrlTitleHandler();
+    private GoogleSearchHandler googleSearchHandler = new GoogleSearchHandler(this);
+    private KarmaHandler karmaHandler = new KarmaHandler();
+    private KarmaTable karmaTable = new KarmaTable();
+    private UrbanDictionaryHandler urbanDictionaryHandler = new UrbanDictionaryHandler(this);
+    private MoreHandler moreHandler = new MoreHandler();
+    private InviteHandler inviteHandler = new InviteHandler(this);
+    private PircBotX bot;
 
 
     public IRCbutt () {
@@ -93,7 +103,7 @@ public class IRCbutt {
         Configuration configuration = new BotConfigurationHandler(this).getConfiguration();
 
         /* Create the bot with our configuration */
-        PircBotX bot = new PircBotX(configuration);
+        this.bot = new PircBotX(configuration);
 
         /* Start the bot */
         try {
@@ -182,4 +192,18 @@ public class IRCbutt {
     public GiveHandler getGiveHandler() { return this.giveHandler; }
 
     public Rot13Handler getRot13Handler() { return this.rot13Handler; }
+
+    public UrlTitleHandler getUrlTitleHandler() { return this.urlTitleHandler; }
+
+    public GoogleSearchHandler getGoogleSearchHandler() { return this.googleSearchHandler; }
+
+    public MoreHandler getMoreHandler() { return this.moreHandler; }
+
+    public UrbanDictionaryHandler getUrbanDictionaryHandler() { return this.urbanDictionaryHandler; }
+
+    public PircBotX getBot() {
+        return this.bot;
+    }
+
+    public InviteHandler getInviteHandler() { return this.inviteHandler; }
 }

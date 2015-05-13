@@ -45,6 +45,9 @@ public class SqlManager {
                 "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `item` VARCHAR(32) NOT NULL UNIQUE," +
                 "`data` VARCHAR(300) NOT NULL, `added_by` VARCHAR(16) NOT NULL," +
                 "`timestamp` DATETIME NOT NULL) ENGINE=MyISAM");
+        sqlUpdate("CREATE TABLE IF NOT EXISTS `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` " +
+                "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `item` VARCHAR(32) NOT NULL," +
+                "`karma` SMALLINT NOT NULL) ENGINE=MyISAM");
     }
 
     public boolean sqlUpdate(String sql) {

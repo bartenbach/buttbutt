@@ -1,4 +1,4 @@
-package net.alureon.ircbutt.handler;
+package net.alureon.ircbutt.handler.command;
 
 import com.google.common.collect.ImmutableSortedSet;
 import net.alureon.ircbutt.BotResponse;

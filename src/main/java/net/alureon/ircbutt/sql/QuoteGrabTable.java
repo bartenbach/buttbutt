@@ -21,6 +21,8 @@ public class QuoteGrabTable {
         this.butt = butt;
     }
 
+    //TODO remove awful redundant connection checks.  This has been taken care of.
+
     public void addQuote(String nick, String quote, String grabber) {
         if (butt.getSqlManager().isConnected()) {
             java.util.Date date = new Date();

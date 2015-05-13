@@ -23,8 +23,4 @@ public class StringUtilsTest {
         assertEquals(StringUtils.getArgsOverOne(args), "z");
     }
 
-    @Test
-    public void testConcatenateUrlArgs() {
-        assertEquals(StringUtils.concatenateUrlArgs(args), "y+z");
-    }
 }

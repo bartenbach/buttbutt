@@ -1,9 +1,8 @@
-package net.alureon.ircbutt.handler;
+package net.alureon.ircbutt.handler.command;
 
 import net.alureon.ircbutt.BotResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,16 +23,9 @@ public class WeatherHandler {
 
         try {
             Document doc = Jsoup.connect("http://thefuckingweather.com/?where=" + place).userAgent(userAgent).get();
-            Element location = doc.getElementById("locationDisplaySpan");
-            Elements temperature = doc.getElementsByClass("temperature");
-            Elements remark = doc.getElementsByClass("remark");
-            Elements flavor = doc.getElementsByClass("flavor");
-            sb.append("(")
-                    .append(location.text())
-                    .append(")  ")
-                    .append(temperature.first().text())
-                    .append("°F  ")
-                    .append(remark.first().text())
+            Elements remark = doc.getElementsByClass("topRemark");
+            Elements flavor = doc.getElementsByClass("remark");
+            sb.append(remark.first().text())
                     .append(".  ")
                     .append(flavor.first().text());
             response.chat(sb.toString());

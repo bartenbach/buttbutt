@@ -1,4 +1,4 @@
-package net.alureon.ircbutt.handler;
+package net.alureon.ircbutt.handler.command;
 
 import net.alureon.ircbutt.BotResponse;
 import org.jsoup.Jsoup;

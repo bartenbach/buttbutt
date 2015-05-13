@@ -16,7 +16,7 @@ public class ButtNameResponseHandler {
         int random = (int) (Math.random()*17);
         switch (random) {
             case 0:
-                response = "yes butt here";
+                response = "butt should be comedian";
                 break;
             case 1:
                 response = "butt never was too great at mc";
@@ -31,7 +31,7 @@ public class ButtNameResponseHandler {
                 response = "are you a bot?";
                 break;
             case 5:
-                response = "how r u?";
+                response = "how r u " + user.getNick() + "?";
                 break;
             case 6:
                 response = "butt have good net connection hbu";
@@ -43,7 +43,7 @@ public class ButtNameResponseHandler {
                 response = "butt need to poop brb";
                 break;
             case 9:
-                response = "butt never been much of conversationalist";
+                response = "butt never been much conversationalist";
                 break;
             case 10:
                 response = "butt use to play mc a lot not no more tho";
@@ -58,10 +58,10 @@ public class ButtNameResponseHandler {
                 response = "butt feel good just enjoying life atm";
                 break;
             case 14:
-                response = "butt like listen to good music";
+                response = "butt like listen to buttstep";
                 break;
             case 15:
-                response = "butt easily get off topic lol";
+                response = "butt easily get off topic";
                 break;
             case 16:
                 response = "butt getting distracted :)";

@@ -7,4 +7,8 @@ public class ButtMath {
         return (test<=1);
     }
 
+    public static int getRandom() {
+        return (int) (Math.random() * 100);
+    }
+
 }

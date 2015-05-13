@@ -21,9 +21,9 @@ public class BotConfigurationHandler {
                 .setNickservPassword(butt.getYamlConfigurationFile().getBotPassword())
                 .setListenerManager(butt.getListenerManager())
                 .setVersion(butt.getProgramVersion());
-        for (String x : butt.getYamlConfigurationFile().getChannelList()) {
+/*        for (String x : butt.getYamlConfigurationFile().getChannelList()) {
             configBuilder.addAutoJoinChannel(x);
-        }
+        }*/
         return configBuilder.buildConfiguration();
     }
 }
