@@ -5,9 +5,7 @@ import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.libmath.Trigonometry;
 import net.alureon.ircbutt.util.ButtMath;
 import net.alureon.ircbutt.util.StringUtils;
-import org.pircbotx.Channel;
 import org.pircbotx.User;
-import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +26,12 @@ public class CommandHandler {
         /* For the sake of clearer code, let's just set these immediately */
         User user = event.getUser();
         String nick = user.getNick();
+
+        for (String x : cmd) {
+            if (x.equals(">>") || x.equals(">")) {
+                //todo redirection handler
+            }
+        }
 
         /* if it's prefixed with a tilde it's a knowledge request */
         if (cmd[0].startsWith("~")) {
@@ -67,11 +71,7 @@ public class CommandHandler {
                 return butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
             case "echo":
                 butt.getEchoHandler().handleEcho(response, cmd);
-        }
-
-        /*  Other functions, and odds and ends that are easier hard-coded */
-        // todo code creeping in here should be refactored to its respective class
-        switch (cmd[0]) {
+                break;
             case "g":
                 butt.getGoogleSearchHandler().handleGoogleSearch(response, user, cmd);
                 break;
@@ -87,33 +87,16 @@ public class CommandHandler {
             case "ud":
                 butt.getUrbanDictionaryHandler().getDefinition(response, cmd);
                 break;
-            case "slap":
-                if (cmd.length == 1) {
-                    response.me("slaps " + nick + " with a large trout");
-                } else {
-                    response.me("slaps " +StringUtils.getArgs(cmd)+ " with a large trout");
-                }
-                break;
             case "version":
                 response.chat(butt.getProgramName() + " " + butt.getProgramVersion());
                 break;
             case "dice":
-            case "roll":
-                if (event instanceof MessageEvent) {
-                    Channel channel = ((MessageEvent) event).getChannel();
-                    response = butt.getDiceHandler().handleDice(response, channel.getUsers());
-                }
+                butt.getDiceHandler().handleDice(event, response);
                 break;
-            case "bloat":
-                if (cmd.length > 1) {
-                    response.chat(StringUtils.getArgs(cmd) + " is bloat.");
-                }
-                break;
-            case "random": {
+            case "random":
                 response.chat(String.valueOf(ButtMath.getRandom()));
                 break;
-            }
-            case "sin":  // todo this doesn't work for shit lol
+            case "sin":
                 response.chat(Trigonometry.getSin(cmd[1]));
                 break;
             case "cos":
@@ -131,7 +114,7 @@ public class CommandHandler {
             case "weather":
                 butt.getWeatherHandler().getFuckingWeather(response, cmd[1]);
                 break;
-            case "invite": //todo make him join
+            case "invite":
                 butt.getInviteHandler().handleInvite(StringUtils.getArgs(cmd).split(" "));
                 break;
             case "more":

@@ -63,7 +63,7 @@ public class IRCbutt {
     private ResponseHandler responseHandler = new ResponseHandler(this);
     private CheckHandler checkHandler = new CheckHandler();
     private WeatherHandler weatherHandler = new WeatherHandler();
-    private DefineHandler defineHandler = new DefineHandler();
+    private DefineHandler defineHandler = new DefineHandler(this);
     private EchoHandler echoHandler = new EchoHandler(this);
     private YouTubeHandler youTubeHandler = new YouTubeHandler(this);
     private IRCUtils ircUtils = new IRCUtils(this);

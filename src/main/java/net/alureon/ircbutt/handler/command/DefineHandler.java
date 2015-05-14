@@ -1,6 +1,7 @@
 package net.alureon.ircbutt.handler.command;
 
 import net.alureon.ircbutt.BotResponse;
+import net.alureon.ircbutt.IRCbutt;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -15,30 +16,31 @@ import java.io.IOException;
 
 public class DefineHandler {
 
+
+    private IRCbutt butt;
     final static Logger log = LoggerFactory.getLogger(DefineHandler.class);
 
-    public void handleDefine(BotResponse response, String word) {
-        String userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0";
 
+    public DefineHandler(IRCbutt butt) {
+        this.butt = butt;
+    }
+
+    public void handleDefine(BotResponse response, String word) {
+        butt.getMoreHandler().clearMore();
+        String userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0";
         try {
             Document doc = Jsoup.connect("http://www.merriam-webster.com/dictionary/"+word).userAgent(userAgent).get();
-            try {
-                Elements definition = doc.getElementsByClass("ld_on_collegiate");
-                response.chat(word + definition.first().text());
-            } catch (NullPointerException ex) {
-                try {
-                    Elements definition2 = doc.getElementsByClass("ssens");
-                    response.chat(word + ": " + definition2.first().text().replaceFirst(":", " ").trim());
-                } catch (NullPointerException ex2) {
-                    response.chat("no definition found for " + word);
-                }
-            }
+            Elements definitions = doc.getElementsByClass("ssens");
+            response.chat(definitions.get(0).text());
+            butt.getMoreHandler().setMore(definitions.get(1).text());
+            butt.getMoreHandler().setMore2(definitions.get(2).text());
+            butt.getMoreHandler().setMore3("get your own dictionary pal");
         } catch (IOException ex) {
-            log.error("We suck. ", ex);
-            response.chat("couldn't get a definition for " + word);
+            log.error("DefineHandler IOException", ex);
+            response.chat(ex.getMessage());
         } catch (NullPointerException ex) {
-            log.error("#NPE4LYFE", ex);
-            response.privateMessage(response.getRecipient(), "couldn't find definition for '" + word + "'");
+            log.error("DefineHandler NullPointerException", ex);
+            response.chat(ex.getMessage());
         }
     }
 }
