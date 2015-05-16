@@ -2,6 +2,7 @@ package net.alureon.ircbutt.handler;
 
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
+import net.alureon.ircbutt.libmath.MathLib;
 import net.alureon.ircbutt.libmath.Trigonometry;
 import net.alureon.ircbutt.util.ButtMath;
 import net.alureon.ircbutt.util.StringUtils;
@@ -103,6 +104,10 @@ public class CommandHandler {
             case "arccos":
             case "arctan":
                 Trigonometry.handleTrigFunctions(response, cmd);
+                break;
+            case "sqrt":
+            case "pow":
+                MathLib.handleMath(response, cmd);
                 break;
             case "check":
                 butt.getCheckHandler().handleCheck(response, StringUtils.getArgs(cmd));
