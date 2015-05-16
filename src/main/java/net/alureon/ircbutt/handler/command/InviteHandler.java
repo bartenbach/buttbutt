@@ -21,7 +21,7 @@ public class InviteHandler {
         for (String x : butt.getYamlConfigurationFile().getChannelList()) {
             for (String y : args) {
                 if (x.equalsIgnoreCase(y)) {
-                    butt.getBot().sendIRC().joinChannel(x);
+                    butt.getPircBotX().sendIRC().joinChannel(x);
                 }
             }
         }

@@ -43,6 +43,7 @@ jar {
   manifest {
     attributes 'Implementation-Title': 'IRCbutt',
                'Implementation-Version': version,
+               'Implementation-Vendor': 'http://github.com/proxa/IRCbutt',
                'Main-Class': 'net.alureon.ircbutt.Main',
                'Built-By': System.properties['user.name']
   }

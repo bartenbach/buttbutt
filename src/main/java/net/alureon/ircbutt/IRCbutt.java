@@ -40,7 +40,7 @@ public class IRCbutt {
     /* Program-related constants */
     private final String programName = this.getClass().getPackage().getImplementationTitle();
     private final String programVersion = this.getClass().getPackage().getImplementationVersion();
-    private final String sourceRepository = "https://github.com/proxa/IRCbutt";
+    private final String sourceRepository = this.getClass().getPackage().getImplementationVendor();
 
     /* Logger */
     final static Logger log = LoggerFactory.getLogger(IRCbutt.class);
@@ -76,7 +76,8 @@ public class IRCbutt {
     private UrbanDictionaryHandler urbanDictionaryHandler = new UrbanDictionaryHandler(this);
     private MoreHandler moreHandler = new MoreHandler();
     private InviteHandler inviteHandler = new InviteHandler(this);
-    private PircBotX bot;
+    private WakeRoomHandler wakeRoomHandler = new WakeRoomHandler();
+    private PircBotX pircBotX;
 
 
     public IRCbutt () {
@@ -103,11 +104,11 @@ public class IRCbutt {
         Configuration configuration = new BotConfigurationHandler(this).getConfiguration();
 
         /* Create the bot with our configuration */
-        this.bot = new PircBotX(configuration);
+        this.pircBotX = new PircBotX(configuration);
 
         /* Start the bot */
         try {
-            bot.startBot();
+            pircBotX.startBot();
         } catch (Exception ex) {  // several exceptions can be thrown here
             log.error("Unable to start bot.  StackTrace: ", ex);
         }
@@ -201,9 +202,9 @@ public class IRCbutt {
 
     public UrbanDictionaryHandler getUrbanDictionaryHandler() { return this.urbanDictionaryHandler; }
 
-    public PircBotX getBot() {
-        return this.bot;
-    }
+    public PircBotX getPircBotX() { return this.pircBotX; }
 
     public InviteHandler getInviteHandler() { return this.inviteHandler; }
+
+    public WakeRoomHandler getWakeRoomHandler() { return this.wakeRoomHandler; }
 }

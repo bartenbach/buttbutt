@@ -97,13 +97,12 @@ public class CommandHandler {
                 response.chat(String.valueOf(ButtMath.getRandom()));
                 break;
             case "sin":
-                response.chat(Trigonometry.getSin(cmd[1]));
-                break;
             case "cos":
-                response.chat(Trigonometry.getCos(cmd[1]));
-                break;
             case "tan":
-                response.chat(Trigonometry.getTan(cmd[1]));
+            case "arcsin":
+            case "arccos":
+            case "arctan":
+                Trigonometry.handleTrigFunctions(response, cmd);
                 break;
             case "check":
                 butt.getCheckHandler().handleCheck(response, StringUtils.getArgs(cmd));
@@ -119,6 +118,9 @@ public class CommandHandler {
                 break;
             case "more":
                 butt.getMoreHandler().handleMore(response);
+                break;
+            case "wr":
+                butt.getWakeRoomHandler().handleWakeRoom();
                 break;
         }
         if (response.getIntention() == null) {
