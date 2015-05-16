@@ -47,8 +47,8 @@ public class IRCbutt {
 
     /* Class instantiation */
     private ButtNameResponseHandler buttNameResponseHandler = new ButtNameResponseHandler(this);
-    private ButtChatHandler buttChatHandler = new ButtChatHandler();
-    private ButtFormatHandler buttFormatHandler = new ButtFormatHandler();
+    private BotChatHandler botChatHandler = new BotChatHandler();
+    private ButtReplaceHandler buttReplaceHandler = new ButtReplaceHandler(this);
     private CommandHandler commandHandler = new CommandHandler(this);
     private YAMLConfigurationFile yamlConfigurationFile = new YAMLConfigurationFile();
     private SqlManager sqlManager = new SqlManager(this);
@@ -114,14 +114,14 @@ public class IRCbutt {
         }
     }
 
-    public ButtChatHandler getButtChatHandler() { return this.buttChatHandler; }
+    public BotChatHandler getBotChatHandler() { return this.botChatHandler; }
 
     public ButtNameResponseHandler getButtNameResponseHandler() {
         return this.buttNameResponseHandler;
     }
 
-    public ButtFormatHandler getButtFormatHandler() {
-        return this.buttFormatHandler;
+    public ButtReplaceHandler getButtReplaceHandler() {
+        return this.buttReplaceHandler;
     }
 
     public String getProgramName() {

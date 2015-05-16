@@ -4,7 +4,7 @@ import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 
-public class ButtChatHandler {
+public class BotChatHandler {
     //todo maybe: implement a scheduler?
 
     public void buttChat(Channel channel, String x) {

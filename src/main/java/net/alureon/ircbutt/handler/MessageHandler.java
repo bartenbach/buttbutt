@@ -39,12 +39,12 @@ public class MessageHandler {
             String message = event.getMessage();
             butt.getUrlTitleHandler().checkForUrl(event.getChannel(), message);
             if (message.startsWith(butt.getYamlConfigurationFile().getBotName())) {
-                butt.getButtChatHandler().buttHighlightChat(event, butt.getButtNameResponseHandler().getButtRespose(event.getUser()));
+                butt.getBotChatHandler().buttHighlightChat(event, butt.getButtNameResponseHandler().getButtRespose(event.getUser()));
             } else {
                 if (ButtMath.isRandomResponseTime()) {
-                    final String buttFormat = butt.getButtFormatHandler().buttformat(message).trim();
+                    final String buttFormat = butt.getButtReplaceHandler().buttformat(message).trim();
                     if (!buttFormat.equals(message)) {
-                        butt.getButtChatHandler().buttChat(event.getChannel(), buttFormat);
+                        butt.getBotChatHandler().buttChat(event.getChannel(), buttFormat);
                     }
                 }
             }
@@ -67,6 +67,6 @@ public class MessageHandler {
     }
 
     public void handleInvalidCommand(User user) {
-        butt.getButtChatHandler().buttPM(user, "butt dont kno nothin bout that");
+        butt.getBotChatHandler().buttPM(user, "butt dont kno nothin bout that");
     }
 }

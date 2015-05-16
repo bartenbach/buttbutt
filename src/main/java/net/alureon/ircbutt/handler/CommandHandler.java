@@ -2,6 +2,7 @@ package net.alureon.ircbutt.handler;
 
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
+import net.alureon.ircbutt.libmath.Eval;
 import net.alureon.ircbutt.libmath.MathLib;
 import net.alureon.ircbutt.libmath.Trigonometry;
 import net.alureon.ircbutt.util.ButtMath;
@@ -126,6 +127,9 @@ public class CommandHandler {
                 break;
             case "wr":
                 butt.getWakeRoomHandler().handleWakeRoom();
+                break;
+            case "eval":
+                Eval.eval(response, StringUtils.getArgs(cmd));
                 break;
         }
         if (response.getIntention() == null) {

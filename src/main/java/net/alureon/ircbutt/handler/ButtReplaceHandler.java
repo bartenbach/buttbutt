@@ -1,48 +1,63 @@
 package net.alureon.ircbutt.handler;
 
-public class ButtFormatHandler {
+import net.alureon.ircbutt.IRCbutt;
+
+public class ButtReplaceHandler {
+
+
+    private IRCbutt butt;
+
+
+    public ButtReplaceHandler(IRCbutt butt) {
+        this.butt = butt;
+    }
 
     public String buttformat(String message) {
         String[] split = message.split(" ");
         replaceButt(split);
         if (split.length > 6) {
-            boolean success = replaceButt(split);
-            if (!success) {
-                buttRetry(split);
-            }
+            attemptReplace(split);
         }
         if (split.length >= 14) {
-            boolean success = replaceButt(split);
-            if (!success) {
-                buttRetry(split);
-            }
+            attemptReplace(split);
         }
         if (split.length >= 20) {
-            boolean success = replaceButt(split);
-            if (!success) {
-                buttRetry(split);
-            }
+            attemptReplace(split);
+        }
+        if (split.length >= 28) {
+            attemptReplace(split);
+        }
+        if (split.length >= 36) {
+            attemptReplace(split);
+        }
+        if (split.length >= 44) {
+            attemptReplace(split);
         }
         StringBuilder sb = new StringBuilder();
         for (String x : split) {
-            if (!x.equalsIgnoreCase("buttbutt") && !x.equalsIgnoreCase("buttbutt!")
-                    && !x.equalsIgnoreCase("buttbutt?") && !x.equalsIgnoreCase("buttbutt,")
-                    && !x.equalsIgnoreCase("buttbutt.")) {
+            if (!x.startsWith(butt.getYamlConfigurationFile().getBotName())) {
                 sb.append(x).append(" ");
             }
         }
-        return sb.toString();
+        return sb.toString().trim();
+    }
+
+    public void attemptReplace(String[] split) {
+        boolean success = replaceButt(split);
+        if (!success) {
+            buttRetry(split);
+        }
     }
 
     private boolean replaceButt(String[] split) {
         int replace = (int) (Math.random()*split.length);
         if(!isAWordWeDontReplace(split[replace])) {
-            if (split[replace].equalsIgnoreCase("buttbutt")) {
-                split[replace] = "";
+            if (split[replace].equalsIgnoreCase(butt.getYamlConfigurationFile().getBotName())) {
+                split[replace] = randomize();
                 return true;
             }
 
-            StringBuilder sb = new StringBuilder("butt");
+            StringBuilder sb = new StringBuilder(randomize());
             String suffix = "";
             if (split[replace].endsWith("?")) {
                 suffix = "?";
@@ -59,7 +74,7 @@ public class ButtFormatHandler {
             } else if (split[replace].endsWith("'s")) {
                 suffix = "'s";
             } else if (split[replace].endsWith("s")) {
-                suffix = "s";
+                suffix = randomize();
             } else if (split[replace].endsWith("!")) {
                 suffix = "!";
             } else if (split[replace].endsWith(".")) {
@@ -142,6 +157,14 @@ public class ButtFormatHandler {
             return true;
         }
         return false;
+    }
+
+    private String randomize() {
+        double ran = Math.random()*100;
+        if (ran < 80) {
+            return "butt";
+        }
+        return "butts";
     }
 
     private boolean isAWordWeDontReplace(String replace) {
