@@ -32,12 +32,15 @@ public class MessageHandler {
         } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")
                 || event.getMessage().endsWith("--;")) {
             // todo handle karma
+        } else if (event.getMessage().startsWith("%s/")) {
+            // todo search and replace
         } else {
             /* Check for URL or troll them */
             Preconditions.checkArgument(event.getUser().getNick() != null, "event.getUser().getNick() was null");
             butt.getChatLoggingManager().logMessage(event.getUser().getNick(), event.getMessage());
             String message = event.getMessage();
-            butt.getUrlTitleHandler().checkForUrl(event.getChannel(), message);
+            //butt.getUrlTitleHandler().checkForUrl(event.getChannel(), message);
+            KlongUrlTitleHandler.handleUrl(event.getChannel(), event.getMessage());
             if (message.startsWith(butt.getYamlConfigurationFile().getBotName())) {
                 butt.getBotChatHandler().buttHighlightChat(event, butt.getButtNameResponseHandler().getButtRespose(event.getUser()));
             } else {

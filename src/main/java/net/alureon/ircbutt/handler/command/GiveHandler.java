@@ -24,7 +24,7 @@ public class GiveHandler {
             MessageEvent event2 = (MessageEvent) event;
             if (args.length > 2) {
                 if (recipientExists(event2, args[1])) {
-                    String parsed = butt.getEchoHandler().parseMessage(response, StringUtils.getArgs(args).split(" "));
+                    String parsed = butt.getEchoHandler().parseMessage(response, StringUtils.getArgs(args).split(" "), user.getNick());
                     response.chat(args[1] + ": " + parsed);
                 }
             } else {

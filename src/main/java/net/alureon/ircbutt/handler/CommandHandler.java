@@ -57,6 +57,7 @@ public class CommandHandler {
             case "qsay":
             case "qsearch":
             case "qfind":
+            case "qf":
                 return butt.getQuoteGrabHandler().handleQuoteGrabs(response, cmd, user, nick);
             case "learn":
             case "forget":
@@ -72,7 +73,7 @@ public class CommandHandler {
             case "fs":
                 return butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
             case "echo":
-                butt.getEchoHandler().handleEcho(response, cmd);
+                butt.getEchoHandler().handleEcho(response, cmd, user.getNick());
                 break;
             case "g":
                 butt.getGoogleSearchHandler().handleGoogleSearch(response, user, cmd);
@@ -90,7 +91,7 @@ public class CommandHandler {
                 butt.getUrbanDictionaryHandler().getDefinition(response, cmd);
                 break;
             case "version":
-                response.chat(butt.getProgramName() + " " + butt.getProgramVersion());
+                response.chat(butt.getProgramVersion());
                 break;
             case "dice":
                 butt.getDiceHandler().handleDice(event, response);

@@ -19,12 +19,12 @@ public class EchoHandler {
         this.butt = butt;
     }
 
-    public void handleEcho(BotResponse response, String[] cmd) {
-        String message = parseMessage(response, cmd);
+    public void handleEcho(BotResponse response, String[] cmd, String nick) {
+        String message = parseMessage(response, cmd, nick);
         response.chat(message);
     }
 
-    public String parseMessage(BotResponse response, String[] cmd) {
+    public String parseMessage(BotResponse response, String[] cmd, String nick) {
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i < cmd.length; i++) {
             if (cmd[i].contains("[")) {
@@ -45,7 +45,7 @@ public class EchoHandler {
                 sb.append(cmd[i]).append(" ");
             }
         }
-        return sb.toString();
+        return sb.toString().replaceAll("%args%", "").replaceAll("%user", nick);
     }
 
     public String parseCommand(String[] cmd, int j) {

@@ -15,28 +15,14 @@ public class ButtReplaceHandler {
     public String buttformat(String message) {
         String[] split = message.split(" ");
         replaceButt(split);
-        if (split.length > 6) {
-            attemptReplace(split);
-        }
-        if (split.length >= 14) {
-            attemptReplace(split);
-        }
-        if (split.length >= 20) {
-            attemptReplace(split);
-        }
-        if (split.length >= 28) {
-            attemptReplace(split);
-        }
-        if (split.length >= 36) {
-            attemptReplace(split);
-        }
-        if (split.length >= 44) {
+        int x = (int) Math.ceil(split.length / 8);
+        for (int i = 1; i < x; i++) {
             attemptReplace(split);
         }
         StringBuilder sb = new StringBuilder();
-        for (String x : split) {
-            if (!x.startsWith(butt.getYamlConfigurationFile().getBotName())) {
-                sb.append(x).append(" ");
+        for (String y : split) {
+            if (!y.startsWith(butt.getYamlConfigurationFile().getBotName())) {
+                sb.append(y).append(" ");
             }
         }
         return sb.toString().trim();

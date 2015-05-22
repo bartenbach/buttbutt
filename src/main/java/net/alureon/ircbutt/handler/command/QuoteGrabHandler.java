@@ -88,7 +88,7 @@ public class QuoteGrabHandler {
                     log.error("Exception accessing database: ", ex);
                 }
             }
-        } else if (cmd[0].equals("qinfo")) {
+        } else if (cmd[0].equals("qinfo") || cmd[0].equals("qi")) {
             if (cmd.length == 1) {
                 response.privateMessage(user, "!qinfo <id>");
             } else {
@@ -120,7 +120,7 @@ public class QuoteGrabHandler {
                     log.error("Exception accessing database: ", ex);
                 }
             }
-        } else if (cmd[0].equals("qfind") || cmd[0].equals("qsearch")) {
+        } else if (cmd[0].equals("qfind") || cmd[0].equals("qsearch") || cmd[0].equals("qf")) {
             if (cmd.length == 1) {
                 response.privateMessage(user, "!qfind <string>");
             } else {

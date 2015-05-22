@@ -15,7 +15,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
- * Created by alureon on 5/13/15.
+ * Created by alureon and Klong on 5/13/15.
+ *
  */
 
 public class UrbanDictionaryHandler {
