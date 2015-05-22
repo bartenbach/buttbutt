@@ -45,7 +45,7 @@ public class EchoHandler {
                 sb.append(cmd[i]).append(" ");
             }
         }
-        return sb.toString().replaceAll("%args%", "").replaceAll("%user", nick);
+        return sb.toString().replaceAll("%args%", "").replaceAll("%user%", nick);
     }
 
     public String parseCommand(String[] cmd, int j) {
