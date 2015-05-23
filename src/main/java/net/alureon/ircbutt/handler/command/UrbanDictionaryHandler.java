@@ -39,19 +39,32 @@ public class UrbanDictionaryHandler {
             try {
                 Document doc = Jsoup.connect(link).userAgent(userAgent).get();
                 Elements meaning = doc.getElementsByClass("meaning");
-                Element firstDefinition = meaning.get(0);
-                Element secondDefinition = meaning.get(1);
-                Element thirdDefinition = meaning.get(2);
+                Element firstDefinition = getElement(meaning, 0);
+                Element secondDefinition = getElement(meaning, 1);
+                Element thirdDefinition = getElement(meaning, 2);
                 response.chat(firstDefinition.text());
-                butt.getMoreHandler().setMore(secondDefinition.text());
-                butt.getMoreHandler().setMore2(thirdDefinition.text());
-                butt.getMoreHandler().setMore3(link);
-            } catch (IOException | NullPointerException ex) {
+                try {
+                    butt.getMoreHandler().setMore(secondDefinition.text());
+                    butt.getMoreHandler().setMore2(thirdDefinition.text());
+                    butt.getMoreHandler().setMore3(link);
+                } catch (NullPointerException ex) {
+                    log.info("No more definitions to get");
+                }
+            } catch (IOException ex) {
                 log.error("Exception encountered", ex);
                 response.privateMessage(response.getRecipient(), "Found no definition");
             }
         } catch (UnsupportedEncodingException ex) {
             log.error("Failed to encode URL", ex);
+        }
+    }
+
+    public Element getElement(Elements elements, int index) {
+        try {
+            Element e =  elements.get(index);
+            return e;
+        } catch (IndexOutOfBoundsException ex) {
+            return null;
         }
     }
 }
