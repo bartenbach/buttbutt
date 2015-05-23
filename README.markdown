@@ -1,5 +1,7 @@
 #IRCbutt
-An IRC bot port of the Minecraft chat bot buttbutt (the latter being originally inspired by buttbot)
+A Java port of buttbot, with various other functionality.
+
+Original ideas, and some borrowed from phrik from #archlinux on freenode
 
 ![Real photograph of buttbutt](buttbot.gif "Real photographs of buttbutt")
 

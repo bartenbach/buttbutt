@@ -6,45 +6,36 @@ import org.jsoup.select.Elements;
 import org.pircbotx.Channel;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /* Created by Klong and alureon */
 
 public class KlongUrlTitleHandler {
 
-    public static void handleUrl(Channel channel, String text) {
-        for (String link : links(text)) {
-            try {
-                String title = getTitle(link);
-                if (title != null) {
-                    channel.send().message("Title: " + title);
-                }
-            } catch (Exception e) {
-                channel.send().message(e.getMessage());
+
+    public static final String URL_REGEX = "((https?|ftp)://|(www|ftp)\\.)?[a-z0-9-]+(\\.[a-z0-9-]+)+([/?].*)?";
+
+
+    public static void handleUrl(Channel channel, String message) {
+        Pattern p = Pattern.compile(URL_REGEX);
+        Matcher m = p.matcher(message);
+        if (m.find()) {
+            String title = getTitle(m.group());
+            if (title != null) {
+                channel.send().message("Title: " + title);
             }
         }
     }
 
-    public static String getTitle(String url) throws IOException {
-        Document doc = Jsoup.connect(url).get();
-        Elements n = doc.select("title");
-        return n.first().text();
-    }
-
-    public static List<String> links(String text) {
-        if (text.contains("http://") || text.contains("https://")) {
-            ArrayList<String> links = new ArrayList<>();
-            String[] parts = text.split(" ");
-            for (String part : parts) {
-                if (part.startsWith("http://") || part.startsWith("https://")) {
-                    links.add(part);
-                }
-            }
-            return links;
+    public static String getTitle(String url) {
+        try {
+            Document doc = Jsoup.connect(url).get();
+            Elements n = doc.select("title");
+            return n.first().text();
+        } catch (IOException ex) {
+            return null;
         }
-        return Collections.EMPTY_LIST;
     }
 
 }
