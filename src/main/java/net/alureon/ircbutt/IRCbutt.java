@@ -46,7 +46,6 @@ public class IRCbutt {
     final static Logger log = LoggerFactory.getLogger(IRCbutt.class);
 
     /* Class instantiation */
-    private ButtNameResponseHandler buttNameResponseHandler = new ButtNameResponseHandler(this);
     private BotChatHandler botChatHandler = new BotChatHandler();
     private ButtReplaceHandler buttReplaceHandler = new ButtReplaceHandler(this);
     private CommandHandler commandHandler = new CommandHandler(this);
@@ -69,10 +68,9 @@ public class IRCbutt {
     private IRCUtils ircUtils = new IRCUtils(this);
     private GiveHandler giveHandler = new GiveHandler(this);
     private Rot13Handler rot13Handler = new Rot13Handler();
-    private UrlTitleHandler urlTitleHandler = new UrlTitleHandler();
     private GoogleSearchHandler googleSearchHandler = new GoogleSearchHandler(this);
-    private KarmaHandler karmaHandler = new KarmaHandler();
-    private KarmaTable karmaTable = new KarmaTable();
+    private KarmaHandler karmaHandler = new KarmaHandler(this);
+    private KarmaTable karmaTable = new KarmaTable(this);
     private UrbanDictionaryHandler urbanDictionaryHandler = new UrbanDictionaryHandler(this);
     private MoreHandler moreHandler = new MoreHandler();
     private InviteHandler inviteHandler = new InviteHandler(this);
@@ -115,10 +113,6 @@ public class IRCbutt {
     }
 
     public BotChatHandler getBotChatHandler() { return this.botChatHandler; }
-
-    public ButtNameResponseHandler getButtNameResponseHandler() {
-        return this.buttNameResponseHandler;
-    }
 
     public ButtReplaceHandler getButtReplaceHandler() {
         return this.buttReplaceHandler;
@@ -194,8 +188,6 @@ public class IRCbutt {
 
     public Rot13Handler getRot13Handler() { return this.rot13Handler; }
 
-    public UrlTitleHandler getUrlTitleHandler() { return this.urlTitleHandler; }
-
     public GoogleSearchHandler getGoogleSearchHandler() { return this.googleSearchHandler; }
 
     public MoreHandler getMoreHandler() { return this.moreHandler; }
@@ -207,4 +199,8 @@ public class IRCbutt {
     public InviteHandler getInviteHandler() { return this.inviteHandler; }
 
     public WakeRoomHandler getWakeRoomHandler() { return this.wakeRoomHandler; }
+
+    public KarmaHandler getKarmaHandler() { return this.karmaHandler; }
+
+    public KarmaTable getKarmaTable() { return this.karmaTable; }
 }

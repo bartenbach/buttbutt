@@ -47,10 +47,7 @@ public class FactTable {
         if (rs != null) {
             try {
                 if (rs.next()) {
-                    /** this is a temp way for debugging **/
-                    String temp = rs.getString("data");
-                    log.debug("String data from database: " + temp);
-                    return temp;
+                    return rs.getString("data");
                 }
             } catch (SQLException ex) {
                 log.error("Failed to query knowledge database. StackTrace:", ex);

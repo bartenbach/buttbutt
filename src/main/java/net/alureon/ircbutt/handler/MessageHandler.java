@@ -31,32 +31,30 @@ public class MessageHandler {
         /* Handle karma */
         } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")
                 || event.getMessage().endsWith("--;")) {
-            // todo handle karma
+            butt.getKarmaHandler().handleKarma(response, event.getMessage());
+
         } else if (event.getMessage().startsWith("%s/")) {
             // todo search and replace
+
         } else {
             /* Check for URL or troll them */
-            Preconditions.checkArgument(event.getUser().getNick() != null, "event.getUser().getNick() was null");
+            Preconditions.checkArgument(event.getUser() != null, "User was null");
             butt.getChatLoggingManager().logMessage(event.getUser().getNick(), event.getMessage());
-            String message = event.getMessage();
-            //butt.getUrlTitleHandler().checkForUrl(event.getChannel(), message);
+            // todo should return a boolean value below, and not respond to urls
             KlongUrlTitleHandler.handleUrl(event.getChannel(), event.getMessage());
-            if (message.startsWith(butt.getYamlConfigurationFile().getBotName())) {
-                butt.getBotChatHandler().buttHighlightChat(event, butt.getButtNameResponseHandler().getButtRespose(event.getUser()));
-            } else {
-                if (ButtMath.isRandomResponseTime()) {
-                    final String buttFormat = butt.getButtReplaceHandler().buttformat(message).trim();
-                    if (!buttFormat.equals(message)) {
-                        butt.getBotChatHandler().buttChat(event.getChannel(), buttFormat);
-                    }
+
+            if (ButtMath.isRandomResponseTime()) {
+                final String buttFormat = butt.getButtReplaceHandler().buttformat(event.getMessage()).trim();
+                if (!buttFormat.equals(event.getMessage())) {
+                    butt.getBotChatHandler().buttChat(event.getChannel(), buttFormat);
                 }
             }
         }
-
     }
 
     public void handlePrivateMessage(PrivateMessageEvent event) {
         BotResponse response = new BotResponse(event);
+        Preconditions.checkArgument(event.getUser() != null, "User was null");
         if (event.getUser().isVerified()) {
             if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
                 response = butt.getCommandHandler().handleCommand(event, event.getMessage().split(" "), response);
