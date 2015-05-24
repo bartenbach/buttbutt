@@ -18,7 +18,7 @@ public class BotResponse {
     private MessageEvent messageEvent;
     private PrivateMessageEvent privateMessageEvent;
 
-
+    
     public BotResponse(MessageEvent messageEvent) {
         this.messageEvent = messageEvent;
         this.recipient = messageEvent.getUser();
@@ -51,7 +51,11 @@ public class BotResponse {
     }
 
     public Channel getChannel() {
-        return this.messageEvent.getChannel();
+        try { //Prevent exceptions of this is called on private messages
+            return this.messageEvent.getChannel();
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 
     public void privateMessage(User recipient, String message) {
@@ -91,8 +95,10 @@ public class BotResponse {
     public void noResponse() {
         this.intention = BotIntention.NO_REPLY;
     }
-    public void setPrivateMessageNoOverride() { this.intention = BotIntention.PRIVATE_MESSAGE_NO_OVERRIDE; }
 
+    public void setPrivateMessageNoOverride() {
+        this.intention = BotIntention.PRIVATE_MESSAGE_NO_OVERRIDE;
+    }
 
     public boolean hasAdditionalMessage() {
         return !(this.additionalMessage == null);
