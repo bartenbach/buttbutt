@@ -14,16 +14,16 @@ import org.slf4j.LoggerFactory;
 
 public class CommandHandler {
 
-    
+
     private IRCbutt butt;
     final static Logger log = LoggerFactory.getLogger(CommandHandler.class);
 
-   
+
     public CommandHandler(IRCbutt butt) {
         this.butt = butt;
     }
 
-    
+
     public BotResponse handleCommand(GenericMessageEvent event, String[] cmd, BotResponse response) {
         /* For the sake of clearer code, let's just set these immediately */
         User user = event.getUser();
@@ -131,6 +131,9 @@ public class CommandHandler {
                 break;
             case "eval":
                 Eval.eval(response, StringUtils.getArgs(cmd));
+                break;
+            case "karma":
+                butt.getKarmaHandler().getKarma(response, user, StringUtils.getArgs(cmd));
                 break;
         }
         if (response.getIntention() == null) {

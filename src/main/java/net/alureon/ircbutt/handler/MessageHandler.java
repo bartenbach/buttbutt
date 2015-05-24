@@ -31,7 +31,7 @@ public class MessageHandler {
         /* Handle karma */
         } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")
                 || event.getMessage().endsWith("--;")) {
-            butt.getKarmaHandler().handleKarma(response, event.getMessage());
+            butt.getKarmaHandler().handleKarma(response, event.getUser(), event.getMessage());
 
         } else if (event.getMessage().startsWith("%s/")) {
             // todo search and replace

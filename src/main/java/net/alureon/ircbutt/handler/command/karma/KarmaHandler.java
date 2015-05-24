@@ -1,9 +1,8 @@
-package net.alureon.ircbutt.handler.command;
+package net.alureon.ircbutt.handler.command.karma;
 
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
-import net.alureon.ircbutt.Karma;
-import net.alureon.ircbutt.KarmaType;
+import org.pircbotx.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,18 +22,29 @@ public class KarmaHandler {
         this.butt = butt;
     }
 
-    public void handleKarma(BotResponse response, String message) {
+    public void handleKarma(BotResponse response, User user, String message) {
         for (String x : karmaEndings) {
             if (message.endsWith(x)) {
                 Karma karma = new Karma();
                 karma.setType(getKarmaType(x));
                 karma.setItem(message.replace(x, "").trim());
-                if (!butt.getKarmaTable().itemExists(karma.getItem())) {
-
-                } else {
-                    //todo increment/decrement karma
+                switch (karma.getType()) {
+                    case DECREMENT:
+                        butt.getKarmaTable().decrementKarma(karma, user, response);
+                        break;
+                    case INCREMENT:
+                        butt.getKarmaTable().incrementKarma(karma, user, response);
                 }
             }
+        }
+    }
+
+    public void getKarma(BotResponse response, User user, String message) {
+        Integer karma = butt.getKarmaTable().getKarmaLevel(message);
+        if (karma != null) {
+            response.highlightChat(user, message + " has a karma level of " + karma);
+        } else {
+            response.privateMessage(user, "no karma record found for " + message);
         }
     }
 
