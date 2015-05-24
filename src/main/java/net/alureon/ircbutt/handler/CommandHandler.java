@@ -14,16 +14,16 @@ import org.slf4j.LoggerFactory;
 
 public class CommandHandler {
 
-
+    
     private IRCbutt butt;
     final static Logger log = LoggerFactory.getLogger(CommandHandler.class);
 
-
+   
     public CommandHandler(IRCbutt butt) {
         this.butt = butt;
     }
 
-
+    
     public BotResponse handleCommand(GenericMessageEvent event, String[] cmd, BotResponse response) {
         /* For the sake of clearer code, let's just set these immediately */
         User user = event.getUser();
@@ -127,7 +127,7 @@ public class CommandHandler {
                 butt.getMoreHandler().handleMore(response);
                 break;
             case "wr":
-                butt.getWakeRoomHandler().handleWakeRoom();
+                butt.getWakeRoomHandler().handleWakeRoom(response);
                 break;
             case "eval":
                 Eval.eval(response, StringUtils.getArgs(cmd));
