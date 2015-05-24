@@ -23,6 +23,7 @@ public class KarmaHandler {
     }
 
     public void handleKarma(BotResponse response, User user, String message) {
+        if (message.contains(" ")) { return; }
         for (String x : karmaEndings) {
             if (message.endsWith(x)) {
                 Karma karma = new Karma();
