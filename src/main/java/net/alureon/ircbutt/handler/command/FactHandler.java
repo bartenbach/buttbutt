@@ -21,12 +21,9 @@ public class FactHandler {
     public BotResponse handleKnowledge(BotResponse response, String[] cmd, User user, String nick) {
         if (cmd[0].equals("learn")) {
             if (user.isVerified()) {
-                boolean added = addKnowledge(nick, cmd);
+                boolean added = addKnowledge(response, user, nick, cmd);
                 if (added) {
                     response.highlightChat(user, "ok got it!");
-                } else {
-                    //TODO potentially differentiate between the two here?  If it already exists
-                    response.privateMessage(user, "either your format is wrong or that fact already exists");
                 }
             }
         } else if (cmd[0].equals("forget")) {
@@ -88,17 +85,24 @@ public class FactHandler {
         return response;
     }
 
-    public boolean addKnowledge(String commandSender, String[] data) {
+    public boolean addKnowledge(BotResponse response, User user, String commandSender, String[] data) {
         if (data[1].endsWith(":") && data.length > 2) {
             String command = StringUtils.getArgs(data);
             String[] split = command.split(":");
             String item = split[0].substring(0, split[0].length()).trim();
             if (getKnowledge(item) == null) {
                 String information = StringUtils.getArgsOverOne(data);
+                if (information.length() > 300) {
+                    response.highlightChat(user, "error: tl;dr");
+                    return false;
+                }
                 log.trace("Item: " + item);
                 log.trace("Data: " + information);
                 butt.getFactTable().insertKnowledge(item, information, commandSender);
+                response.highlightChat(user, "ok got it!");
                 return true;
+            } else {
+                response.privateMessage(user, "error: fact already exists");
             }
         }
         return false;

@@ -7,6 +7,7 @@ import org.pircbotx.User;
 /**
  * Created by alureon on 5/14/15. Fixed at 2015-05-24
  */
+
 public class WakeRoomHandler {
 
     public void handleWakeRoom(BotResponse response) {

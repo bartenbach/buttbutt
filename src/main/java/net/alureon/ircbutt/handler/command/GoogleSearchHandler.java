@@ -39,20 +39,33 @@ public class GoogleSearchHandler {
         if (cmd.length > 1) {
             GoogleResults results = getMyGoogHoles(response, StringUtils.getArgs(cmd));
             assert results != null;
-            String title = results.getResponseData().getResults().get(0).getTitle().replaceAll("\\<.*?\\>", "");
-            String url = results.getResponseData().getResults().get(0).getUrl();
-            String title2 = results.getResponseData().getResults().get(1).getTitle().replace("\\<.*?\\>", "");
-            String url2 = results.getResponseData().getResults().get(1).getUrl();
-            String title3 = results.getResponseData().getResults().get(2).getTitle().replace("\\<.*?\\>", "");
-            String url3 = results.getResponseData().getResults().get(2).getUrl();
-            try {
-                response.chat(URLDecoder.decode(StringEscapeUtils.unescapeHtml4(title), "utf-8"), URLDecoder.decode(url, "utf8"));
-                butt.getMoreHandler().setMore(URLDecoder.decode(StringEscapeUtils.unescapeHtml4(title2), "utf-8") + URLDecoder.decode(url2, "utf-8"));
-                butt.getMoreHandler().setMore2(URLDecoder.decode(StringEscapeUtils.unescapeHtml4(title3), "utf-8") + URLDecoder.decode(url3, "utf-8"));
-                butt.getMoreHandler().setMore3("google it yourself fuckwad");
-            } catch (UnsupportedEncodingException ex) {
-                log.error("Failed decoding URL ", ex);
+            if (results.getResponseData().getResults().size() > 0) {
+                String title = results.getResponseData().getResults().get(0).getTitle().replaceAll("\\<.*?\\>", "");
+                String url = results.getResponseData().getResults().get(0).getUrl();
+                if (results.getResponseData().getResults().size() > 1) {
+                    String title2 = results.getResponseData().getResults().get(1).getTitle().replace("\\<.*?\\>", "");
+                    String url2 = results.getResponseData().getResults().get(1).getUrl();
+                    try {
+                        butt.getMoreHandler().setMore(URLDecoder.decode(StringEscapeUtils.unescapeHtml4(title2), "utf-8") + URLDecoder.decode(url2, "utf-8"));
+                    } catch (UnsupportedEncodingException ex) {}
+                    if (results.getResponseData().getResults().size() > 2) {
+                        String title3 = results.getResponseData().getResults().get(2).getTitle().replace("\\<.*?\\>", "");
+                        String url3 = results.getResponseData().getResults().get(2).getUrl();
+                        try {
+                            butt.getMoreHandler().setMore2(URLDecoder.decode(StringEscapeUtils.unescapeHtml4(title3), "utf-8") + URLDecoder.decode(url3, "utf-8"));
+                        } catch (UnsupportedEncodingException ex) {}
+                    }
+                }
+                try {
+                    response.chat(URLDecoder.decode(StringEscapeUtils.unescapeHtml4(title), "utf-8"), URLDecoder.decode(url, "utf8"));
+                    butt.getMoreHandler().setMore3("google it yourself fuckwad");
+                } catch (UnsupportedEncodingException ex) {
+                    log.error("Failed decoding URL ", ex);
+                }
+            } else {
+                response.privateMessage(user, "i found nothing");
             }
+
         } else {
             response.privateMessage(user, "!g <search term>");
         }
