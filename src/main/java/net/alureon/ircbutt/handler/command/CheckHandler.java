@@ -8,7 +8,7 @@ import org.pircbotx.Colors;
  */
 public class CheckHandler {
 
-    public BotResponse handleCheck(BotResponse response, String checking) {
+    public static void handleCheck(BotResponse response, String checking) {
         StringBuilder sb = new StringBuilder("Testing ");
         sb.append(checking).append(": ");
 
@@ -23,7 +23,6 @@ public class CheckHandler {
         }
         sb.append(result);
         response.chat(sb.toString());
-        return response;
     }
 
 }

@@ -39,9 +39,7 @@ public class IRCbutt {
 
 
     /* Program-related constants */
-    private final String programName = this.getClass().getPackage().getImplementationTitle();
     private final String programVersion = this.getClass().getPackage().getImplementationVersion();
-    private final String sourceRepository = this.getClass().getPackage().getImplementationVendor();
 
     /* Logger */
     final static Logger log = LoggerFactory.getLogger(IRCbutt.class);
@@ -59,23 +57,11 @@ public class IRCbutt {
     private MessageHandler messageHandler = new MessageHandler(this);
     private ChatLoggingManager chatLoggingManager = new ChatLoggingManager();
     private QuoteGrabHandler quoteGrabHandler = new QuoteGrabHandler(this);
-    private DiceHandler diceHandler = new DiceHandler(this);
-    private ResponseHandler responseHandler = new ResponseHandler(this);
-    private CheckHandler checkHandler = new CheckHandler();
-    private WeatherHandler weatherHandler = new WeatherHandler();
-    private DefineHandler defineHandler = new DefineHandler(this);
-    private EchoHandler echoHandler = new EchoHandler(this);
-    private YouTubeHandler youTubeHandler = new YouTubeHandler(this);
     private IRCUtils ircUtils = new IRCUtils(this);
     private GiveHandler giveHandler = new GiveHandler(this);
-    private Rot13Handler rot13Handler = new Rot13Handler();
-    private GoogleSearchHandler googleSearchHandler = new GoogleSearchHandler(this);
     private KarmaHandler karmaHandler = new KarmaHandler(this);
     private KarmaTable karmaTable = new KarmaTable(this);
-    private UrbanDictionaryHandler urbanDictionaryHandler = new UrbanDictionaryHandler(this);
     private MoreHandler moreHandler = new MoreHandler();
-    private InviteHandler inviteHandler = new InviteHandler(this);
-    private WakeRoomHandler wakeRoomHandler = new WakeRoomHandler();
     private PircBotX pircBotX;
 
 
@@ -119,16 +105,8 @@ public class IRCbutt {
         return this.buttReplaceHandler;
     }
 
-    public String getProgramName() {
-        return this.programName;
-    }
-
     public String getProgramVersion() {
         return this.programVersion;
-    }
-
-    public String getSourceRepository() {
-        return this.sourceRepository;
     }
 
     public CommandHandler getCommandHandler() {
@@ -169,37 +147,13 @@ public class IRCbutt {
 
     public QuoteGrabHandler getQuoteGrabHandler() { return this.quoteGrabHandler; }
 
-    public DiceHandler getDiceHandler() { return this.diceHandler; }
-
-    public ResponseHandler getResponseHandler() { return this.responseHandler; }
-
-    public CheckHandler getCheckHandler() { return this.checkHandler; }
-
-    public WeatherHandler getWeatherHandler() { return this.weatherHandler; }
-
-    public DefineHandler getDefineHandler() { return this.defineHandler; }
-
-    public EchoHandler getEchoHandler() { return this.echoHandler; }
-
-    public YouTubeHandler getYouTubeHandler() { return this.youTubeHandler; }
-
     public IRCUtils getIrcUtils() { return this.ircUtils; }
 
     public GiveHandler getGiveHandler() { return this.giveHandler; }
 
-    public Rot13Handler getRot13Handler() { return this.rot13Handler; }
-
-    public GoogleSearchHandler getGoogleSearchHandler() { return this.googleSearchHandler; }
-
     public MoreHandler getMoreHandler() { return this.moreHandler; }
 
-    public UrbanDictionaryHandler getUrbanDictionaryHandler() { return this.urbanDictionaryHandler; }
-
     public PircBotX getPircBotX() { return this.pircBotX; }
-
-    public InviteHandler getInviteHandler() { return this.inviteHandler; }
-
-    public WakeRoomHandler getWakeRoomHandler() { return this.wakeRoomHandler; }
 
     public KarmaHandler getKarmaHandler() { return this.karmaHandler; }
 

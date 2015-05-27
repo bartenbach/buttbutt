@@ -5,7 +5,7 @@ package net.alureon.ircbutt.handler.command;
  */
 public class CoinHandler {
 
-    public void handleCoin() {
+    public static void handleCoin() {
 
     }
 

@@ -2,7 +2,6 @@ package net.alureon.ircbutt.handler.command;
 
 import com.google.common.collect.ImmutableSortedSet;
 import net.alureon.ircbutt.BotResponse;
-import net.alureon.ircbutt.IRCbutt;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 import org.pircbotx.User;
@@ -11,15 +10,7 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 
 public class DiceHandler {
 
-
-    private IRCbutt butt;
-
-
-    public DiceHandler(IRCbutt butt) {
-        this.butt = butt;
-    }
-
-    public void handleDice(GenericMessageEvent event, BotResponse response) {
+    public static void handleDice(GenericMessageEvent event, BotResponse response) {
         if (event instanceof MessageEvent) {
             Channel channel = ((MessageEvent) event).getChannel();
             ImmutableSortedSet<User> users = channel.getUsers();

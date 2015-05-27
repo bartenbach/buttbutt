@@ -20,122 +20,131 @@ public class QuoteGrabHandler {
         this.butt = butt;
     }
 
-    public BotResponse handleQuoteGrabs(BotResponse response, String[] cmd, User user, String nick) {
-        if (cmd[0].equals("grab")){
-            if (cmd.length == 2) {
-                if (cmd[1].equalsIgnoreCase(nick)) {
-                    response.highlightChat(response.getRecipient(), "You like grabbing yourself " + nick + "?");
-                } else if (cmd[1].equalsIgnoreCase(butt.getYamlConfigurationFile().getBotName())) {
-                    response.highlightChat(response.getRecipient(), "get your hands off me, creep!");
-                } else {
-                    if (butt.getChatLoggingManager().hasQuoteFrom(cmd[1])) {
-                        String quote = butt.getChatLoggingManager().getLastQuoteFrom(cmd[1]);
-                        log.trace("Quote grabbed: " + quote);
-                        try {
-                            if (!butt.getQuoteGrabTable().quoteAlreadyExists(cmd[1], quote)) {
-                                butt.getQuoteGrabTable().addQuote(cmd[1], quote, nick);
-                                response.highlightChat(user, "Tada!");
-                            } else {
-                                log.info("Attempted to add duplicate quote - not adding duplicate.");
+    public void handleQuoteGrabs(BotResponse response, String[] cmd, User user, String nick) {
+        switch (cmd[0]) {
+            case "grab":
+                if (cmd.length == 2) {
+                    if (cmd[1].equalsIgnoreCase(nick)) {
+                        response.highlightChat(response.getRecipient(), "You like grabbing yourself " + nick + "?");
+                    } else if (cmd[1].equalsIgnoreCase(butt.getYamlConfigurationFile().getBotName())) {
+                        response.highlightChat(response.getRecipient(), "get your hands off me, creep!");
+                    } else {
+                        if (butt.getChatLoggingManager().hasQuoteFrom(cmd[1])) {
+                            String quote = butt.getChatLoggingManager().getLastQuoteFrom(cmd[1]);
+                            log.trace("Quote grabbed: " + quote);
+                            try {
+                                if (!butt.getQuoteGrabTable().quoteAlreadyExists(cmd[1], quote)) {
+                                    butt.getQuoteGrabTable().addQuote(cmd[1], quote, nick);
+                                    response.highlightChat(user, "Tada!");
+                                } else {
+                                    log.info("Attempted to add duplicate quote - not adding duplicate.");
+                                }
+                            } catch (SQLException ex) {
+                                log.error("Exception accessing database: ", ex);
                             }
-                        } catch (SQLException ex) {
-                            log.error("Exception accessing database: ", ex);
+                        } else {
+                            response.chat("i don't believe i've met " + cmd[1]);
                         }
-                    } else {
-                        response.chat("i don't believe i've met " + cmd[1]);
                     }
-                }
-            } else {
-                response.privateMessage(user, "!grab <player>");
-            }
-        } else if (cmd[0].equals("rq")) {
-            if (cmd.length == 1) {
-                String quote = butt.getQuoteGrabTable().getRandomQuote();
-                if (quote != null) {
-                    response.chat(quote);
                 } else {
-                    log.error("Error: couldn't retrieve a random quote!");
-                    response.chat("Uh oh...something's broken");
+                    response.privateMessage(user, "!grab <player>");
                 }
-            } else {
-                try {
-                    String quote = butt.getQuoteGrabTable().getRandomQuoteFromPlayer(cmd[1]);
+                break;
+            case "rq":
+                if (cmd.length == 1) {
+                    String quote = butt.getQuoteGrabTable().getRandomQuote();
                     if (quote != null) {
                         response.chat(quote);
                     } else {
-                        response.privateMessage(user, "butt couldn't find anything for " + cmd[1]);
-                        log.warn("Attempted to get quote from: " + cmd[1]);
+                        log.error("Error: couldn't retrieve a random quote!");
+                        response.chat("Uh oh...something's broken");
                     }
-                } catch (SQLException ex) {
-                    response.noResponse();
-                    log.error("Exception accessing database: ", ex);
-                }
-            }
-        } else if (cmd[0].equals("q")) {
-            if (cmd.length == 1) {
-                response.privateMessage(user, "!q <nick>");
-            } else {
-                try {
-                    String quote = butt.getQuoteGrabTable().getLastQuoteFromPlayer(cmd[1]);
-                    if (quote != null) {
-                        response.chat(quote);
-                    } else {
-                        response.privateMessage(user, "butt couldn't find anything for " + cmd[1]);
-                        log.warn("Attempted to get quote from: " + cmd[1]);
+                } else {
+                    try {
+                        String quote = butt.getQuoteGrabTable().getRandomQuoteFromPlayer(cmd[1]);
+                        if (quote != null) {
+                            response.chat(quote);
+                        } else {
+                            response.privateMessage(user, "butt couldn't find anything for " + cmd[1]);
+                            log.warn("Attempted to get quote from: " + cmd[1]);
+                        }
+                    } catch (SQLException ex) {
+                        response.noResponse();
+                        log.error("Exception accessing database: ", ex);
                     }
-                } catch (SQLException ex) {
-                    response.noResponse();
-                    log.error("Exception accessing database: ", ex);
                 }
-            }
-        } else if (cmd[0].equals("qinfo") || cmd[0].equals("qi")) {
-            if (cmd.length == 1) {
-                response.privateMessage(user, "!qinfo <id>");
-            } else {
-                try {
-                    String[] quote = butt.getQuoteGrabTable().getQuoteInfo(Integer.parseInt(cmd[1]));
-                    if (quote != null) {
-                        response.chat(quote[0], quote[1]);
-                    } else {
-                        response.privateMessage(user, "no quote record with id " + cmd[1]);
+                break;
+            case "q":
+                if (cmd.length == 1) {
+                    response.privateMessage(user, "!q <nick>");
+                } else {
+                    try {
+                        String quote = butt.getQuoteGrabTable().getLastQuoteFromPlayer(cmd[1]);
+                        if (quote != null) {
+                            response.chat(quote);
+                        } else {
+                            response.privateMessage(user, "butt couldn't find anything for " + cmd[1]);
+                            log.warn("Attempted to get quote from: " + cmd[1]);
+                        }
+                    } catch (SQLException ex) {
+                        response.noResponse();
+                        log.error("Exception accessing database: ", ex);
                     }
-                } catch (SQLException ex) {
-                    response.noResponse();
-                    log.error("Exception accessing database: ", ex);
                 }
-            }
-        } else if (cmd[0].equals("qsay")) {
-            if (cmd.length == 1) {
-                response.privateMessage(user, "!qsay <id>");
-            } else {
-                try {
-                    String quote = butt.getQuoteGrabTable().getQuoteById(Integer.parseInt(cmd[1]));
-                    if (quote != null) {
-                        response.chat(quote);
-                    } else {
-                        response.privateMessage(user, "no quote record with id of " + cmd[1]);
+                break;
+            case "qinfo":
+            case "qi":
+                if (cmd.length == 1) {
+                    response.privateMessage(user, "!qinfo <id>");
+                } else {
+                    try {
+                        String[] quote = butt.getQuoteGrabTable().getQuoteInfo(Integer.parseInt(cmd[1]));
+                        if (quote != null) {
+                            response.chat(quote[0], quote[1]);
+                        } else {
+                            response.privateMessage(user, "no quote record with id " + cmd[1]);
+                        }
+                    } catch (SQLException ex) {
+                        response.noResponse();
+                        log.error("Exception accessing database: ", ex);
                     }
-                } catch (SQLException ex) {
-                    response.noResponse();
-                    log.error("Exception accessing database: ", ex);
                 }
-            }
-        } else if (cmd[0].equals("qfind") || cmd[0].equals("qsearch") || cmd[0].equals("qf")) {
-            if (cmd.length == 1) {
-                response.privateMessage(user, "!qfind <string>");
-            } else {
-                try {
-                    String quote = butt.getQuoteGrabTable().findQuote(StringUtils.getArgs(cmd));
-                    if (quote != null) {
-                        response.chat(quote);
-                    } else {
-                        response.privateMessage(user, "sry butt find noting");
+                break;
+            case "qsay":
+                if (cmd.length == 1) {
+                    response.privateMessage(user, "!qsay <id>");
+                } else {
+                    try {
+                        String quote = butt.getQuoteGrabTable().getQuoteById(Integer.parseInt(cmd[1]));
+                        if (quote != null) {
+                            response.chat(quote);
+                        } else {
+                            response.privateMessage(user, "no quote record with id of " + cmd[1]);
+                        }
+                    } catch (SQLException ex) {
+                        response.noResponse();
+                        log.error("Exception accessing database: ", ex);
                     }
-                } catch (SQLException ex) {
-                    log.error("Exception accessing database: ", ex);
                 }
-            }
+                break;
+            case "qfind":
+            case "qsearch":
+            case "qf":
+                if (cmd.length == 1) {
+                    response.privateMessage(user, "!qfind <string>");
+                } else {
+                    try {
+                        String quote = butt.getQuoteGrabTable().findQuote(StringUtils.getArgs(cmd));
+                        if (quote != null) {
+                            response.chat(quote);
+                        } else {
+                            response.privateMessage(user, "sry butt find noting");
+                        }
+                    } catch (SQLException ex) {
+                        log.error("Exception accessing database: ", ex);
+                    }
+                }
+                break;
         }
-        return response;
     }
 }

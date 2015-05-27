@@ -26,12 +26,12 @@ public class MessageHandler {
         BotResponse response = new BotResponse(event);
         if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
             response = butt.getCommandHandler().handleCommand(event, event.getMessage().split(" "), response);
-            butt.getResponseHandler().handleResponse(response);
+            ResponseHandler.handleResponse(response);
 
         /* Handle karma */
         } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")
                 || event.getMessage().endsWith("--;")) {
-            butt.getKarmaHandler().handleKarma(response, event.getUser(), event.getMessage());
+            butt.getKarmaHandler().handleKarma(butt, response, event.getUser(), event.getMessage());
 
         } else if (event.getMessage().startsWith("%s/")) {
             // todo search and replace
@@ -59,7 +59,7 @@ public class MessageHandler {
             if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
                 response = butt.getCommandHandler().handleCommand(event, event.getMessage().split(" "), response);
                 response.setPrivateMessageNoOverride();
-                butt.getResponseHandler().handleResponse(response);
+                ResponseHandler.handleResponse(response);
             } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")
                     || event.getMessage().endsWith("--;")) {
                 // todo handle karma

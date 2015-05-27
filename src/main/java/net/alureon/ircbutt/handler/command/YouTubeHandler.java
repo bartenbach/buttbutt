@@ -22,15 +22,10 @@ import java.net.URLEncoder;
 public class YouTubeHandler {
 
 
-    private IRCbutt butt;
     final static Logger log = LoggerFactory.getLogger(YouTubeHandler.class);
 
 
-    public YouTubeHandler(IRCbutt butt) {
-        this.butt = butt;
-    }
-
-    public void getYouTubeVideo(BotResponse response, String[] cmd) {
+    public static void getYouTubeVideo(IRCbutt butt, BotResponse response, String[] cmd) {
         butt.getMoreHandler().clearMore();
         try {
             String link = "http://www.youtube.com/results?search_query=" + URLEncoder.encode(StringUtils.getArgs(cmd), "utf-8");

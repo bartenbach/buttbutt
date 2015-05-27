@@ -11,20 +11,16 @@ import org.slf4j.LoggerFactory;
 
 public class EchoHandler {
 
-    private IRCbutt butt;
+
     final static Logger log = LoggerFactory.getLogger(EchoHandler.class);
 
 
-    public EchoHandler(IRCbutt butt) {
-        this.butt = butt;
-    }
-
-    public void handleEcho(BotResponse response, String[] cmd, String nick) {
-        String message = parseMessage(response, cmd, nick);
+    public static void handleEcho(IRCbutt butt, BotResponse response, String[] cmd, String nick) {
+        String message = parseMessage(butt, response, cmd, nick);
         response.chat(message);
     }
 
-    public String parseMessage(BotResponse response, String[] cmd, String nick) {
+    public static String parseMessage(IRCbutt butt, BotResponse response, String[] cmd, String nick) {
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i < cmd.length; i++) {
             if (cmd[i].contains("[")) {
@@ -48,7 +44,7 @@ public class EchoHandler {
         return sb.toString().replaceAll("%args%", "").replaceAll("%user%", nick);
     }
 
-    public String parseCommand(String[] cmd, int j) {
+    public static String parseCommand(String[] cmd, int j) {
         for (;j < cmd.length; j++ )
         if (cmd[j].contains("]")) {
             System.out.println("We have a command: " + cmd[j]);

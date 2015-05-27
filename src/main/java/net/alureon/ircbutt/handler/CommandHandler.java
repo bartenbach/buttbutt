@@ -2,6 +2,8 @@ package net.alureon.ircbutt.handler;
 
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
+import net.alureon.ircbutt.handler.command.*;
+import net.alureon.ircbutt.handler.command.karma.KarmaHandler;
 import net.alureon.ircbutt.libmath.Eval;
 import net.alureon.ircbutt.libmath.MathLib;
 import net.alureon.ircbutt.libmath.Trigonometry;
@@ -37,7 +39,7 @@ public class CommandHandler {
 
         /* if it's prefixed with a tilde it's a knowledge request */
         if (cmd[0].startsWith("~")) {
-            return butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
+            butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
         }
 
         if (cmd[0].startsWith("%s/")) {
@@ -58,7 +60,7 @@ public class CommandHandler {
             case "qsearch":
             case "qfind":
             case "qf":
-                return butt.getQuoteGrabHandler().handleQuoteGrabs(response, cmd, user, nick);
+                butt.getQuoteGrabHandler().handleQuoteGrabs(response, cmd, user, nick);
             case "learn":
             case "forget":
             case "fact":
@@ -71,30 +73,30 @@ public class CommandHandler {
             case "ff":
             case "fi":
             case "fs":
-                return butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
+                butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
             case "echo":
-                butt.getEchoHandler().handleEcho(response, cmd, user.getNick());
+                EchoHandler.handleEcho(butt, response, cmd, user.getNick());
                 break;
             case "g":
-                butt.getGoogleSearchHandler().handleGoogleSearch(response, user, cmd);
+                GoogleSearchHandler.handleGoogleSearch(butt, response, user, cmd);
                 break;
             case "give":
                 butt.getGiveHandler().handleGive(response, event, user, cmd);
                 break;
             case "rot13":
-                butt.getRot13Handler().handleRot13(response, StringUtils.getArgs(cmd));
+                Rot13Handler.handleRot13(response, StringUtils.getArgs(cmd));
                 break;
             case "yt":
-                butt.getYouTubeHandler().getYouTubeVideo(response, cmd);
+                YouTubeHandler.getYouTubeVideo(butt, response, cmd);
                 break;
             case "ud":
-                butt.getUrbanDictionaryHandler().getDefinition(response, cmd);
+                UrbanDictionaryHandler.getDefinition(butt, response, cmd);
                 break;
             case "version":
                 response.chat(butt.getProgramVersion());
                 break;
             case "dice":
-                butt.getDiceHandler().handleDice(event, response);
+                DiceHandler.handleDice(event, response);
                 break;
             case "random":
                 response.chat(String.valueOf(ButtMath.getRandom()));
@@ -112,28 +114,25 @@ public class CommandHandler {
                 MathLib.handleMath(response, cmd);
                 break;
             case "check":
-                butt.getCheckHandler().handleCheck(response, StringUtils.getArgs(cmd));
+                CheckHandler.handleCheck(response, StringUtils.getArgs(cmd));
                 break;
             case "define":
-                butt.getDefineHandler().handleDefine(response, cmd[1]);
-                break;
-            case "weather":
-                butt.getWeatherHandler().getFuckingWeather(response, cmd[1]);
+                DefineHandler.handleDefine(butt, response, cmd[1]);
                 break;
             case "invite":
-                butt.getInviteHandler().handleInvite(StringUtils.getArgs(cmd).split(" "));
+                InviteHandler.handleInvite(butt, StringUtils.getArgs(cmd).split(" "));
                 break;
             case "more":
                 butt.getMoreHandler().handleMore(response);
                 break;
             case "wr":
-                butt.getWakeRoomHandler().handleWakeRoom(response);
+                WakeRoomHandler.handleWakeRoom(response);
                 break;
             case "eval":
                 Eval.eval(response, StringUtils.getArgs(cmd));
                 break;
             case "karma":
-                butt.getKarmaHandler().getKarma(response, user, StringUtils.getArgs(cmd));
+                KarmaHandler.getKarma(butt, response, user, StringUtils.getArgs(cmd));
                 break;
         }
         if (response.getIntention() == null) {

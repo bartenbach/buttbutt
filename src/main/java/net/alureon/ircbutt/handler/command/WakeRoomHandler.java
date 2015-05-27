@@ -10,7 +10,7 @@ import org.pircbotx.User;
 
 public class WakeRoomHandler {
 
-    public void handleWakeRoom(BotResponse response) {
+    public static void handleWakeRoom(BotResponse response) {
         Channel channel = response.getChannel();
         if (channel != null) {
             StringBuilder sb = new StringBuilder();

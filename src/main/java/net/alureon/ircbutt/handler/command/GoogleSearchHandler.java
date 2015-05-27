@@ -34,7 +34,7 @@ public class GoogleSearchHandler {
         this.butt = butt;
     }
 
-    public void handleGoogleSearch(BotResponse response, User user, String[] cmd) {
+    public static void handleGoogleSearch(IRCbutt butt, BotResponse response, User user, String[] cmd) {
         butt.getMoreHandler().clearMore();
         if (cmd.length > 1) {
             GoogleResults results = getMyGoogHoles(response, StringUtils.getArgs(cmd));
@@ -71,16 +71,14 @@ public class GoogleSearchHandler {
         }
     }
 
-    public GoogleResults getMyGoogHoles(BotResponse response, String query) {
+    public static GoogleResults getMyGoogHoles(BotResponse response, String query) {
         final String google = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=";
         final String charset = "UTF-8";
-        URL url = null;
 
         try {
-            url = new URL(google + URLEncoder.encode(query, charset));
-            Reader reader = null;
+            URL url = new URL(google + URLEncoder.encode(query, charset));
             try {
-                reader = new InputStreamReader(url.openStream(), charset);
+                Reader reader = new InputStreamReader(url.openStream(), charset);
                 return new Gson().fromJson(reader, GoogleResults.class);
             } catch (IOException e) {
                 e.printStackTrace();

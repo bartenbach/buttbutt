@@ -23,15 +23,9 @@ public class UrbanDictionaryHandler {
 
 
     final static Logger log = LoggerFactory.getLogger(UrbanDictionaryHandler.class);
-    private IRCbutt butt;
 
 
-    public UrbanDictionaryHandler(IRCbutt butt) {
-        this.butt = butt;
-    }
-
-
-    public void getDefinition(BotResponse response, String[] cmd) {
+    public static void getDefinition(IRCbutt butt, BotResponse response, String[] cmd) {
         butt.getMoreHandler().clearMore();
         try {
             String link = "http://www.urbandictionary.com/define.php?term=" + URLEncoder.encode(StringUtils.getArgs(cmd), "utf-8");
@@ -59,7 +53,7 @@ public class UrbanDictionaryHandler {
         }
     }
 
-    public Element getElement(Elements elements, int index) {
+    public static Element getElement(Elements elements, int index) {
         try {
             Element e =  elements.get(index);
             return e;

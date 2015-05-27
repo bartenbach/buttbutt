@@ -14,7 +14,7 @@ public class KarmaHandler {
 
 
     IRCbutt butt;
-    String[] karmaEndings = { "--;", "++;", "++", "--" };
+    private static String[] karmaEndings = { "--;", "++;", "++", "--" };
     final static Logger log = LoggerFactory.getLogger(KarmaHandler.class);
 
 
@@ -22,7 +22,7 @@ public class KarmaHandler {
         this.butt = butt;
     }
 
-    public void handleKarma(BotResponse response, User user, String message) {
+    public static void handleKarma(IRCbutt butt, BotResponse response, User user, String message) {
         if (message.contains(" ")) { return; }
         for (String x : karmaEndings) {
             if (message.endsWith(x)) {
@@ -40,7 +40,7 @@ public class KarmaHandler {
         }
     }
 
-    public void getKarma(BotResponse response, User user, String message) {
+    public static void getKarma(IRCbutt butt, BotResponse response, User user, String message) {
         Integer karma = butt.getKarmaTable().getKarmaLevel(message);
         if (karma != null) {
             response.highlightChat(user, message + " has a karma level of " + karma);
@@ -49,7 +49,7 @@ public class KarmaHandler {
         }
     }
 
-    public KarmaType getKarmaType(String x) {
+    public static KarmaType getKarmaType(String x) {
         switch (x) {
             case "++":
             case "++;":
