@@ -18,13 +18,14 @@ package net.alureon.ircbutt;
 
 import net.alureon.ircbutt.file.YAMLConfigurationFile;
 import net.alureon.ircbutt.handler.*;
-import net.alureon.ircbutt.handler.command.*;
-import net.alureon.ircbutt.handler.command.karma.KarmaHandler;
+import net.alureon.ircbutt.handler.command.FactHandler;
+import net.alureon.ircbutt.handler.command.GiveHandler;
+import net.alureon.ircbutt.handler.command.MoreHandler;
+import net.alureon.ircbutt.handler.command.QuoteGrabHandler;
+import net.alureon.ircbutt.handler.command.karma.KarmaTable;
 import net.alureon.ircbutt.listener.ChatListener;
 import net.alureon.ircbutt.listener.PrivateMessageListener;
-import net.alureon.ircbutt.listener.UserJoinListener;
 import net.alureon.ircbutt.sql.FactTable;
-import net.alureon.ircbutt.handler.command.karma.KarmaTable;
 import net.alureon.ircbutt.sql.QuoteGrabTable;
 import net.alureon.ircbutt.sql.SqlManager;
 import net.alureon.ircbutt.util.IRCUtils;
@@ -59,7 +60,6 @@ public class IRCbutt {
     private QuoteGrabHandler quoteGrabHandler = new QuoteGrabHandler(this);
     private IRCUtils ircUtils = new IRCUtils(this);
     private GiveHandler giveHandler = new GiveHandler(this);
-    private KarmaHandler karmaHandler = new KarmaHandler(this);
     private KarmaTable karmaTable = new KarmaTable(this);
     private MoreHandler moreHandler = new MoreHandler();
     private PircBotX pircBotX;
@@ -83,7 +83,6 @@ public class IRCbutt {
         /* Add event listeners */
         listenerManager.addListener(new ChatListener(this));
         listenerManager.addListener(new PrivateMessageListener(this));
-        listenerManager.addListener(new UserJoinListener());
 
         /* Set the bot's configuration variables */
         Configuration configuration = new BotConfigurationHandler(this).getConfiguration();
@@ -154,8 +153,6 @@ public class IRCbutt {
     public MoreHandler getMoreHandler() { return this.moreHandler; }
 
     public PircBotX getPircBotX() { return this.pircBotX; }
-
-    public KarmaHandler getKarmaHandler() { return this.karmaHandler; }
 
     public KarmaTable getKarmaTable() { return this.karmaTable; }
 }

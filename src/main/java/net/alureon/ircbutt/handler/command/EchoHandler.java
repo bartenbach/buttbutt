@@ -30,7 +30,7 @@ public class EchoHandler {
                 log.debug("Command length: " + cmd2.length);
                     log.debug("Command to execute: " + command);
                     BotResponse commandResponse = new BotResponse(response.getMessageEvent());
-                    commandResponse = butt.getCommandHandler().handleCommand(response.getMessageEvent(), cmd2, commandResponse);
+                    butt.getCommandHandler().handleCommand(response.getMessageEvent(), cmd2, commandResponse);
                     if (commandResponse.toString() != null) {
                         log.debug("Command response: " + commandResponse.toString());
                         sb.append(commandResponse.toString()).append(" ");

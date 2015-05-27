@@ -3,6 +3,7 @@ package net.alureon.ircbutt.handler;
 import com.google.common.base.Preconditions;
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
+import net.alureon.ircbutt.handler.command.karma.KarmaHandler;
 import net.alureon.ircbutt.util.ButtMath;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -31,7 +32,7 @@ public class MessageHandler {
         /* Handle karma */
         } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")
                 || event.getMessage().endsWith("--;")) {
-            butt.getKarmaHandler().handleKarma(butt, response, event.getUser(), event.getMessage());
+            KarmaHandler.handleKarma(butt, response, event.getUser(), event.getMessage());
 
         } else if (event.getMessage().startsWith("%s/")) {
             // todo search and replace
@@ -62,7 +63,9 @@ public class MessageHandler {
                 ResponseHandler.handleResponse(response);
             } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")
                     || event.getMessage().endsWith("--;")) {
-                // todo handle karma
+                KarmaHandler.handleKarma(butt, response, event.getUser(), event.getMessage());
+                response.setPrivateMessageNoOverride();
+                ResponseHandler.handleResponse(response);
             }
         }
     }

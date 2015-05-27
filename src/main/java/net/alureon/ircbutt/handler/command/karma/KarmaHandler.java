@@ -13,14 +13,9 @@ import org.slf4j.LoggerFactory;
 public class KarmaHandler {
 
 
-    IRCbutt butt;
     private static String[] karmaEndings = { "--;", "++;", "++", "--" };
     final static Logger log = LoggerFactory.getLogger(KarmaHandler.class);
 
-
-    public KarmaHandler(IRCbutt butt) {
-        this.butt = butt;
-    }
 
     public static void handleKarma(IRCbutt butt, BotResponse response, User user, String message) {
         if (message.contains(" ")) { return; }
