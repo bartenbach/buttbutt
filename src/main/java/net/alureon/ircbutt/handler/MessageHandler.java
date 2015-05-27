@@ -25,7 +25,7 @@ public class MessageHandler {
         /* Handle a command */
         BotResponse response = new BotResponse(event);
         if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
-            response = butt.getCommandHandler().handleCommand(event, event.getMessage().split(" "), response);
+            butt.getCommandHandler().handleCommand(event, event.getMessage().split(" "), response);
             ResponseHandler.handleResponse(response);
 
         /* Handle karma */
@@ -57,7 +57,7 @@ public class MessageHandler {
         Preconditions.checkArgument(event.getUser() != null, "User was null");
         if (event.getUser().isVerified()) {
             if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
-                response = butt.getCommandHandler().handleCommand(event, event.getMessage().split(" "), response);
+                butt.getCommandHandler().handleCommand(event, event.getMessage().split(" "), response);
                 response.setPrivateMessageNoOverride();
                 ResponseHandler.handleResponse(response);
             } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")

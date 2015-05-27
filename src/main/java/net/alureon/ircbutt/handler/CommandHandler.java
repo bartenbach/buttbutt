@@ -26,7 +26,7 @@ public class CommandHandler {
     }
 
 
-    public BotResponse handleCommand(GenericMessageEvent event, String[] cmd, BotResponse response) {
+    public void handleCommand(GenericMessageEvent event, String[] cmd, BotResponse response) {
         /* For the sake of clearer code, let's just set these immediately */
         User user = event.getUser();
         String nick = user.getNick();
@@ -40,6 +40,7 @@ public class CommandHandler {
         /* if it's prefixed with a tilde it's a knowledge request */
         if (cmd[0].startsWith("~")) {
             butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
+            return;
         }
 
         if (cmd[0].startsWith("%s/")) {
@@ -61,6 +62,7 @@ public class CommandHandler {
             case "qfind":
             case "qf":
                 butt.getQuoteGrabHandler().handleQuoteGrabs(response, cmd, user, nick);
+                break;
             case "learn":
             case "forget":
             case "fact":
@@ -74,6 +76,7 @@ public class CommandHandler {
             case "fi":
             case "fs":
                 butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
+                break;
             case "echo":
                 EchoHandler.handleEcho(butt, response, cmd, user.getNick());
                 break;
@@ -138,6 +141,5 @@ public class CommandHandler {
         if (response.getIntention() == null) {
             response.noResponse();
         }
-        return response;
     }
 }
