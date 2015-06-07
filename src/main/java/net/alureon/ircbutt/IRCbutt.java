@@ -19,7 +19,6 @@ package net.alureon.ircbutt;
 import net.alureon.ircbutt.file.YAMLConfigurationFile;
 import net.alureon.ircbutt.handler.*;
 import net.alureon.ircbutt.handler.command.FactHandler;
-import net.alureon.ircbutt.handler.command.GiveHandler;
 import net.alureon.ircbutt.handler.command.MoreHandler;
 import net.alureon.ircbutt.handler.command.QuoteGrabHandler;
 import net.alureon.ircbutt.handler.command.karma.KarmaTable;
@@ -59,7 +58,6 @@ public class IRCbutt {
     private ChatLoggingManager chatLoggingManager = new ChatLoggingManager();
     private QuoteGrabHandler quoteGrabHandler = new QuoteGrabHandler(this);
     private IRCUtils ircUtils = new IRCUtils(this);
-    private GiveHandler giveHandler = new GiveHandler(this);
     private KarmaTable karmaTable = new KarmaTable(this);
     private MoreHandler moreHandler = new MoreHandler();
     private PircBotX pircBotX;
@@ -147,8 +145,6 @@ public class IRCbutt {
     public QuoteGrabHandler getQuoteGrabHandler() { return this.quoteGrabHandler; }
 
     public IRCUtils getIrcUtils() { return this.ircUtils; }
-
-    public GiveHandler getGiveHandler() { return this.giveHandler; }
 
     public MoreHandler getMoreHandler() { return this.moreHandler; }
 

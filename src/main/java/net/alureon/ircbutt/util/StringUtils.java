@@ -35,15 +35,8 @@ public class StringUtils {
         return sb.toString().trim();
     }
 
-/*    public static String concatenateUrlArgs(String[] args) {
-        args[0] = "";
-        StringBuilder sb = new StringBuilder();
-        for (String x : args) {
-            if (!x.isEmpty()) {
-                sb.append(x).append("+");
-            }
-        }
-        return sb.deleteCharAt(sb.length()-1).toString();
-    }*/
+    public static String getTrimmedString(String x) {
+        return "";
+    }
 
 }

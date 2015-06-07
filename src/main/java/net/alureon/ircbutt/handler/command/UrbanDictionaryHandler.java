@@ -36,8 +36,9 @@ public class UrbanDictionaryHandler {
                 Element firstDefinition = getElement(meaning, 0);
                 Element secondDefinition = getElement(meaning, 1);
                 Element thirdDefinition = getElement(meaning, 2);
-                response.chat(firstDefinition.text());
                 try {
+                    // todo this is so lazy  need to fix this bad
+                    response.chat(firstDefinition.text());
                     butt.getMoreHandler().setMore(secondDefinition.text());
                     butt.getMoreHandler().setMore2(thirdDefinition.text());
                     butt.getMoreHandler().setMore3(link);

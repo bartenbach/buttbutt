@@ -2,6 +2,7 @@ package net.alureon.ircbutt.handler.command;
 
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
+import net.alureon.ircbutt.util.IRCUtils;
 import net.alureon.ircbutt.util.StringUtils;
 import org.pircbotx.User;
 import org.slf4j.Logger;
@@ -18,8 +19,9 @@ public class FactHandler {
         this.butt = butt;
     }
 
-    public BotResponse handleKnowledge(BotResponse response, String[] cmd, User user, String nick) {
+    public void handleKnowledge(BotResponse response, String[] cmd, User user, String nick) {
         if (cmd[0].equals("learn")) {
+            // cmd.split(" ", 2);
             if (user.isVerified()) {
                 boolean added = addKnowledge(response, user, nick, cmd);
                 if (added) {
@@ -27,7 +29,7 @@ public class FactHandler {
                 }
             }
         } else if (cmd[0].equals("forget")) {
-            if (butt.getIrcUtils().isOpInBotChannel(user)) {
+            if (IRCUtils.isOpInBotChannel(butt, user)) {
                 boolean success = removeKnowledge(cmd);
                 if (success) {
                     response.chat("ok butt wont member that no more");
@@ -41,7 +43,7 @@ public class FactHandler {
             }
         } else if (cmd[0].startsWith("~")) {
             cmd[0] = cmd[0].replaceFirst("~", "");
-            String info = getKnowledge(StringUtils.arrayToString(cmd));
+            String info = getFact(StringUtils.arrayToString(cmd));
             if (info != null) {
                 if (info.contains("%args%")) {
                     info = info.replaceAll("%args%", StringUtils.getArgs(cmd));
@@ -49,6 +51,7 @@ public class FactHandler {
                 if (info.startsWith("%me%")) {
                     info = info.replaceFirst("%me%", "");
                     response.me(info.replaceAll("%user%", user.getNick()));
+                    return;
                 }
                 response.chat(info.replaceAll("%user%", user.getNick()));
             } else {
@@ -64,7 +67,7 @@ public class FactHandler {
                     butt.getMessageHandler().handleInvalidCommand(user);
                 }
         } else if (cmd[0].equals("factinfo") || cmd[0].equals("finfo") || cmd[0].equals("fi")) {
-            String info = butt.getFactTable().getKnowledgeInfo(StringUtils.getArgs(cmd));
+            String info = butt.getFactTable().getFactInfo(StringUtils.getArgs(cmd));
             if (info != null) {
                 response.chat(info);
             } else {
@@ -79,10 +82,9 @@ public class FactHandler {
                 response.chat(info);
             } else {
                 response.noResponse();
-                butt.getMessageHandler().handleInvalidCommand(user);
+                butt.getMessageHandler().handleInvalidCommand(user, "butt find noting");
             }
         }
-        return response;
     }
 
     public boolean addKnowledge(BotResponse response, User user, String commandSender, String[] data) {
@@ -90,7 +92,7 @@ public class FactHandler {
             String command = StringUtils.getArgs(data);
             String[] split = command.split(":");
             String item = split[0].substring(0, split[0].length()).trim();
-            if (getKnowledge(item) == null) {
+            if (getFact(item) == null) {
                 String information = StringUtils.getArgsOverOne(data);
                 if (information.length() > 300) {
                     response.highlightChat(user, "error: tl;dr");
@@ -108,7 +110,7 @@ public class FactHandler {
         return false;
     }
 
-    public String getKnowledge(String item) {
+    public String getFact(String item) {
         if (!item.isEmpty()) {
             log.trace("Item: " + item);
             return butt.getFactTable().queryKnowledge(item);

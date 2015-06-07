@@ -73,4 +73,8 @@ public class MessageHandler {
     public void handleInvalidCommand(User user) {
         butt.getBotChatHandler().buttPM(user, "butt dont kno nothin bout that");
     }
+
+    public void handleInvalidCommand(User user, String message) {
+        butt.getBotChatHandler().buttPM(user, message);
+    }
 }

@@ -81,6 +81,8 @@ public class ButtReplaceHandler {
                 suffix = "'";
             } else if (split[replace].endsWith("*")) {
                 suffix = "*";
+            } else if (split[replace].endsWith("]")) {
+                suffix = "]";
             }
             sb.append(suffix);
 

@@ -18,7 +18,7 @@ public class IRCUtils {
         this.butt = butt;
     }
 
-    public boolean isOpInBotChannel(User user) {
+    public static boolean isOpInBotChannel(IRCbutt butt, User user) {
         for (String x : butt.getYamlConfigurationFile().getChannelList()) {
             for (Channel y : user.getChannelsOpIn()) {
                 if (y.getName().equalsIgnoreCase(x)) {

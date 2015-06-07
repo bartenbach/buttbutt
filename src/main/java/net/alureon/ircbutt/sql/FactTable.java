@@ -85,7 +85,7 @@ public class FactTable {
     }
 
     //TODO definitely need a way to retrieve factinfo
-    public String getKnowledgeInfo(String name) {
+    public String getFactInfo(String name) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE item=?";
         System.out.println(query);
         System.out.println(name);

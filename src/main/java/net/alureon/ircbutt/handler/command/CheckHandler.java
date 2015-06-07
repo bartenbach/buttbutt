@@ -14,7 +14,7 @@ public class CheckHandler {
 
         double random = Math.random()*100;
         String result;
-        if (random < 5) {
+        if (random < 2) {
             result = Colors.WHITE + "[" + Colors.YELLOW + "PANIC" + Colors.WHITE + "]";
         } else if (random < 52) {
             result = Colors.WHITE + "[" + Colors.RED + "FAIL" + Colors.WHITE + "]";

@@ -25,18 +25,24 @@ public class EchoHandler {
         for (int i = 1; i < cmd.length; i++) {
             if (cmd[i].contains("[")) {
                 String command = parseCommand(cmd, i);
+                log.trace(command);
                 String[] cmd2 = command.split(" ");
-                i+=cmd2.length-1;
+                for (String x : cmd2) {
+                    System.out.println(x);
+                }
+                i += cmd2.length - 1;
                 log.debug("Command length: " + cmd2.length);
-                    log.debug("Command to execute: " + command);
-                    BotResponse commandResponse = new BotResponse(response.getMessageEvent());
-                    butt.getCommandHandler().handleCommand(response.getMessageEvent(), cmd2, commandResponse);
-                    if (commandResponse.toString() != null) {
-                        log.debug("Command response: " + commandResponse.toString());
-                        sb.append(commandResponse.toString()).append(" ");
-                    } else {
-                        response.privateMessage(response.getRecipient(), "invalid butt: " + command);
-                    }
+                log.debug("Command to execute: " + command);
+                BotResponse commandResponse = new BotResponse(response.getMessageEvent());
+                butt.getCommandHandler().handleCommand(response.getMessageEvent(), cmd2, commandResponse);
+                if (commandResponse.toString() != null) {
+                    log.debug("Command response: " + commandResponse.toString());
+                    sb.append(commandResponse.toString()).append(" ");
+                } else {
+                    response.privateMessage(response.getRecipient(), "invalid butt: " + command);
+                }
+            } else if (cmd[i].startsWith("~")) {
+                sb.append(butt.getFactHandler().getFact(cmd[i].substring(1, cmd[i].length()))).append(" ");
             } else {
                 sb.append(cmd[i]).append(" ");
             }

@@ -11,15 +11,10 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 /**
  * Created by alureon on 5/10/15.
  */
+
 public class GiveHandler {
 
-    private IRCbutt butt;
-
-    public GiveHandler(IRCbutt butt) {
-        this.butt = butt;
-    }
-
-    public void handleGive(BotResponse response, GenericMessageEvent event, User user, String[] args) {
+    public static void handleGive(IRCbutt butt, BotResponse response, GenericMessageEvent event, User user, String[] args) {
         if (event instanceof MessageEvent) {
             MessageEvent event2 = (MessageEvent) event;
             if (args.length > 2) {
@@ -33,7 +28,7 @@ public class GiveHandler {
         }
     }
 
-    private boolean recipientExists(MessageEvent event, String recipient) {
+    private static boolean recipientExists(MessageEvent event, String recipient) {
         ImmutableSortedSet<User> users = event.getChannel().getUsers();
         for (User x : users) {
             if(x.getNick().equals(recipient))

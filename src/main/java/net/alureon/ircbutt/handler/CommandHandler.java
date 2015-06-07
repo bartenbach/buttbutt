@@ -6,24 +6,26 @@ import net.alureon.ircbutt.handler.command.*;
 import net.alureon.ircbutt.handler.command.karma.KarmaHandler;
 import net.alureon.ircbutt.libmath.Eval;
 import net.alureon.ircbutt.libmath.MathLib;
-import net.alureon.ircbutt.libmath.Trigonometry;
 import net.alureon.ircbutt.util.ButtMath;
 import net.alureon.ircbutt.util.StringUtils;
 import org.pircbotx.User;
 import org.pircbotx.hooks.types.GenericMessageEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CommandHandler {
 
 
     private IRCbutt butt;
-    final static Logger log = LoggerFactory.getLogger(CommandHandler.class);
 
 
     public CommandHandler(IRCbutt butt) {
         this.butt = butt;
     }
+
+
+    // advice from Mandl:  /notice not query
+    //                     parse formatting characters
+    //                     colon is pointless
+    //                     .trim() ruining formatting
 
 
     public void handleCommand(GenericMessageEvent event, String[] cmd, BotResponse response) {
@@ -37,14 +39,10 @@ public class CommandHandler {
             }
         }
 
-        /* if it's prefixed with a tilde it's a knowledge request */
+        /* if it's prefixed with a tilde it's a fact request */
         if (cmd[0].startsWith("~")) {
             butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
             return;
-        }
-
-        if (cmd[0].startsWith("%s/")) {
-            // search and replace?
         }
 
         /* remove the '!' from the command */
@@ -84,9 +82,10 @@ public class CommandHandler {
                 GoogleSearchHandler.handleGoogleSearch(butt, response, user, cmd);
                 break;
             case "give":
-                butt.getGiveHandler().handleGive(response, event, user, cmd);
+                GiveHandler.handleGive(butt, response, event, user, cmd);
                 break;
             case "rot13":
+            case "rot":
                 Rot13Handler.handleRot13(response, StringUtils.getArgs(cmd));
                 break;
             case "yt":
@@ -103,14 +102,6 @@ public class CommandHandler {
                 break;
             case "random":
                 response.chat(String.valueOf(ButtMath.getRandom()));
-                break;
-            case "sin":
-            case "cos":
-            case "tan":
-            case "arcsin":
-            case "arccos":
-            case "arctan":
-                Trigonometry.handleTrigFunctions(response, cmd);
                 break;
             case "sqrt":
             case "pow":
@@ -136,6 +127,9 @@ public class CommandHandler {
                 break;
             case "karma":
                 KarmaHandler.getKarma(butt, response, user, StringUtils.getArgs(cmd));
+                break;
+            case "coin":
+                CoinHandler.handleCoin(response);
                 break;
         }
         if (response.getIntention() == null) {
