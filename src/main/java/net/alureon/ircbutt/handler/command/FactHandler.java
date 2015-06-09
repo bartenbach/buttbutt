@@ -88,9 +88,9 @@ public class FactHandler {
     }
 
     public boolean addKnowledge(BotResponse response, User user, String commandSender, String[] data) {
-        if (data[1].endsWith(":") && data.length > 2) {
+        if (data.length > 2) {
             String command = StringUtils.getArgs(data);
-            String[] split = command.split(":");
+            String[] split = command.split(" ", 2);
             String item = split[0].substring(0, split[0].length()).trim();
             if (getFact(item) == null) {
                 String information = StringUtils.getArgsOverOne(data);
