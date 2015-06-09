@@ -3,36 +3,31 @@ package net.alureon.ircbutt.util;
 public class StringUtils {
 
     public static String arrayToString(String[] args) {
-        StringBuilder sb = new StringBuilder();
-        for (String x : args) {
-            if (!x.isEmpty()) {
-                sb.append(x).append(" ");
-            }
-        }
-        return sb.toString().trim();
+        return String.join(" ", args);
     }
 
     public static String getArgs(String[] args) {
-        args[0] = "";
         StringBuilder sb = new StringBuilder();
-        for (String x : args) {
-            if (!x.isEmpty()) {
-                sb.append(x).append(" ");
+        for (int i = 1; i < args.length; i++) {
+            String x = args[i];
+            sb.append(x);
+            if (i + 1 != args.length) {
+                sb.append(" ");
             }
         }
-        return sb.toString().trim();
+        return sb.toString();
     }
 
     public static String getArgsOverOne(String[] args) {
-        args[0] = "";
-        args[1] = "";
         StringBuilder sb = new StringBuilder();
-        for (String x : args) {
-            if (!x.isEmpty()) {
-                sb.append(x).append(" ");
+        for (int i = 2; i < args.length; i++) {
+            String x = args[i];
+            sb.append(x);
+            if (i + 1 != args.length) {
+                sb.append(" ");
             }
         }
-        return sb.toString().trim();
+        return sb.toString();
     }
 
     public static String getTrimmedString(String x) {
