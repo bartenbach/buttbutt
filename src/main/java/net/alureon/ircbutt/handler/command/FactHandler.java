@@ -22,7 +22,7 @@ public class FactHandler {
     public void handleKnowledge(BotResponse response, String[] cmd, User user, String nick) {
         if (cmd[0].equals("learn")) {
             // cmd.split(" ", 2);
-            if (user.isVerified()) {
+            if (butt.getYamlConfigurationFile().getBotNoVerify() || user.isVerified()) {
                 boolean added = addKnowledge(response, user, nick, cmd);
                 if (added) {
                     response.highlightChat(user, "ok got it!");

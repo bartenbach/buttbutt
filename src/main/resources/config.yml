@@ -3,6 +3,7 @@ Bot:
     Login: buttbutt
     Password:
     Message-Delay: 10
+    No-Verify: false
 Channels:
     - '#gsbros'
     - '##anotherchannel'
