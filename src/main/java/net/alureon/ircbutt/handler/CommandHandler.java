@@ -70,6 +70,9 @@ public class CommandHandler {
             case "ffind":
             case "fsearch":
             case "finfo":
+            case "factbyid":
+            case "factid":
+            case "fid":
             case "ff":
             case "fi":
             case "fs":

@@ -125,4 +125,21 @@ public class FactTable {
         return null;
     }
 
+    public String findFactById(int fid) {
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE id = ?";
+        try (PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query)) {
+            ps.setInt(1, fid);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String item = rs.getString("item");
+                String data = rs.getString("data");
+                return "(" + id + ") " + item + ": " + data;
+            }
+        } catch (SQLException ex) {
+            log.error("SQL Exception, ", ex);
+        }
+        return null;
+    }
+    
 }

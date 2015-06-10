@@ -84,6 +84,19 @@ public class FactHandler {
                 response.noResponse();
                 butt.getMessageHandler().handleInvalidCommand(user, "butt find noting");
             }
+        } else if (cmd[0].equalsIgnoreCase("factbyid") || cmd[0].equalsIgnoreCase("factid") || cmd[0].equalsIgnoreCase("fid")) {
+            try {
+                int id = Integer.parseInt(StringUtils.getArgs(cmd));
+                String info = butt.getFactTable().findFactById(id);
+                if (info != null) {
+                    response.chat(info);
+                } else {
+                    response.noResponse();
+                    butt.getMessageHandler().handleInvalidCommand(user, "butt find noting");
+                }
+            } catch (Exception e) {
+                butt.getMessageHandler().handleInvalidCommand(user, "not a number");
+            }
         }
     }
 
