@@ -56,7 +56,7 @@ public class MessageHandler {
     public void handlePrivateMessage(PrivateMessageEvent event) {
         BotResponse response = new BotResponse(event);
         Preconditions.checkArgument(event.getUser() != null, "User was null");
-        if (event.getUser().isVerified()) {
+        if (butt.getYamlConfigurationFile().getBotNoVerify() || event.getUser().isVerified()) {
             if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
                 butt.getCommandHandler().handleCommand(event, event.getMessage().split(" "), response);
                 response.setPrivateMessageNoOverride();

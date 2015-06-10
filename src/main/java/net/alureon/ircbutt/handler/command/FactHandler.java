@@ -22,7 +22,7 @@ public class FactHandler {
     public void handleKnowledge(BotResponse response, String[] cmd, User user, String nick) {
         if (cmd[0].equals("learn")) {
             // cmd.split(" ", 2);
-            if (user.isVerified()) {
+            if (butt.getYamlConfigurationFile().getBotNoVerify() || user.isVerified()) {
                 boolean added = addKnowledge(response, user, nick, cmd);
                 if (added) {
                     response.highlightChat(user, "ok got it!");
@@ -83,6 +83,19 @@ public class FactHandler {
             } else {
                 response.noResponse();
                 butt.getMessageHandler().handleInvalidCommand(user, "butt find noting");
+            }
+        } else if (cmd[0].equalsIgnoreCase("factbyid") || cmd[0].equalsIgnoreCase("factid") || cmd[0].equalsIgnoreCase("fid")) {
+            try {
+                int id = Integer.parseInt(StringUtils.getArgs(cmd));
+                String info = butt.getFactTable().findFactById(id);
+                if (info != null) {
+                    response.chat(info);
+                } else {
+                    response.noResponse();
+                    butt.getMessageHandler().handleInvalidCommand(user, "butt find noting");
+                }
+            } catch (Exception e) {
+                butt.getMessageHandler().handleInvalidCommand(user, "not a number");
             }
         }
     }

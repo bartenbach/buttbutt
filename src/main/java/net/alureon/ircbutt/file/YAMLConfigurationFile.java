@@ -17,6 +17,7 @@ public class YAMLConfigurationFile {
     private String botLogin;
     private String botPassword;
     private long botMessageDelay;
+    private boolean noVerify;
     private List<String> channelList;
     private String serverHostname;
     private boolean serverAutoReconnect;
@@ -53,6 +54,7 @@ public class YAMLConfigurationFile {
             this.botLogin = (String) botSettings.get("Login");
             this.botPassword = (String) botSettings.get("Password");
             this.botMessageDelay = Long.parseLong(String.valueOf(botSettings.get("Message-Delay")));
+            this.noVerify = Boolean.parseBoolean(String.valueOf(botSettings.get("No-Verify")));
             this.serverHostname = (String) serverSettings.get("Hostname");
             this.serverAutoReconnect = Boolean.parseBoolean(String.valueOf(serverSettings.get("Auto-Reconnect")));
             this.sqlUsername = (String) sqlSettings.get("Username");
@@ -112,6 +114,10 @@ public class YAMLConfigurationFile {
         return botMessageDelay;
     }
 
+    public boolean getBotNoVerify() {
+        return noVerify;
+    }
+    
     public List<String> getChannelList() {
         return channelList;
     }
