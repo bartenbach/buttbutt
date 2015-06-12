@@ -40,9 +40,9 @@ public class ResponseHandler {
     }
 
     private static void handleHighlight(BotResponse response) {
-        response.getMessageEvent().respond(response.getMessage());
+        response.getEvent().respond(response.getMessage());
         if (response.hasAdditionalMessage()) {
-            response.getMessageEvent().respond(response.getAdditionalMessage());
+            response.getEvent().respond(response.getAdditionalMessage());
         }
     }
 
@@ -53,7 +53,9 @@ public class ResponseHandler {
                 response.getRecipient().send().message(response.getMessage());
             }
         } else {
+            // TODO why is this happening?
             System.out.println("Recieved null message");
+            response.getRecipient().send().message("butt have nothin to say on the matter");
         }
     }
 

@@ -24,7 +24,6 @@ public class CommandHandler {
 
     // advice from Mandl:  /notice not query
     //                     parse formatting characters
-    //                     colon is pointless
     //                     .trim() ruining formatting
 
 

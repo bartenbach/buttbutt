@@ -23,7 +23,7 @@ public class BotConfigurationHandler {
                 .setVersion(butt.getProgramVersion());
 /*        for (String x : butt.getYamlConfigurationFile().getChannelList()) {
             configBuilder.addAutoJoinChannel(x);
-        }*/
+        }*/  // TODO this is commented out because the bot doesn't authenticate before joining channels
         return configBuilder.buildConfiguration();
     }
 }

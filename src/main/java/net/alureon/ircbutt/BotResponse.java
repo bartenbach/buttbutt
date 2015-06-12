@@ -4,6 +4,7 @@ import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
+import org.pircbotx.hooks.types.GenericMessageEvent;
 
 /**
  * Created by alureon on 2/28/15.
@@ -11,23 +12,22 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
 
 public class BotResponse {
 
+
+    // TODO testing making this more generic.  Maybe just use GenericMessageEvent to simplify things
+    // Keep throwing exceptions here.
+
     private String message;
     private String additionalMessage;
     private User recipient;
     private BotIntention intention;
-    private MessageEvent messageEvent;
-    private PrivateMessageEvent privateMessageEvent;
+    private GenericMessageEvent event;
 
-    
-    public BotResponse(MessageEvent messageEvent) {
-        this.messageEvent = messageEvent;
-        this.recipient = messageEvent.getUser();
-    }
-
-    public BotResponse(PrivateMessageEvent privateMessageEvent) {
-        this.privateMessageEvent = privateMessageEvent;
-        this.recipient = privateMessageEvent.getUser();
-        this.intention = BotIntention.PRIVATE_MESSAGE_NO_OVERRIDE;
+    public BotResponse(GenericMessageEvent event) {
+        this.event = event;
+        this.recipient = event.getUser();
+        if (event instanceof PrivateMessageEvent) {
+            this.intention = BotIntention.PRIVATE_MESSAGE_NO_OVERRIDE;
+        }
     }
 
     public String getMessage() {
@@ -46,16 +46,11 @@ public class BotResponse {
         return this.additionalMessage;
     }
 
-    public MessageEvent getMessageEvent() {
-        return this.messageEvent;
-    }
-
     public Channel getChannel() {
-        try { //Prevent exceptions of this is called on private messages
-            return this.messageEvent.getChannel();
-        } catch (NullPointerException e) {
-            return null;
+        if (this.event instanceof MessageEvent) {
+            return ((MessageEvent) event).getChannel();
         }
+        return null;
     }
 
     public void privateMessage(User recipient, String message) {
@@ -64,7 +59,15 @@ public class BotResponse {
         this.message = message;
     }
 
+    public GenericMessageEvent getEvent() {
+        return this.event;
+    }
+
     public void highlightChat(User recipient, String message) {
+        if (this.event instanceof PrivateMessageEvent) {  // sometimes we don't want highlight chat if PM
+            privateMessage(recipient, message);
+            return;
+        }
         this.intention = BotIntention.HIGHLIGHT;
         this.recipient = recipient;
         this.message = message;
