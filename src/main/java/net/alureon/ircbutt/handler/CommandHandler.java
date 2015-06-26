@@ -133,6 +133,9 @@ public class CommandHandler {
             case "coin":
                 CoinHandler.handleCoin(response);
                 break;
+            case "gi":
+                GoogleImageSearchHandler.handleGoogleImageSearch(response, StringUtils.getArgs(cmd));
+                break;  
         }
         if (response.getIntention() == null) {
             response.noResponse();
