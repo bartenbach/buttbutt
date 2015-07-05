@@ -62,6 +62,7 @@ public class CommandHandler {
                 butt.getQuoteGrabHandler().handleQuoteGrabs(response, cmd, user, nick);
                 break;
             case "learn":
+            case "append":
             case "forget":
             case "fact":
             case "factinfo":

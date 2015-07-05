@@ -142,4 +142,15 @@ public class FactTable {
         return null;
     }
     
+    public void appendKnowledge(String item, String data, String grabber) {
+        String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` SET data = CONCAT(data, ' ', ?) WHERE item = ?";
+        try (PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(update)) {
+            ps.setString(1, data);
+            ps.setString(2, item);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            log.error("Unable to insert knowledge into SQL database.  Stacktrace: ", ex);
+        }
+    }
+    
 }
