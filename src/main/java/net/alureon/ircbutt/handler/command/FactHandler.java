@@ -37,9 +37,14 @@ public class FactHandler {
             }
         } else if (cmd[0].equals("forget")) {
             if (IRCUtils.isOpInBotChannel(butt, user)) {
-                boolean success = removeKnowledge(cmd);
-                if (success) {
-                    response.chat("ok butt wont member that no more");
+                if (cmd.length == 2) {
+                    String old = getFact(cmd[1]);
+                    boolean success = removeKnowledge(cmd);
+                    if (success) {
+                        response.chat("Forgot: " + cmd[1] + " = " + old);
+                    } else {
+                        response.chat("Could not forget: " + cmd[1] + " = " + old);
+                    }
                 } else {
                     response.noResponse();
                     butt.getMessageHandler().handleInvalidCommand(user);
