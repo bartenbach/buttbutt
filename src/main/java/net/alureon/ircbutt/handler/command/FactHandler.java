@@ -28,11 +28,23 @@ public class FactHandler {
                     response.highlightChat(user, "ok got it!");
                 }
             }
+        } else if (cmd[0].equals("append")) {
+            if (butt.getYamlConfigurationFile().getBotNoVerify() || user.isVerified()) {
+                boolean added = appendToKnowledge(response, user, nick, cmd);
+                if (added) {
+                    response.highlightChat(user, "ok got it!");
+                }
+            }
         } else if (cmd[0].equals("forget")) {
             if (IRCUtils.isOpInBotChannel(butt, user)) {
-                boolean success = removeKnowledge(cmd);
-                if (success) {
-                    response.chat("ok butt wont member that no more");
+                if (cmd.length == 2) {
+                    String old = getFact(cmd[1]);
+                    boolean success = removeKnowledge(cmd);
+                    if (success) {
+                        response.chat("Forgot: " + cmd[1] + " = " + old);
+                    } else {
+                        response.chat("Could not forget: " + cmd[1] + " = " + old);
+                    }
                 } else {
                     response.noResponse();
                     butt.getMessageHandler().handleInvalidCommand(user);
@@ -124,6 +136,29 @@ public class FactHandler {
         return false;
     }
 
+    public boolean appendToKnowledge(BotResponse response, User user, String commandSender, String[] data) {
+        if (data.length > 2) {
+            String command = StringUtils.getArgs(data);
+            String[] split = command.split(" ", 2);
+            String item = split[0].substring(0, split[0].length()).trim();
+            if (getFact(item) != null) {
+                String information = StringUtils.getArgsOverOne(data);
+                if (information.length() > 300) {
+                    response.highlightChat(user, "error: tl;dr");
+                    return false;
+                }
+                log.trace("Item: " + item);
+                log.trace("Data: " + information);
+                butt.getFactTable().appendKnowledge(item, information, commandSender);
+                response.highlightChat(user, "ok got it!");
+                return true;
+            } else {
+                response.privateMessage(user, "error: fact does not exist");
+            }
+        }
+        return false;
+    }
+    
     public String getFact(String item) {
         if (!item.isEmpty()) {
             log.trace("Item: " + item);

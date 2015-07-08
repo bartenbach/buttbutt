@@ -25,14 +25,11 @@ public class QuoteGrabTable {
 
     public void addQuote(String nick, String quote, String grabber) {
         if (butt.getSqlManager().isConnected()) {
-            java.util.Date date = new Date();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String timestamp = sdf.format(date);
-            String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` (user,quote,grabbed_by,timestamp) VALUES(?,?,?,?)";
+            String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` (user,quote,grabbed_by) VALUES(?,?,?)";
             PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update);
             if (ps != null) {
-                log.trace(nick + quote + grabber + timestamp);
-                Object[] objects = { nick, quote, grabber, timestamp };
+                log.trace(nick + quote + grabber );
+                Object[] objects = { nick, quote, grabber };
                 butt.getSqlManager().prepareStatement(ps, objects);
                 try {
                     ps.executeUpdate();

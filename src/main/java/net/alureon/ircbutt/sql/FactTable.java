@@ -24,14 +24,11 @@ public class FactTable {
 
     public void insertKnowledge(String item, String data, String grabber) {
         java.util.Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String timestamp = sdf.format(date);
-        String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` (item,data,added_by,timestamp) VALUES(?,?,?,?)";
+        String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` (item,data,added_by) VALUES(?,?,?)";
         try (PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(update)) {
             ps.setString(1, item);
             ps.setString(2, data);
             ps.setString(3, grabber);
-            ps.setString(4, timestamp);
             ps.executeUpdate();
         } catch (SQLException ex) {
             log.error("Unable to insert knowledge into SQL database.  Stacktrace: ", ex);
@@ -140,6 +137,17 @@ public class FactTable {
             log.error("SQL Exception, ", ex);
         }
         return null;
+    }
+    
+    public void appendKnowledge(String item, String data, String grabber) {
+        String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` SET data = CONCAT(data, ' ', ?) WHERE item = ?";
+        try (PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(update)) {
+            ps.setString(1, data);
+            ps.setString(2, item);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            log.error("Unable to insert knowledge into SQL database.  Stacktrace: ", ex);
+        }
     }
     
 }

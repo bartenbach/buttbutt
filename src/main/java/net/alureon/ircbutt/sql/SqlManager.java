@@ -35,16 +35,20 @@ public class SqlManager {
         }
         log.info("[SQL backend connected]");
     }
-
+    /*
+    To upgrade tables from old version do
+     ALTER TABLE _knowledge CHANGE COLUMN `timestamp` `timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+     ALTER TABLE _quotes CHANGE COLUMN `timestamp` `timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    */
     public void createTablesIfNotExists() {
         sqlUpdate("CREATE TABLE IF NOT EXISTS `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` " +
                 "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `user` VARCHAR(16) NOT NULL," +
                 "`quote` VARCHAR(300) NOT NULL, `grabbed_by` VARCHAR(16) NOT NULL," +
-                "`timestamp` DATETIME NOT NULL) ENGINE=MyISAM");
+                "`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=MyISAM");
         sqlUpdate("CREATE TABLE IF NOT EXISTS `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` " +
                 "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `item` VARCHAR(32) NOT NULL UNIQUE," +
                 "`data` VARCHAR(300) NOT NULL, `added_by` VARCHAR(16) NOT NULL," +
-                "`timestamp` DATETIME NOT NULL) ENGINE=MyISAM");
+                "`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=MyISAM");
         sqlUpdate("CREATE TABLE IF NOT EXISTS `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` " +
                 "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `item` VARCHAR(32) NOT NULL," +
                 "`karma` SMALLINT NOT NULL) ENGINE=MyISAM");
