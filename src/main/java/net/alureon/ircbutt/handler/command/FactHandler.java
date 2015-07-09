@@ -21,7 +21,6 @@ public class FactHandler {
 
     public void handleKnowledge(BotResponse response, String[] cmd, User user, String nick) {
         if (cmd[0].equals("learn")) {
-            // cmd.split(" ", 2);
             if (butt.getYamlConfigurationFile().getBotNoVerify() || user.isVerified()) {
                 boolean added = addKnowledge(response, user, nick, cmd);
                 if (added) {
@@ -39,11 +38,10 @@ public class FactHandler {
             if (IRCUtils.isOpInBotChannel(butt, user)) {
                 if (cmd.length == 2) {
                     String old = getFact(cmd[1]);
-                    boolean success = removeKnowledge(cmd);
-                    if (success) {
-                        response.chat("Forgot: " + cmd[1] + " = " + old);
+                    if (removeKnowledge(cmd)) {
+                        response.chat("ok butt wont member that " + old);
                     } else {
-                        response.chat("Could not forget: " + cmd[1] + " = " + old);
+                        response.privateMessage(user, "butt don't know nothin bout " + cmd[1]);
                     }
                 } else {
                     response.noResponse();
@@ -57,15 +55,12 @@ public class FactHandler {
             cmd[0] = cmd[0].replaceFirst("~", "");
             String info = getFact(StringUtils.arrayToString(cmd));
             if (info != null) {
-                if (info.contains("%args%")) {
-                    info = info.replaceAll("%args%", StringUtils.getArgs(cmd));
-                }
-                if (info.startsWith("%me%")) {
-                    info = info.replaceFirst("%me%", "");
-                    response.me(info.replaceAll("%user%", user.getNick()));
+                if (info.startsWith("$ME")) {
+                    info = info.replaceFirst("\\$ME", "");
+                    response.me(info.replaceAll("\\$USER", user.getNick()));
                     return;
                 }
-                response.chat(info.replaceAll("%user%", user.getNick()));
+                response.chat(info.replaceAll("\\$USER", user.getNick()));
             } else {
                 response.noResponse();
                 butt.getMessageHandler().handleInvalidCommand(user);
@@ -96,6 +91,7 @@ public class FactHandler {
                 response.noResponse();
                 butt.getMessageHandler().handleInvalidCommand(user, "butt find noting");
             }
+            //todo: factfind ^ should just accept either string or integer input instead of having separate commands
         } else if (cmd[0].equalsIgnoreCase("factbyid") || cmd[0].equalsIgnoreCase("factid") || cmd[0].equalsIgnoreCase("fid")) {
             try {
                 int id = Integer.parseInt(StringUtils.getArgs(cmd));
@@ -158,7 +154,7 @@ public class FactHandler {
         }
         return false;
     }
-    
+
     public String getFact(String item) {
         if (!item.isEmpty()) {
             log.trace("Item: " + item);

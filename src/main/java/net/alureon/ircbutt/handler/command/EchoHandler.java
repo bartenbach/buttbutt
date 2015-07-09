@@ -23,7 +23,7 @@ public class EchoHandler {
     public static String parseMessage(IRCbutt butt, BotResponse response, String[] cmd, String nick) {
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i < cmd.length; i++) {
-            if (cmd[i].contains("[")) {
+            if (cmd[i].contains("`")) {
                 String command = parseCommand(cmd, i);
                 log.trace(command);
                 String[] cmd2 = command.split(" ");
