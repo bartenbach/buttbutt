@@ -28,18 +28,13 @@ public class SqlManager {
         log.debug(url);
         try {
             this.connection = DriverManager.getConnection(url, username, password);
-            //fixme why am I timing out?
         } catch (SQLException ex) {
             log.error("Failed to establish SQL connection: ", ex);
             return;
         }
         log.info("[SQL backend connected]");
     }
-    /*
-    To upgrade tables from old version do
-     ALTER TABLE _knowledge CHANGE COLUMN `timestamp` `timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
-     ALTER TABLE _quotes CHANGE COLUMN `timestamp` `timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
-    */
+
     public void createTablesIfNotExists() {
         sqlUpdate("CREATE TABLE IF NOT EXISTS `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` " +
                 "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `user` VARCHAR(16) NOT NULL," +
@@ -78,7 +73,7 @@ public class SqlManager {
         checkConnection();
         try {
             return this.connection.prepareStatement(query);
-        } catch (SQLException ex) {
+        } catch (SQLException | NullPointerException ex) {
             log.error("Unable to prepare SQL statement. Stacktrace: ", ex);
             return null;
         }

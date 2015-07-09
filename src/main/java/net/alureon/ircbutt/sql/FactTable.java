@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class FactTable {
 
@@ -17,13 +15,11 @@ public class FactTable {
     private IRCbutt butt;
     final static Logger log = LoggerFactory.getLogger(FactTable.class);
 
-    // TODO/FIXME Update this entire class to take advantage of AutoCloseable
     public FactTable(IRCbutt butt) {
         this.butt = butt;
     }
 
     public void insertKnowledge(String item, String data, String grabber) {
-        java.util.Date date = new Date();
         String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` (item,data,added_by) VALUES(?,?,?)";
         try (PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(update)) {
             ps.setString(1, item);
@@ -81,11 +77,8 @@ public class FactTable {
         return null;
     }
 
-    //TODO definitely need a way to retrieve factinfo
     public String getFactInfo(String name) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE item=?";
-        System.out.println(query);
-        System.out.println(name);
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
@@ -93,7 +86,6 @@ public class FactTable {
                 int id = rs.getInt("id");
                 String user = rs.getString("added_by");
                 String time = rs.getString("timestamp");
-                System.out.println(name + time + user);
                 return "(" + id + ") " + name + ": added by " + user + " on " + time;
             }
         } catch (SQLException ex) {
@@ -138,7 +130,7 @@ public class FactTable {
         }
         return null;
     }
-    
+
     public void appendKnowledge(String item, String data, String grabber) {
         String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` SET data = CONCAT(data, ' ', ?) WHERE item = ?";
         try (PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(update)) {
@@ -149,5 +141,5 @@ public class FactTable {
             log.error("Unable to insert knowledge into SQL database.  Stacktrace: ", ex);
         }
     }
-    
+
 }

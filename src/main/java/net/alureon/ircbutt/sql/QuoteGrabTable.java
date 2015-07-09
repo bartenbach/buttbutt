@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class QuoteGrabTable {
 
@@ -21,171 +19,125 @@ public class QuoteGrabTable {
         this.butt = butt;
     }
 
-    //TODO remove awful redundant connection checks.  This has been taken care of.
+    //TODO remove awful redundant connection checks.
 
     public void addQuote(String nick, String quote, String grabber) {
-        if (butt.getSqlManager().isConnected()) {
-            String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` (user,quote,grabbed_by) VALUES(?,?,?)";
-            PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update);
-            if (ps != null) {
-                log.trace(nick + quote + grabber );
-                Object[] objects = { nick, quote, grabber };
-                butt.getSqlManager().prepareStatement(ps, objects);
-                try {
-                    ps.executeUpdate();
-                } catch (SQLException ex) {
-                    log.error("SQL Exception has occurred. StackTrace:", ex);
-                }
-            } // null PreparedStatement is handled by getPreparedStatement();
-        } else {
-            butt.getSqlManager().reconnect();
-            addQuote(nick, quote, grabber);
+        String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` (user,quote,grabbed_by) VALUES(?,?,?)";
+        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update);
+        log.trace(nick + quote + grabber);
+        Object[] objects = { nick, quote, grabber };
+        butt.getSqlManager().prepareStatement(ps, objects);
+        try {
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            log.error("SQL Exception has occurred. StackTrace:", ex);
         }
+        // null PreparedStatement is handled by getPreparedStatement();
     }
 
     public boolean quoteAlreadyExists(String playerName, String quote) throws SQLException{
-        if (butt.getSqlManager().isConnected()) {
-            String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? AND quote=?";
-            PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
-            ps.setString(1, playerName);
-            ps.setString(2, quote);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return true;
-            }
-        }
-        return false;
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? AND quote=?";
+        PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
+        ps.setString(1, playerName);
+        ps.setString(2, quote);
+        ResultSet rs = ps.executeQuery();
+        return rs.next();
     }
 
     public String getRandomQuote() {
-        if (butt.getSqlManager().isConnected()) {
-            String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` ORDER BY RAND() LIMIT 1";
-            PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
-            ResultSet rs = butt.getSqlManager().getResultSet(ps);
-            try {
-                if (rs.next()) {
-                    String user = rs.getString("user");
-                    String quote = rs.getString("quote");
-                    return restructureQuote(user, quote);
-                }
-            } catch (SQLException ex) {
-                log.error("SQL Exception has occurred. StackTrace:", ex);
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` ORDER BY RAND() LIMIT 1";
+        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
+        ResultSet rs = butt.getSqlManager().getResultSet(ps);
+        try {
+            if (rs.next()) {
+                String user = rs.getString("user");
+                String quote = rs.getString("quote");
+                return restructureQuote(user, quote);
             }
-        } else {
-            butt.getSqlManager().reconnect();
-            getRandomQuote();
+        } catch (SQLException ex) {
+            log.error("SQL Exception has occurred. StackTrace:", ex);
         }
         return null;
     }
 
     public String getQuoteById(int id) throws SQLException {
-        if (butt.getSqlManager().isConnected()) {
-            String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE id=?";
-            PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                String user = rs.getString("user");
-                String quote = rs.getString("quote");
-                return restructureQuote(id, user, quote);
-            }
-        } else {
-            butt.getSqlManager().reconnect();
-            getQuoteById(id);
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE id=?";
+        PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            String user = rs.getString("user");
+            String quote = rs.getString("quote");
+            return restructureQuote(id, user, quote);
         }
         return null;
     }
 
     public String findQuote(String search) throws SQLException {
-        if (butt.getSqlManager().isConnected()) {
-            String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE quote LIKE ?";
-            StringBuilder sb = new StringBuilder(query);
-            PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
-            ps.setString(1, "%" + search + "%");
-            ResultSet rs = ps.executeQuery();
-            //TODO this could certainly return more than one item
-            if (rs.next()) {
-                int id = rs.getInt("id");
-                String user = rs.getString("user");
-                String quote = rs.getString("quote");
-                return restructureQuote(id, user, quote);
-            }
-        } else {
-            butt.getSqlManager().reconnect();
-            findQuote(search);
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE quote LIKE ?";
+        PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
+        ps.setString(1, "%" + search + "%");
+        ResultSet rs = ps.executeQuery();
+        //TODO this could certainly return more than one item
+        if (rs.next()) {
+            int id = rs.getInt("id");
+            String user = rs.getString("user");
+            String quote = rs.getString("quote");
+            return restructureQuote(id, user, quote);
         }
         return null;
     }
 
     public String getRandomQuoteFromPlayer(String username) throws SQLException {
-        if (butt.getSqlManager().isConnected()) {
-            String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY RAND() LIMIT 1";
-            PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
-            ps.setString(1, username);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                String quote = rs.getString("quote");
-                return restructureQuote(username, quote);
-            }
-        } else {
-            butt.getSqlManager().reconnect();
-            return getRandomQuoteFromPlayer(username);
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY RAND() LIMIT 1";
+        PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            String quote = rs.getString("quote");
+            return restructureQuote(username, quote);
         }
         return null;
     }
 
     public String[] getQuoteInfo(int id) throws SQLException {
-        if (butt.getSqlManager().isConnected()) {
-            String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE id=?";
-            PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                String user = rs.getString("user");
-                String quote = rs.getString("quote");
-                String grabber = rs.getString("grabbed_by");
-                String time = rs.getString("timestamp");
-                String formattedQuote = restructureQuote(id, user, quote);
-                String quoteInfo = "Grabbed by: " + grabber + " on " + time;
-                String[] quotes = new String[2];
-                quotes[0] = formattedQuote;
-                quotes[1] = quoteInfo;
-                return quotes;
-            }
-        } else {
-            butt.getSqlManager().reconnect();
-            return getQuoteInfo(id);
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE id=?";
+        PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            String user = rs.getString("user");
+            String quote = rs.getString("quote");
+            String grabber = rs.getString("grabbed_by");
+            String time = rs.getString("timestamp");
+            String formattedQuote = restructureQuote(id, user, quote);
+            String quoteInfo = "Grabbed by: " + grabber + " on " + time;
+            String[] quotes = new String[2];
+            quotes[0] = formattedQuote;
+            quotes[1] = quoteInfo;
+            return quotes;
         }
         return null;
     }
 
     public String getLastQuoteFromPlayer(String username) throws SQLException {
-        if (butt.getSqlManager().isConnected()) {
-            String query = "SELECT * FROM `" +butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY id DESC LIMIT 1";
-            PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
-            ps.setString(1, username);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                String quote = rs.getString("quote");
-                return restructureQuote(username, quote);
-            }
-        } else {
-            butt.getSqlManager().reconnect();
-            return getLastQuoteFromPlayer(username);
+        String query = "SELECT * FROM `" +butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY id DESC LIMIT 1";
+        PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            String quote = rs.getString("quote");
+            return restructureQuote(username, quote);
         }
         return null;
     }
 
     private String restructureQuote(int id, String username, String quote) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("(").append(id).append(") ").append(username).append(": ").append(quote);
-        return sb.toString();
+        return "(" + id + ") " + username + ": " + quote;
     }
 
     private String restructureQuote(String username, String quote) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(username).append(": ").append(quote);
-        return sb.toString();
+        return username + ": " + quote;
     }
 
 }
