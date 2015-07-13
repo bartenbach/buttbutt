@@ -23,7 +23,7 @@ public class EchoHandler {
     public static String parseMessage(IRCbutt butt, BotResponse response, String[] cmd, String nick) {
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i < cmd.length; i++) {
-            if (cmd[i].contains("`")) {
+            if (cmd[i].contains("$(")) {
                 String command = parseCommand(cmd, i);
                 log.trace(command);
                 String[] cmd2 = command.split(" ");
@@ -47,14 +47,14 @@ public class EchoHandler {
                 sb.append(cmd[i]).append(" ");
             }
         }
-        return sb.toString().replaceAll("%args%", "").replaceAll("%user%", nick);
+        return sb.toString().replaceAll("\\$USER", nick);
     }
 
     public static String parseCommand(String[] cmd, int j) {
         for (;j < cmd.length; j++ )
-        if (cmd[j].contains("]")) {
+        if (cmd[j].contains(")")) {
             System.out.println("We have a command: " + cmd[j]);
-            String command = cmd[j].substring(1,cmd[j].length()-1);
+            String command = cmd[j].substring(2,cmd[j].length()-1);
             System.out.println("Command is: " + command);
             return command;
         } else {
@@ -62,7 +62,7 @@ public class EchoHandler {
             s.append(" ");
             for (int k=j+1;k < cmd.length;k++) {
                 s.append(cmd[k]);
-                if (cmd[k].contains("]")) {
+                if (cmd[k].contains(")")) {
                     System.out.println("We have a command: " + s.toString());  // strings i - j
                     String command = s.toString().trim();
                     return command.substring(1, command.length()-1);
