@@ -2,8 +2,12 @@ package net.alureon.ircbutt.handler.command;
 
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
+import net.alureon.ircbutt.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by alureon on 3/1/15.
@@ -16,61 +20,24 @@ public class EchoHandler {
 
 
     public static void handleEcho(IRCbutt butt, BotResponse response, String[] cmd, String nick) {
-        String message = parseMessage(butt, response, cmd, nick);
+        String message = parseCommands(butt, response, StringUtils.arrayToString(cmd), nick);
         response.chat(message);
     }
 
-    public static String parseMessage(IRCbutt butt, BotResponse response, String[] cmd, String nick) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < cmd.length; i++) {
-            if (cmd[i].contains("$(")) {
-                String command = parseCommand(cmd, i);
-                log.trace(command);
-                String[] cmd2 = command.split(" ");
-                for (String x : cmd2) {
-                    System.out.println(x);
-                }
-                i += cmd2.length - 1;
-                log.debug("Command length: " + cmd2.length);
-                log.debug("Command to execute: " + command);
-                BotResponse commandResponse = new BotResponse(response.getEvent());
-                butt.getCommandHandler().handleCommand(response.getEvent(), cmd2, commandResponse);
-                if (commandResponse.toString() != null) {
-                    log.debug("Command response: " + commandResponse.toString());
-                    sb.append(commandResponse.toString()).append(" ");
-                } else {
-                    response.privateMessage(response.getRecipient(), "invalid butt: " + command);
-                }
-            } else if (cmd[i].startsWith("~")) {
-                sb.append(butt.getFactHandler().getFact(cmd[i].substring(1, cmd[i].length()))).append(" ");
+    public static String parseCommands(IRCbutt butt, BotResponse response, String input, String nick) {
+        Pattern p = Pattern.compile("\\$\\([^)]*\\)");
+        Matcher m = p.matcher(input);
+        while (m.find()) {
+            String command = m.group().substring(2, m.group().length() - 1);
+            BotResponse botResponse = new BotResponse(response.getEvent());
+            butt.getCommandHandler().handleCommand(response.getEvent(), command.split(" "), botResponse);
+            if (botResponse.toString() != null) {
+                input = input.replace(m.group(), botResponse.toString());
             } else {
-                sb.append(cmd[i]).append(" ");
+                botResponse.privateMessage(response.getRecipient(), "butt didnt get this part: " + m.group());
             }
         }
-        return sb.toString().replaceAll("\\$USER", nick);
-    }
-
-    public static String parseCommand(String[] cmd, int j) {
-        for (;j < cmd.length; j++ )
-        if (cmd[j].contains(")")) {
-            System.out.println("We have a command: " + cmd[j]);
-            String command = cmd[j].substring(2,cmd[j].length()-1);
-            System.out.println("Command is: " + command);
-            return command;
-        } else {
-            StringBuilder s = new StringBuilder(cmd[j]);
-            s.append(" ");
-            for (int k=j+1;k < cmd.length;k++) {
-                s.append(cmd[k]);
-                if (cmd[k].contains(")")) {
-                    System.out.println("We have a command: " + s.toString());  // strings i - j
-                    String command = s.toString().trim();
-                    return command.substring(1, command.length()-1);
-                }
-                s.append(" ");
-            }
-        }
-        return null;
+        return input.replaceAll("\\$USER", nick);
     }
 
 }

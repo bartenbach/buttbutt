@@ -32,11 +32,11 @@ public class CommandHandler {
         User user = event.getUser();
         String nick = user.getNick();
 
-        for (String x : cmd) {
+/*        for (String x : cmd) {
             if (x.equals(">>") || x.equals(">")) {
                 //todo redirection handler
             }
-        }
+        }*/
 
         /* if it's prefixed with a tilde it's a fact request */
         if (cmd[0].startsWith("~")) {
@@ -79,7 +79,7 @@ public class CommandHandler {
                 butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
                 break;
             case "echo":
-                EchoHandler.handleEcho(butt, response, cmd, user.getNick());
+                EchoHandler.handleEcho(butt, response, StringUtils.getArgs(cmd).split(" "), user.getNick());
                 break;
             case "g":
                 GoogleSearchHandler.handleGoogleSearch(butt, response, user, cmd);
@@ -136,7 +136,7 @@ public class CommandHandler {
                 break;
             case "gi":
                 GoogleImageSearchHandler.handleGoogleImageSearch(response, StringUtils.getArgs(cmd));
-                break;  
+                break;
         }
         if (response.getIntention() == null) {
             response.noResponse();
