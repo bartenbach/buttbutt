@@ -19,7 +19,7 @@ public class GiveHandler {
             MessageEvent event2 = (MessageEvent) event;
             if (args.length > 2) {
                 if (recipientExists(event2, args[1])) {
-                    String parsed = EchoHandler.parseCommands(butt, response, StringUtils.getArgs(args).split(" "), user.getNick());
+                    String parsed = EchoHandler.parseCommands(butt, response, StringUtils.arrayToString(args), user.getNick());
                     response.chat(args[1] + ": " + parsed);
                 }
             } else {
