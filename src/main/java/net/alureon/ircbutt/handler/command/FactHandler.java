@@ -39,7 +39,9 @@ public class FactHandler {
                 if (cmd.length == 2) {
                     String old = getFact(cmd[1]);
                     if (removeKnowledge(cmd)) {
-                        response.chat("ok butt wont member that " + old);
+                        response.chat("ok butt wont member that no more");
+                        // log to console in event of accidental data loss
+                        log.info("Removed fact [" + cmd[1] + "]: " + old);
                     } else {
                         response.privateMessage(user, "butt don't know nothin bout " + cmd[1]);
                     }
@@ -117,7 +119,7 @@ public class FactHandler {
             if (getFact(item) == null) {
                 String information = StringUtils.getArgsOverOne(data);
                 if (information.length() > 300) {
-                    response.highlightChat(user, "error: tl;dr");
+                    response.highlightChat(user, "tl;dr");
                     return false;
                 }
                 log.trace("Item: " + item);
@@ -140,7 +142,7 @@ public class FactHandler {
             if (getFact(item) != null) {
                 String information = StringUtils.getArgsOverOne(data);
                 if (information.length() > 300) {
-                    response.highlightChat(user, "error: tl;dr");
+                    response.highlightChat(user, "tl;dr");
                     return false;
                 }
                 log.trace("Item: " + item);

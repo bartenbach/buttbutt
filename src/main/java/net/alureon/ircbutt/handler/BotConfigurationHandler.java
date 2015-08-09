@@ -15,15 +15,16 @@ public class BotConfigurationHandler {
         Configuration.Builder configBuilder = new Configuration.Builder();
         configBuilder.setName(butt.getYamlConfigurationFile().getBotName())
                 .setLogin(butt.getYamlConfigurationFile().getBotLogin())
+                .setRealName(butt.getYamlConfigurationFile().getBotRealName())
                 .setServerHostname(butt.getYamlConfigurationFile().getServerHostname())
                 .setAutoReconnect(butt.getYamlConfigurationFile().getServerAutoReconnect())
                 .setMessageDelay(butt.getYamlConfigurationFile().getBotMessageDelay())
                 .setNickservPassword(butt.getYamlConfigurationFile().getBotPassword())
                 .setListenerManager(butt.getListenerManager())
                 .setVersion(butt.getProgramVersion());
-/*        for (String x : butt.getYamlConfigurationFile().getChannelList()) {
+        for (String x : butt.getYamlConfigurationFile().getChannelList()) {
             configBuilder.addAutoJoinChannel(x);
-        }*/  // TODO this is commented out because the bot doesn't authenticate before joining channels
+        }  // TODO this doesn't authenticate before joining channels
         return configBuilder.buildConfiguration();
     }
 }

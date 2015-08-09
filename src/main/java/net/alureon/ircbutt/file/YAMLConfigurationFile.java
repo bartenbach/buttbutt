@@ -16,6 +16,7 @@ public class YAMLConfigurationFile {
     private String botName;
     private String botLogin;
     private String botPassword;
+    private String botRealName;
     private long botMessageDelay;
     private boolean noVerify;
     private List<String> channelList;
@@ -52,6 +53,7 @@ public class YAMLConfigurationFile {
             this.channelList = (List<String>) map.get("Channels");
             this.botName = (String) botSettings.get("Name");
             this.botLogin = (String) botSettings.get("Login");
+            this.botRealName = (String) botSettings.get("Realname");
             this.botPassword = (String) botSettings.get("Password");
             this.botMessageDelay = Long.parseLong(String.valueOf(botSettings.get("Message-Delay")));
             this.noVerify = Boolean.parseBoolean(String.valueOf(botSettings.get("No-Verify")));
@@ -106,6 +108,10 @@ public class YAMLConfigurationFile {
         return botLogin;
     }
 
+    public String getBotRealName() {
+        return botRealName;
+    }
+
     public String getBotPassword() {
         return botPassword;
     }
@@ -117,7 +123,7 @@ public class YAMLConfigurationFile {
     public boolean getBotNoVerify() {
         return noVerify;
     }
-    
+
     public List<String> getChannelList() {
         return channelList;
     }
