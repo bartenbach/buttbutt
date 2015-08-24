@@ -4,6 +4,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.pircbotx.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -14,6 +16,7 @@ import java.util.regex.Pattern;
 public class KlongUrlTitleHandler {
 
 
+    public final static Logger log = LoggerFactory.getLogger(KlongUrlTitleHandler.class);
     public static final String URL_REGEX = "((https?|ftp)://|(www|ftp)\\.)?[a-z0-9-]+(\\.[a-z0-9-]+)+([/?].*)?";
 
 
@@ -34,6 +37,7 @@ public class KlongUrlTitleHandler {
             Elements n = doc.select("title");
             return n.first().text();
         } catch (IOException ex) {
+            // why is this logging to console?
             return null;
         }
     }

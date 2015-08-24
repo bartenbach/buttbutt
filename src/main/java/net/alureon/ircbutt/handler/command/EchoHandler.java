@@ -32,7 +32,7 @@ public class EchoHandler {
             BotResponse botResponse = new BotResponse(response.getEvent());
             butt.getCommandHandler().handleCommand(response.getEvent(), command.split(" "), botResponse);
             if (botResponse.toString() != null) {
-                input = input.replace(m.group(), botResponse.toString());
+                input = input.replaceFirst(Pattern.quote(m.group()), botResponse.toString());
             } else {
                 botResponse.privateMessage(response.getRecipient(), "butt didnt get this part: " + m.group());
             }

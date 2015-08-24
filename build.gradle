@@ -12,7 +12,7 @@ configurations {
 dependencies {
   compile 'com.google.guava:guava:18.0'
   compile 'org.pircbotx:pircbotx:2.0.1'
-  compile 'org.slf4j:slf4j-simple:1.7.7'
+  compile 'org.slf4j:slf4j-simple:1.7.9'
   compile 'org.apache.commons:commons-lang3:3.3.2'
   compile 'org.yaml:snakeyaml:1.14'
   compile 'mysql:mysql-connector-java:5.1.6'
@@ -23,7 +23,7 @@ dependencies {
 }
 
 sourceCompatibility = 1.8
-version = '0.2.8-indev'
+version = '0.2.9-indev'
 
 jar {
   dependsOn configurations.runtime

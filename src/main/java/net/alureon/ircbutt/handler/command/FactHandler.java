@@ -14,7 +14,6 @@ public class FactHandler {
     private IRCbutt butt;
     public final static Logger log = LoggerFactory.getLogger(FactHandler.class);
 
-
     public FactHandler(IRCbutt butt) {
         this.butt = butt;
     }
