@@ -13,17 +13,17 @@ dependencies {
   compile 'com.google.guava:guava:18.0'
   compile 'org.pircbotx:pircbotx:2.0.1'
   compile 'org.slf4j:slf4j-simple:1.7.9'
-  compile 'org.apache.commons:commons-lang3:3.3.2'
+  compile 'org.apache.commons:commons-lang3:3.4'
   compile 'org.yaml:snakeyaml:1.14'
   compile 'mysql:mysql-connector-java:5.1.6'
   compile 'junit:junit:4.12-beta-3'
   compile 'com.google.code.gson:gson:2.3.1'
-  compile 'org.jsoup:jsoup:1.8.1'
+  compile 'org.jsoup:jsoup:1.8.3'
   compile 'net.sourceforge.jeval:jeval:0.9.4'
 }
 
 sourceCompatibility = 1.8
-version = '0.2.9-indev'
+version = '0.3-indev'
 
 jar {
   dependsOn configurations.runtime

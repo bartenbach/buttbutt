@@ -7,7 +7,6 @@ import org.pircbotx.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,8 +35,9 @@ public class KlongUrlTitleHandler {
             Document doc = Jsoup.connect(url).get();
             Elements n = doc.select("title");
             return n.first().text();
-        } catch (IOException ex) {
-            // why is this logging to console?
+        } catch (Exception ex) {
+            // This can throw IOException, MalformedUrlException, IllegalArgumentException...maybe more
+            // Pull requests accepted...
             return null;
         }
     }

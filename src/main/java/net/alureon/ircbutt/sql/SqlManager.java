@@ -24,7 +24,7 @@ public class SqlManager {
         String password = butt.getYamlConfigurationFile().getSqlPassword();
         int port = butt.getYamlConfigurationFile().getSqlPort();
         String database = butt.getYamlConfigurationFile().getSqlDatabase();
-        String url = "jdbc:mysql://" + ip + ":" + port + "/" + database;
+        String url = "jdbc:mysql://" + ip + ":" + port + "/" + database + "?autoreconnect=true";
         log.debug(url);
         try {
             this.connection = DriverManager.getConnection(url, username, password);
