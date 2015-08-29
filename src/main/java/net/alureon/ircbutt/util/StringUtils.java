@@ -1,7 +1,5 @@
 package net.alureon.ircbutt.util;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
 public class StringUtils {
 
     public static String arrayToString(String[] args) {
@@ -31,10 +29,5 @@ public class StringUtils {
         }
         return sb.toString();
     }
-
-    public static String unescapeHtml(String x) {
-        return x.replaceAll("&nbsp;", " ");
-    }
-
 
 }
