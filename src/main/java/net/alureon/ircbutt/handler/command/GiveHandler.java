@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSortedSet;
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.StringUtils;
+import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
@@ -14,9 +15,9 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 
 public class GiveHandler {
 
-    public static void handleGive(IRCbutt butt, BotResponse response, GenericMessageEvent event, User user, String[] args) {
+    public static void handleGive(IRCbutt butt, BotResponse response, GenericMessageEvent<PircBotX> event, User user, String[] args) {
         if (event instanceof MessageEvent) {
-            MessageEvent event2 = (MessageEvent) event;
+            MessageEvent<PircBotX> event2 = (MessageEvent<PircBotX>) event;
             if (args.length > 2) {
                 if (recipientExists(event2, args[1])) {
                     String parsed = EchoHandler.parseCommands(butt, response, StringUtils.getArgsOverOne(args), user.getNick());
@@ -28,7 +29,7 @@ public class GiveHandler {
         }
     }
 
-    private static boolean recipientExists(MessageEvent event, String recipient) {
+    private static boolean recipientExists(MessageEvent<PircBotX> event, String recipient) {
         ImmutableSortedSet<User> users = event.getChannel().getUsers();
         for (User x : users) {
             if(x.getNick().equals(recipient))

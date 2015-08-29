@@ -1,6 +1,7 @@
 package net.alureon.ircbutt;
 
 import org.pircbotx.Channel;
+import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
@@ -20,9 +21,9 @@ public class BotResponse {
     private String additionalMessage;
     private User recipient;
     private BotIntention intention;
-    private GenericMessageEvent event;
+    private GenericMessageEvent<PircBotX> event;
 
-    public BotResponse(GenericMessageEvent event) {
+    public BotResponse(GenericMessageEvent<PircBotX> event) {
         this.event = event;
         this.recipient = event.getUser();
         if (event instanceof PrivateMessageEvent) {
@@ -48,7 +49,7 @@ public class BotResponse {
 
     public Channel getChannel() {
         if (this.event instanceof MessageEvent) {
-            return ((MessageEvent) event).getChannel();
+            return ((MessageEvent<PircBotX>) event).getChannel();
         }
         return null;
     }
@@ -59,7 +60,7 @@ public class BotResponse {
         this.message = message;
     }
 
-    public GenericMessageEvent getEvent() {
+    public GenericMessageEvent<PircBotX> getEvent() {
         return this.event;
     }
 
@@ -110,9 +111,7 @@ public class BotResponse {
     @Override
     public String toString() {
         if (this.hasAdditionalMessage()) {
-            StringBuilder sb = new StringBuilder(this.message);
-            sb.append(" ").append(this.additionalMessage);
-            return sb.toString();
+            return this.message + " " + this.additionalMessage;
         }
         return this.message;
     }

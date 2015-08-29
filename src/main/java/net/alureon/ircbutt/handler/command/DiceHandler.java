@@ -4,15 +4,16 @@ import com.google.common.collect.ImmutableSortedSet;
 import net.alureon.ircbutt.BotResponse;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
+import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 public class DiceHandler {
 
-    public static void handleDice(GenericMessageEvent event, BotResponse response) {
+    public static void handleDice(GenericMessageEvent<PircBotX> event, BotResponse response) {
         if (event instanceof MessageEvent) {
-            Channel channel = ((MessageEvent) event).getChannel();
+            Channel channel = ((MessageEvent<PircBotX>) event).getChannel();
             ImmutableSortedSet<User> users = channel.getUsers();
             String victimName = "";
             int totalUsers = users.size();

@@ -21,7 +21,7 @@ public class FactTable {
 
     public void insertKnowledge(String item, String data, String grabber) {
         String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` (item,data,added_by) VALUES(?,?,?)";
-        try (PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(update)) {
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
             ps.setString(1, item);
             ps.setString(2, data);
             ps.setString(3, grabber);
@@ -97,7 +97,7 @@ public class FactTable {
     public String findFact(String search) {
         String firstResult = null;
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE data LIKE ?";
-        try(PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query)) {
+        try(PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             ps.setString(1, "%" + search + "%");
             ResultSet rs = ps.executeQuery();
             int moreUses = 1;
@@ -134,7 +134,7 @@ public class FactTable {
 
     public String findFactById(int fid) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE id = ?";
-        try (PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query)) {
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             ps.setInt(1, fid);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -151,7 +151,7 @@ public class FactTable {
 
     public void appendKnowledge(String item, String data, String grabber) {
         String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` SET data = CONCAT(data, ' ', ?) WHERE item = ?";
-        try (PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(update)) {
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
             ps.setString(1, data);
             ps.setString(2, item);
             ps.executeUpdate();

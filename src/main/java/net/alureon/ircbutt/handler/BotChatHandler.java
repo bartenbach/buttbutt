@@ -1,6 +1,7 @@
 package net.alureon.ircbutt.handler;
 
 import org.pircbotx.Channel;
+import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 
@@ -11,7 +12,8 @@ public class BotChatHandler {
         channel.send().message(x);
     }
 
-    public void buttHighlightChat(MessageEvent event, String x) {
+    //todo why isn't this ever being called?  code duplication somewhere
+    public void buttHighlightChat(MessageEvent<PircBotX> event, String x) {
         event.respond(x);
     }
 

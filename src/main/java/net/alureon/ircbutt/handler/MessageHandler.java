@@ -5,6 +5,7 @@ import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.handler.command.karma.KarmaHandler;
 import net.alureon.ircbutt.util.ButtMath;
+import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
@@ -22,7 +23,7 @@ public class MessageHandler {
         this.butt = butt;
     }
 
-    public void handleMessage(MessageEvent event) {
+    public void handleMessage(MessageEvent<PircBotX> event) {
         /* Handle a command */
         BotResponse response = new BotResponse(event);
         if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
@@ -33,9 +34,6 @@ public class MessageHandler {
         } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")
                 || event.getMessage().endsWith("--;")) {
             KarmaHandler.handleKarma(butt, response, event.getUser(), event.getMessage());
-
-        } else if (event.getMessage().startsWith("%s/")) {
-            // todo search and replace
 
         } else {
             /* Check for URL or troll them */
@@ -53,7 +51,7 @@ public class MessageHandler {
         }
     }
 
-    public void handlePrivateMessage(PrivateMessageEvent event) {
+    public void handlePrivateMessage(PrivateMessageEvent<PircBotX> event) {
         BotResponse response = new BotResponse(event);
         Preconditions.checkArgument(event.getUser() != null, "User was null");
         if (butt.getYamlConfigurationFile().getBotNoVerify() || event.getUser().isVerified()) {

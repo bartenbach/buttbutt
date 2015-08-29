@@ -42,7 +42,7 @@ public class KarmaTable {
     public void decrementKarma(Karma karma, User user, BotResponse response) {
         if (itemExists(karma.getItem())) {
             String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` SET karma = karma -1 WHERE item=?";
-            try (PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(update)) {
+            try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
                 ps.setString(1, karma.getItem());
                 ps.executeUpdate();
             } catch (SQLException ex) {
@@ -51,7 +51,7 @@ public class KarmaTable {
             }
         } else {
             String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` (item,karma) VALUES(?,?)";
-            try (PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(update)) {
+            try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
                 ps.setString(1, karma.getItem());
                 ps.setInt(2, -1);
                 ps.execute();
@@ -79,7 +79,7 @@ public class KarmaTable {
     public void incrementKarma(Karma karma, User user, BotResponse response) {
         if (itemExists(karma.getItem())) {
             String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` SET karma = karma +1 WHERE item=?";
-            try (PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(update)) {
+            try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
                 ps.setString(1, karma.getItem());
                 ps.executeUpdate();
             } catch (SQLException ex) {
@@ -88,7 +88,7 @@ public class KarmaTable {
                 }
         } else {
             String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` (item,karma) VALUES(?,?)";
-            try (PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(update)) {
+            try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
                 ps.setString(1, karma.getItem());
                 ps.setInt(2, 1);
                 ps.execute();

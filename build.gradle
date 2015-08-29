@@ -15,7 +15,7 @@ dependencies {
   compile 'org.slf4j:slf4j-simple:1.7.9'
   compile 'org.apache.commons:commons-lang3:3.4'
   compile 'org.yaml:snakeyaml:1.14'
-  compile 'mysql:mysql-connector-java:5.1.6'
+  compile 'mysql:mysql-connector-java:5.1.36'
   compile 'junit:junit:4.12-beta-3'
   compile 'com.google.code.gson:gson:2.3.1'
   compile 'org.jsoup:jsoup:1.8.3'
@@ -23,7 +23,7 @@ dependencies {
 }
 
 sourceCompatibility = 1.8
-version = '0.3-indev'
+version = '0.3.1-indev'
 
 jar {
   dependsOn configurations.runtime

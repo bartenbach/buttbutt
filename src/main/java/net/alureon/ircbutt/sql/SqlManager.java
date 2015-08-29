@@ -65,9 +65,9 @@ public class SqlManager {
         this.connectToDatabase();
     }
 
-    public Connection getConnection() {
-        return this.connection;
-    }
+ //   public Connection getConnection() {
+ //       return this.connection;
+ //   }
 
     public PreparedStatement getPreparedStatement(String query) {
         checkConnection();

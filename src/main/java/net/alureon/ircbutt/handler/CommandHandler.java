@@ -8,6 +8,7 @@ import net.alureon.ircbutt.libmath.Eval;
 import net.alureon.ircbutt.libmath.MathLib;
 import net.alureon.ircbutt.util.ButtMath;
 import net.alureon.ircbutt.util.StringUtils;
+import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
@@ -27,7 +28,7 @@ public class CommandHandler {
     //                     .trim() ruining formatting
 
 
-    public void handleCommand(GenericMessageEvent event, String[] cmd, BotResponse response) {
+    public void handleCommand(GenericMessageEvent<PircBotX> event, String[] cmd, BotResponse response) {
         /* For the sake of clearer code, let's just set these immediately */
         User user = event.getUser();
         String nick = user.getNick();

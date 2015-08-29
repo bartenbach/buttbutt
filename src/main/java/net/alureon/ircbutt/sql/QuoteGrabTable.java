@@ -20,6 +20,7 @@ public class QuoteGrabTable {
     }
 
     //TODO remove awful redundant connection checks.
+    //TODO why on god's green earth is this class throwing SQL exceptions?
 
     public void addQuote(String nick, String quote, String grabber) {
         String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` (user,quote,grabbed_by) VALUES(?,?,?)";
@@ -35,9 +36,9 @@ public class QuoteGrabTable {
         // null PreparedStatement is handled by getPreparedStatement();
     }
 
-    public boolean quoteAlreadyExists(String playerName, String quote) throws SQLException{
+    public boolean quoteAlreadyExists(String playerName, String quote) throws SQLException {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? AND quote=?";
-        PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
+        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setString(1, playerName);
         ps.setString(2, quote);
         ResultSet rs = ps.executeQuery();
@@ -62,7 +63,7 @@ public class QuoteGrabTable {
 
     public String getQuoteById(int id) throws SQLException {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE id=?";
-        PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
+        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
@@ -75,7 +76,7 @@ public class QuoteGrabTable {
 
     public String findQuote(String search) throws SQLException {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE quote LIKE ?";
-        PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
+        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setString(1, "%" + search + "%");
         ResultSet rs = ps.executeQuery();
         //TODO this could certainly return more than one item
@@ -90,7 +91,7 @@ public class QuoteGrabTable {
 
     public String getRandomQuoteFromPlayer(String username) throws SQLException {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY RAND() LIMIT 1";
-        PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
+        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setString(1, username);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
@@ -102,7 +103,7 @@ public class QuoteGrabTable {
 
     public String[] getQuoteInfo(int id) throws SQLException {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE id=?";
-        PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
+        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
@@ -122,7 +123,7 @@ public class QuoteGrabTable {
 
     public String getLastQuoteFromPlayer(String username) throws SQLException {
         String query = "SELECT * FROM `" +butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY id DESC LIMIT 1";
-        PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query);
+        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setString(1, username);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
