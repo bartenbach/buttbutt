@@ -85,12 +85,12 @@ public class FactHandler {
         } else if (cmd[0].equalsIgnoreCase("factfind") || cmd[0].equalsIgnoreCase("factsearch")
                 || cmd[0].equalsIgnoreCase("fsearch") || cmd[0].equalsIgnoreCase("ffind")
                 || cmd[0].equals("ff") || cmd[0].equals("fs")) {
+            butt.getMoreHandler().clearMore();
             String info = butt.getFactTable().findFact(StringUtils.getArgs(cmd));
             if (info != null) {
-                response.chat(info);
+                response.highlightChat(user, info);
             } else {
-                response.noResponse();
-                butt.getMessageHandler().handleInvalidCommand(user, "butt find noting");
+                response.highlightChat(user, "butt find nothing");
             }
             //todo: factfind ^ should just accept either string or integer input instead of having separate commands
         } else if (cmd[0].equalsIgnoreCase("factbyid") || cmd[0].equalsIgnoreCase("factid") || cmd[0].equalsIgnoreCase("fid")) {

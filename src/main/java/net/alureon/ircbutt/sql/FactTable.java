@@ -95,23 +95,41 @@ public class FactTable {
     }
 
     public String findFact(String search) {
+        String firstResult = null;
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE data LIKE ?";
         try(PreparedStatement ps = butt.getSqlManager().getConnection().prepareStatement(query)) {
             ps.setString(1, "%" + search + "%");
             ResultSet rs = ps.executeQuery();
-            //TODO this could certainly return more than one item
+            int moreUses = 1;
             if (rs.next()) {
-                int id = rs.getInt("id");
-                String item = rs.getString("item");
-                String data = rs.getString("data");
-                return "(" + id + ") " + item + ": " + data;
+                firstResult = getFormattedFact(rs);
+                while (rs.next()) {
+                    switch (moreUses) {
+                        case 1:
+                            butt.getMoreHandler().setMore(getFormattedFact(rs));
+                            break;
+                        case 2:
+                            butt.getMoreHandler().setMore2(getFormattedFact(rs));
+                            break;
+                        case 3:
+                            butt.getMoreHandler().setMore3(getFormattedFact(rs));
+                            break;
+                        default:
+                            continue;
+                    }
+                    moreUses++;
+                }
             } else {
                 //todo try to find a fact with similar name?
             }
         } catch (SQLException ex) {
             log.error("SQL Exception, ", ex);
         }
-        return null;
+        return firstResult;
+    }
+
+    public String getFormattedFact(ResultSet rs) throws SQLException {
+        return "(" + rs.getInt("id") + ") " + rs.getString("item") + ": " + rs.getString("data");
     }
 
     public String findFactById(int fid) {

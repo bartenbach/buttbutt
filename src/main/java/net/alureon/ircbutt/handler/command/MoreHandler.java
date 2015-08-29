@@ -38,6 +38,8 @@ public class MoreHandler {
                 if (this.more3 != null) {
                     response.chat(this.more3);
                     this.more3 = null;
+                } else {
+                    response.chat("butt don't have any more");
                 }
             }
         }
