@@ -42,8 +42,6 @@ public class FactTable {
                 }
             } catch (SQLException ex) {
                 log.error("Failed to query knowledge database. StackTrace:", ex);
-            } finally {
-                SqlUtils.close(ps, rs);
             }
         return null;
     }
