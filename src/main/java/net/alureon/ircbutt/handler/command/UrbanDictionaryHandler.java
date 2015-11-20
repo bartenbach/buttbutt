@@ -32,16 +32,18 @@ public class UrbanDictionaryHandler {
             String userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0";
             try {
                 Document doc = Jsoup.connect(link).userAgent(userAgent).get();
-                Elements meaning = doc.getElementsByClass("meaning");
-                Element firstDefinition = getElement(meaning, 0);
-                Element secondDefinition = getElement(meaning, 1);
-                Element thirdDefinition = getElement(meaning, 2);
+                Elements meanings = doc.getElementsByClass("meaning");
                 try {
-                    // todo this is so lazy  need to fix this bad
-                    response.chat(firstDefinition.text());
-                    butt.getMoreHandler().setMore(secondDefinition.text());
-                    butt.getMoreHandler().setMore2(thirdDefinition.text());
-                    butt.getMoreHandler().setMore3(link);
+                    int size =  meanings.size();
+                    for (int i = 0; i < size; i++) {
+                        Element meaning = meanings.get(i);
+                        if (i == 0) {
+                            response.chat(meaning.text());
+                        } else {
+                            butt.getMoreHandler().addMore(meaning.text());
+                        }
+                    }
+                    butt.getMoreHandler().setNoMore(link);
                 } catch (NullPointerException ex) {
                     log.info("No more definitions to get");
                 }

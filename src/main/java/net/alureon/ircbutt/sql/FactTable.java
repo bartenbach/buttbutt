@@ -1,7 +1,6 @@
 package net.alureon.ircbutt.sql;
 
 import net.alureon.ircbutt.IRCbutt;
-import net.alureon.ircbutt.util.SqlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,29 +89,16 @@ public class FactTable {
     }
 
     public String findFact(String search) {
+        butt.getMoreHandler().clearMore();
         String firstResult = null;
-        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE data LIKE ?";
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE data LIKE ? LIMIT 24";
         try(PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             ps.setString(1, "%" + search + "%");
             ResultSet rs = ps.executeQuery();
-            int moreUses = 1;
             if (rs.next()) {
                 firstResult = getFormattedFact(rs);
                 while (rs.next()) {
-                    switch (moreUses) {
-                        case 1:
-                            butt.getMoreHandler().setMore(getFormattedFact(rs));
-                            break;
-                        case 2:
-                            butt.getMoreHandler().setMore2(getFormattedFact(rs));
-                            break;
-                        case 3:
-                            butt.getMoreHandler().setMore3(getFormattedFact(rs));
-                            break;
-                        default:
-                            continue;
-                    }
-                    moreUses++;
+                     butt.getMoreHandler().addMore(getFormattedFact(rs));
                 }
             } else {
                 //todo try to find a fact with similar name?

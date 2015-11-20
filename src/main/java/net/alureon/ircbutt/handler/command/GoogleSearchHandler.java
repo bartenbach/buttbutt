@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.List;
 
 /**
  * Created by alureon on 1/31/15.
@@ -37,28 +38,26 @@ public class GoogleSearchHandler {
     public static void handleGoogleSearch(IRCbutt butt, BotResponse response, User user, String[] cmd) {
         butt.getMoreHandler().clearMore();
         if (cmd.length > 1) {
-            GoogleResults results = getMyGoogHoles(response, StringUtils.getArgs(cmd));
+            String search = StringUtils.getArgs(cmd);
+            GoogleResults results = getMyGoogHoles(response, search);
             assert results != null;
-            if (results.getResponseData().getResults().size() > 0) {
-                String title = results.getResponseData().getResults().get(0).getTitle().replaceAll("\\<.*?\\>", "");
-                String url = results.getResponseData().getResults().get(0).getUrl();
-                if (results.getResponseData().getResults().size() > 1) {
-                    String title2 = results.getResponseData().getResults().get(1).getTitle().replace("\\<.*?\\>", "");
-                    String url2 = results.getResponseData().getResults().get(1).getUrl();
-                    try {
-                        butt.getMoreHandler().setMore(URLDecoder.decode(StringEscapeUtils.unescapeHtml4(title2), "utf-8") + URLDecoder.decode(url2, "utf-8"));
-                    } catch (UnsupportedEncodingException ex) {}
-                    if (results.getResponseData().getResults().size() > 2) {
-                        String title3 = results.getResponseData().getResults().get(2).getTitle().replace("\\<.*?\\>", "");
-                        String url3 = results.getResponseData().getResults().get(2).getUrl();
-                        try {
-                            butt.getMoreHandler().setMore2(URLDecoder.decode(StringEscapeUtils.unescapeHtml4(title3), "utf-8") + URLDecoder.decode(url3, "utf-8"));
-                        } catch (UnsupportedEncodingException ex) {}
-                    }
-                }
+            List<GoogleResults.Result> resultList = results.getResponseData().getResults();
+            int size = resultList.size();
+            if (size > 0) {
                 try {
-                    response.chat(URLDecoder.decode(StringEscapeUtils.unescapeHtml4(title), "utf-8"), URLDecoder.decode(url, "utf8"));
-                    butt.getMoreHandler().setMore3("google it yourself fuckwad");
+                    for (int i = 0; i < size; i++) {
+                        GoogleResults.Result result = resultList.get(i);
+                        String title = result.getTitle().replaceAll("\\<.*?\\>", "");
+                        String url = result.getUrl();
+                        String text1 = URLDecoder.decode(StringEscapeUtils.unescapeHtml4(title), "utf-8");
+                        String text2 = URLDecoder.decode(url, "utf8");
+                        if (i == 0) {
+                            response.chat(text1, text2);
+                        } else {
+                            butt.getMoreHandler().addMore(text1 + text2);
+                        }
+                    }
+                    butt.getMoreHandler().setNoMore("https://google.com/search?q=" + URLEncoder.encode(search, "utf8"));
                 } catch (UnsupportedEncodingException ex) {
                     log.error("Failed decoding URL ", ex);
                 }

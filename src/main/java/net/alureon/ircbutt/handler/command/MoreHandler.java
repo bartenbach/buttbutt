@@ -1,5 +1,6 @@
 package net.alureon.ircbutt.handler.command;
 
+import java.util.ArrayList;
 import net.alureon.ircbutt.BotResponse;
 
 /**
@@ -9,46 +10,31 @@ import net.alureon.ircbutt.BotResponse;
 public class MoreHandler {
 
 
-    private String more;
-    private String more2;
-    private String more3;
+    private final ArrayList<String> more = new ArrayList<>();
+    private final String defaultNoMore = "butt don't have any more";
+    private String noMore = defaultNoMore;
 
-
-    public void setMore(String more) {
-        this.more = more;
+    public void addMore(String more) {
+        this.more.add(more);
     }
 
-    public void setMore2(String more) {
-        this.more2 = more;
+    public void setNoMore(String more) {
+        this.noMore = more;
     }
-
-    public void setMore3(String more) {
-        this.more3 = more;
-    }
-
+    
     public void handleMore(BotResponse response) {
-        if (this.more != null) {
-            response.chat(this.more);
-            this.more = null;
+        if (!this.more.isEmpty()) {
+            String e = this.more.get(0);
+            this.more.remove(0);
+            response.chat(e);
         } else {
-            if (this.more2 != null) {
-                response.chat(this.more2);
-                this.more2 = null;
-            } else {
-                if (this.more3 != null) {
-                    response.chat(this.more3);
-                    this.more3 = null;
-                } else {
-                    response.chat("butt don't have any more");
-                }
-            }
+            response.chat(this.noMore);
         }
     }
 
     public void clearMore() {
-        this.more = null;
-        this.more2 = null;
-        this.more3 = null;
+        this.more.clear();
+        this.noMore = defaultNoMore;
     }
 
 }

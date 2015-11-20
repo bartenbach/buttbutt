@@ -34,19 +34,18 @@ public class YouTubeHandler {
                 Document doc = Jsoup.connect(link).userAgent(userAgent).get();
                 Element result = doc.getElementById("results");
                 Elements videos = result.getElementsByClass("yt-lockup-title");
-                Element firstVideo = videos.get(0);
-                Element secondVideo = videos.get(1);
-                Element thirdVideo = videos.get(2);
-                Attributes attributes = firstVideo.child(0).attributes();
-                Attributes attributes2 = secondVideo.child(0).attributes();
-                Attributes attributes3 = thirdVideo.child(0).attributes();
-                String url = attributes.get("href");
-                String url2 = attributes2.get("href");
-                String url3 = attributes3.get("href");
-                response.chat(URLDecoder.decode(firstVideo.text(), "utf8") + " http://youtube.com" + url);
-                butt.getMoreHandler().setMore(URLDecoder.decode(secondVideo.text(), "utf-8") + " http://youtube.com" + url2);
-                butt.getMoreHandler().setMore2(URLDecoder.decode(thirdVideo.text(), "utf-8") + " http://youtube.com" + url3);
-                butt.getMoreHandler().setMore3("how about you refine your search terms instead?");
+                int size = videos.size();
+                for (int i = 0; i < size; i++) {
+                    Element video = videos.get(i);
+                    Attributes attributes = video.child(0).attributes();
+                    String url = attributes.get("href");
+                    if (i == 0) {
+                        response.chat(URLDecoder.decode(video.text(), "utf8") + " http://youtube.com" + url);
+                    } else {
+                        butt.getMoreHandler().addMore(URLDecoder.decode(video.text(), "utf-8") + " http://youtube.com" + url);
+                    }
+                }
+                butt.getMoreHandler().setNoMore("how about you refine your search terms instead?");
             } catch (IOException | NullPointerException ex) {
                 log.error("Found no video", ex);
                 response.privateMessage(response.getRecipient(), "Found no video");
