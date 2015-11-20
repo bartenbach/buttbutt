@@ -24,19 +24,18 @@ public class QuoteGrabTable {
 
     public void addQuote(String nick, String quote, String grabber) {
         String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` (user,quote,grabbed_by) VALUES(?,?,?)";
-        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update);
+        try(PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
         log.trace(nick + quote + grabber);
         Object[] objects = { nick, quote, grabber };
         butt.getSqlManager().prepareStatement(ps, objects);
-        try {
-            ps.executeUpdate();
+        ps.executeUpdate();
         } catch (SQLException ex) {
             log.error("SQL Exception has occurred. StackTrace:", ex);
         }
         // null PreparedStatement is handled by getPreparedStatement();
     }
 
-    public boolean quoteAlreadyExists(String playerName, String quote) throws SQLException {
+    public boolean quoteAlreadyExists(String playerName, String quote) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? AND quote=?";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setString(1, playerName);
@@ -61,7 +60,7 @@ public class QuoteGrabTable {
         return null;
     }
 
-    public String getQuoteById(int id) throws SQLException {
+    public String getQuoteById(int id) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE id=?";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setInt(1, id);
@@ -74,7 +73,7 @@ public class QuoteGrabTable {
         return null;
     }
 
-    public String findQuote(String search) throws SQLException {
+    public String findQuote(String search) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE quote LIKE ?";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setString(1, "%" + search + "%");
@@ -89,7 +88,7 @@ public class QuoteGrabTable {
         return null;
     }
 
-    public String getRandomQuoteFromPlayer(String username) throws SQLException {
+    public String getRandomQuoteFromPlayer(String username) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY RAND() LIMIT 1";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setString(1, username);
@@ -101,7 +100,7 @@ public class QuoteGrabTable {
         return null;
     }
 
-    public String[] getQuoteInfo(int id) throws SQLException {
+    public String[] getQuoteInfo(int id) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE id=?";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setInt(1, id);
@@ -121,7 +120,7 @@ public class QuoteGrabTable {
         return null;
     }
 
-    public String getLastQuoteFromPlayer(String username) throws SQLException {
+    public String getLastQuoteFromPlayer(String username) {
         String query = "SELECT * FROM `" +butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY id DESC LIMIT 1";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setString(1, username);

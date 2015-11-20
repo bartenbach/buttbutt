@@ -33,12 +33,10 @@ public class FactTable {
 
     public String queryKnowledge(String item) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE item=?";
-        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
+        try(PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
         Object[] objects = { item };
         butt.getSqlManager().prepareStatement(ps, objects);
         ResultSet rs = butt.getSqlManager().getResultSet(ps);
-        if (rs != null) {
-            try {
                 if (rs.next()) {
                     return rs.getString("data");
                 }
@@ -47,7 +45,6 @@ public class FactTable {
             } finally {
                 SqlUtils.close(ps, rs);
             }
-        }
         return null;
     }
 
