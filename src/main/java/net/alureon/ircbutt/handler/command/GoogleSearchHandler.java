@@ -4,7 +4,6 @@ import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.StringUtils;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.pircbotx.User;
 import org.slf4j.Logger;
@@ -19,16 +18,16 @@ import java.net.URLEncoder;
  * Created by alureon on 8/24/2016.
  */
 
-public class GoogleCustomSearchHandler {
+public class GoogleSearchHandler {
 
     private IRCbutt butt;
-    final static Logger log = LoggerFactory.getLogger(GoogleCustomSearchHandler.class);
+    final static Logger log = LoggerFactory.getLogger(GoogleSearchHandler.class);
 
-    public GoogleCustomSearchHandler(IRCbutt butt) {
+    public GoogleSearchHandler(IRCbutt butt) {
         this.butt = butt;
     }
 
-    public static void handleCustomGoogleSearch(IRCbutt butt, BotResponse response, User user, String[] cmd) {
+    public static void handleGoogleSearch(IRCbutt butt, BotResponse response, User user, String[] cmd) {
         String google = "http://www.google.com/search?q=";
         String search = StringUtils.getArgs(cmd);
         String charset = "UTF-8";
@@ -47,9 +46,9 @@ public class GoogleCustomSearchHandler {
                 }
 
                 if (i==0) {
-                    response.chat("Title: " + title, "URL: " + url);
+                    response.chat("Title: " + title, url);
                 } else {
-                    butt.getMoreHandler().addMore("Title: " + title + " URL: " + url);
+                    butt.getMoreHandler().addMore("Title: " + title + " " + url);
                 }
             }
         } catch (UnsupportedEncodingException ex) {
