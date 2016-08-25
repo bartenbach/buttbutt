@@ -37,18 +37,18 @@ Fact requests start with a `~` followed immediately by the fact name.
 
 `!define <query>`       -  Get the definition of a word from Merriam Webster
 
-`!rot13 <query>`        -  Get the rot13 equivalent of <query>
+`!rot13 <query>`        -  Get the rot13 equivalent of `<query>`
 
 `!wr`                   -  Wake the room!  Ping everbody in the room.
 
-`!yt <query>`           -  Search YouTube for <query>
+`!yt <query>`           -  Search YouTube for `<query>`
 
 `!give <user> <thing>`  -  Give something to someone else
 
 `!version`              -  Get the current bot version
 
 ###Math Functionality
-`!sqrt <number>`      -  Get the square root of <number>
+`!sqrt <number>`      -  Get the square root of `<number>`
 
 `!pow <num1> <num2>`  -  Get the result of num1^num2
 
@@ -65,16 +65,16 @@ Fact requests start with a `~` followed immediately by the fact name.
 
 `!fi <factnumber>`            -  Get information about a factoid
 
-`!append <factname> <string>` -  Appends <string> to a current factoid
+`!append <factname> <string>` -  Appends `<string>` to a current factoid
 
 `!forget <factname>`          -  Delete a fact from the database
 
 ###Quotegrab Functionality
-`!grab <username>`     -  Grab and store the last message from <user> in the database
+`!grab <username>`     -  Grab and store the last message from `<user>` in the database
 
 `!rq`                  -  Retrieve a random quote from the database
 
-`!q <username>`        -  Retrieve the last grabbed quote from <user>
+`!q <username>`        -  Retrieve the last grabbed quote from `<user>`
 
 `!qf <query>`          -  Search for a quote by string query
 
@@ -83,8 +83,8 @@ Fact requests start with a `~` followed immediately by the fact name.
 `!qsay <quotenum>`     -  Say quote by ID
 
 ###Karma Functionality
-`<randomstring>++`      -  Increase the karma of <whatever>
+`<randomstring>++`      -  Increase the karma of `<whatever>`
 
-`<randomstring>--`      -  Decrease the karma of <whatever>
+`<randomstring>--`      -  Decrease the karma of `<whatever>`
 
-`!karma <randomstring>` -  Retrieve the current karma of <whatever>
+`!karma <randomstring>` -  Retrieve the current karma of `<whatever>`
