@@ -17,6 +17,7 @@ Fact requests start with a `~` followed immediately by the fact name.
 
 ###Basic Functionality
 `!8 <question>`         -  Ask the Magic 8 Ball a question
+
 `!g <query>`            -  Google something
 `!gi <query>`           -  Google Image Search
 `!check <query>`        -  Get a random response on whether or not something passes or fails
