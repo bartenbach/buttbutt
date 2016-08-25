@@ -13,6 +13,7 @@ Original ideas, and some borrowed from phrik from #archlinux on freenode
 
 ##Usage:
 Most commands start with `!` followed by the command name, then arguments.
+
 Fact requests start with a `~` followed immediately by the fact name.
 
 ###Basic Functionality
