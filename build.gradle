@@ -23,7 +23,7 @@ dependencies {
 }
 
 sourceCompatibility = 1.8
-version = '0.3.2-indev-java8'
+version = '0.3.3-indev-java8'
 
 jar {
   dependsOn configurations.runtime

@@ -20,6 +20,7 @@ public class DefineHandler {
 
     final static Logger log = LoggerFactory.getLogger(DefineHandler.class);
 
+    // BROKEN - needs testing
 
     public static void handleDefine(IRCbutt butt, BotResponse response, String word) {
         butt.getMoreHandler().clearMore();
@@ -27,7 +28,7 @@ public class DefineHandler {
         try {
             String link = "http://www.merriam-webster.com/dictionary/" + word;
             Document doc = Jsoup.connect(link).userAgent(userAgent).get();
-            Elements definitions = doc.getElementsByClass("ssens");
+            Elements definitions = doc.getElementsByClass("definition-inner-item");
             int size = definitions.size();
             if (size > 0) {
                 for (int i = 0; i < size; i++) {

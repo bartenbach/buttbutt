@@ -138,6 +138,9 @@ public class CommandHandler {
             case "gi":
                 GoogleImageSearchHandler.handleGoogleImageSearch(response, StringUtils.getArgs(cmd));
                 break;
+            case "8":
+                MagicEightBallHandler.handleMagicEightBall(response);
+                break;
         }
         if (response.getIntention() == null) {
             response.noResponse();
