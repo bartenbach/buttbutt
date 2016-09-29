@@ -53,7 +53,6 @@ public class ResponseHandler {
                 response.getRecipient().send().message(response.getMessage());
             }
         } else {
-            // TODO why is this happening?
             System.out.println("Recieved null message");
             response.getRecipient().send().message("butt have nothin to say on the matter");
         }

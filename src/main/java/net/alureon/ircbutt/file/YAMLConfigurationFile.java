@@ -12,7 +12,7 @@ public class YAMLConfigurationFile {
 
 
     private final static File config = new File("config.yml");
-    final static Logger log = LoggerFactory.getLogger(YAMLConfigurationFile.class);
+    private final static Logger log = LoggerFactory.getLogger(YAMLConfigurationFile.class);
     private String botName;
     private String botLogin;
     private String botPassword;

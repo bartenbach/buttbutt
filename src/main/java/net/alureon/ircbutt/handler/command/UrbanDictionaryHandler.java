@@ -16,7 +16,6 @@ import java.net.URLEncoder;
 
 /**
  * Created by alureon and Klong on 5/13/15.
- *
  */
 
 public class UrbanDictionaryHandler {

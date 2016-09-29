@@ -142,13 +142,23 @@ public class IRCbutt {
         return this.quoteGrabTable;
     }
 
-    public QuoteGrabHandler getQuoteGrabHandler() { return this.quoteGrabHandler; }
+    public QuoteGrabHandler getQuoteGrabHandler() {
+        return this.quoteGrabHandler;
+    }
 
-    public IRCUtils getIrcUtils() { return this.ircUtils; }
+    public IRCUtils getIrcUtils() {
+        return this.ircUtils;
+    }
 
-    public MoreHandler getMoreHandler() { return this.moreHandler; }
+    public MoreHandler getMoreHandler() {
+        return this.moreHandler;
+    }
 
-    public PircBotX getPircBotX() { return this.pircBotX; }
+    public PircBotX getPircBotX() {
+        return this.pircBotX;
+    }
 
-    public KarmaTable getKarmaTable() { return this.karmaTable; }
+    public KarmaTable getKarmaTable() {
+        return this.karmaTable;
+    }
 }

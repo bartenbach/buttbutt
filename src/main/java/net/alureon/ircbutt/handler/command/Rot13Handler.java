@@ -2,10 +2,6 @@ package net.alureon.ircbutt.handler.command;
 
 import net.alureon.ircbutt.BotResponse;
 
-/**
- * Created by Klong on 5/10/15.
- */
-
 public class Rot13Handler {
 
     public static void handleRot13(BotResponse response, String in) {

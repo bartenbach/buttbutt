@@ -4,10 +4,6 @@ import net.alureon.ircbutt.BotResponse;
 
 import static java.lang.Math.*;
 
-/**
- * Created by alureon on 5/15/15.
- */
-
 public class MathLib {
 
     public static void handleMath(BotResponse response, String[] cmd) {

@@ -6,15 +6,15 @@ Bot:
     Message-Delay: 10
     No-Verify: false
 Channels:
-    - '#gsbros'
+    - '#afterlunch'
     - '##anotherchannel'
 Server:
     Hostname: 'chat.freenode.net'
     Auto-Reconnect: true
 SQL:
-    Username: poop
+    Username: root
     Password:
-    IP:
+    IP: 127.0.0.1
     Port:
     Database:
     Table-Prefix:

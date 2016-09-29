@@ -109,7 +109,7 @@ public class FactHandler {
         }
     }
 
-    public boolean addKnowledge(BotResponse response, User user, String commandSender, String[] data) {
+    private boolean addKnowledge(BotResponse response, User user, String commandSender, String[] data) {
         if (data.length > 2) {
             String command = StringUtils.getArgs(data);
             String[] split = command.split(" ", 2);
@@ -133,7 +133,7 @@ public class FactHandler {
         return false;
     }
 
-    public boolean appendToKnowledge(BotResponse response, User user, String commandSender, String[] data) {
+    private boolean appendToKnowledge(BotResponse response, User user, String commandSender, String[] data) {
         if (data.length > 2) {
             String command = StringUtils.getArgs(data);
             String[] split = command.split(" ", 2);
@@ -156,7 +156,7 @@ public class FactHandler {
         return false;
     }
 
-    public String getFact(String item) {
+    private String getFact(String item) {
         if (!item.isEmpty()) {
             log.trace("Item: " + item);
             return butt.getFactTable().queryKnowledge(item);
@@ -164,7 +164,7 @@ public class FactHandler {
         return null;
     }
 
-    public boolean removeKnowledge(String[] item) {
+    private boolean removeKnowledge(String[] item) {
         return item.length > 0 && butt.getFactTable().deleteKnowledge(StringUtils.getArgs(item));
     }
 

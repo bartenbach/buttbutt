@@ -16,9 +16,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
-/**
- * Created by alureon on 3/8/15.
- */
 public class YouTubeHandler {
 
 

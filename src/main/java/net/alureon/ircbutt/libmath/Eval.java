@@ -6,10 +6,6 @@ import net.sourceforge.jeval.Evaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Created by alureon on 5/15/15.
- */
-
 public class Eval {
 
 

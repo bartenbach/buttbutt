@@ -11,16 +11,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import org.jsoup.nodes.Element;
 
-/**
- * Created by alureon on 3/1/15.
- */
-
 public class DefineHandler {
 
 
     final static Logger log = LoggerFactory.getLogger(DefineHandler.class);
 
-    // BROKEN - needs testing
 
     public static void handleDefine(IRCbutt butt, BotResponse response, String word) {
         butt.getMoreHandler().clearMore();

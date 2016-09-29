@@ -3,10 +3,6 @@ package net.alureon.ircbutt.handler.command;
 import java.util.ArrayList;
 import net.alureon.ircbutt.BotResponse;
 
-/**
- * Created by alureon on 5/13/15.
- */
-
 public class MoreHandler {
 
 

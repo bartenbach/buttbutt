@@ -1,20 +1,16 @@
 package net.alureon.ircbutt.handler.command.karma;
 
-/**
- * Created by alureon on 5/24/15.
- */
-
-public class Karma {
+class Karma {
 
     private KarmaType type;
     private String item;
     private int karmaLevel;
 
-    protected void setType(KarmaType type) {
+    void setType(KarmaType type) {
         this.type = type;
     }
 
-    protected void setItem(String item) {
+    void setItem(String item) {
         this.item = item;
     }
 
@@ -22,11 +18,11 @@ public class Karma {
         this.karmaLevel = karma;
     }
 
-    public KarmaType getType() {
+    KarmaType getType() {
         return this.type;
     }
 
-    public String getItem() {
+    String getItem() {
         return this.item;
     }
 

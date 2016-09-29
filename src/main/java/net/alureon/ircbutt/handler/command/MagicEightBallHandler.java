@@ -4,10 +4,6 @@ import net.alureon.ircbutt.BotResponse;
 
 import java.util.Random;
 
-/**
- * Created by alureon on 5/27/15.
- */
-
 public class MagicEightBallHandler {
 
     public static void handleMagicEightBall(BotResponse response) {

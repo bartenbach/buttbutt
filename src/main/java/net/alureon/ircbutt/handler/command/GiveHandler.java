@@ -9,10 +9,6 @@ import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-/**
- * Created by alureon on 5/10/15.
- */
-
 public class GiveHandler {
 
     public static void handleGive(IRCbutt butt, BotResponse response, GenericMessageEvent<PircBotX> event, User user, String[] args) {

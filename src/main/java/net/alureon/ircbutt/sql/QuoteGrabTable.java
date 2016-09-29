@@ -19,9 +19,6 @@ public class QuoteGrabTable {
         this.butt = butt;
     }
 
-    //TODO remove awful redundant connection checks.
-    //TODO why on god's green earth is this class throwing SQL exceptions?
-
     public void addQuote(String nick, String quote, String grabber) {
         String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` (user,quote,grabbed_by) VALUES(?,?,?)";
         try(PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {

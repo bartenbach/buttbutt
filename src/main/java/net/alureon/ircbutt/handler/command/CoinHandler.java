@@ -2,9 +2,6 @@ package net.alureon.ircbutt.handler.command;
 
 import net.alureon.ircbutt.BotResponse;
 
-/**
- * Created by alureon on 5/17/15.
- */
 public class CoinHandler {
 
     public static void handleCoin(BotResponse response) {

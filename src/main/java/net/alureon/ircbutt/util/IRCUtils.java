@@ -4,10 +4,6 @@ import net.alureon.ircbutt.IRCbutt;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 
-/**
- * Created by alureon on 5/5/15.
- */
-
 public class IRCUtils {
 
 

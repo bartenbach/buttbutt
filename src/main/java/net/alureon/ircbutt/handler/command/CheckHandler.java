@@ -3,9 +3,6 @@ package net.alureon.ircbutt.handler.command;
 import net.alureon.ircbutt.BotResponse;
 import org.pircbotx.Colors;
 
-/**
- * Created by alureon on 3/1/15.
- */
 public class CheckHandler {
 
     public static void handleCheck(BotResponse response, String checking) {

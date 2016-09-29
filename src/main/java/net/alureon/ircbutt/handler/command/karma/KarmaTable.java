@@ -10,22 +10,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Created by alureon on 5/12/15.
- */
-
 public class KarmaTable {
 
 
     private IRCbutt butt;
-    final static Logger log = LoggerFactory.getLogger(KarmaTable.class);
+    private final static Logger log = LoggerFactory.getLogger(KarmaTable.class);
 
 
     public KarmaTable(IRCbutt butt) {
         this.butt = butt;
     }
 
-    public boolean itemExists(String item) {
+    private boolean itemExists(String item) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` WHERE item=?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
         ps.setString(1, item);
@@ -39,7 +35,7 @@ public class KarmaTable {
         return false;
     }
 
-    public void decrementKarma(Karma karma, User user, BotResponse response) {
+    void decrementKarma(Karma karma, User user, BotResponse response) {
         if (itemExists(karma.getItem())) {
             String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` SET karma = karma -1 WHERE item=?";
             try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
@@ -62,7 +58,7 @@ public class KarmaTable {
         }
     }
 
-    protected Integer getKarmaLevel(String item) {
+    Integer getKarmaLevel(String item) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` WHERE item=?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             ps.setString(1, item);
@@ -76,7 +72,7 @@ public class KarmaTable {
         return null;
     }
 
-    public void incrementKarma(Karma karma, User user, BotResponse response) {
+    void incrementKarma(Karma karma, User user, BotResponse response) {
         if (itemExists(karma.getItem())) {
             String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` SET karma = karma +1 WHERE item=?";
             try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {

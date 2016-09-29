@@ -14,10 +14,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
-/**
- * Created by alureon on 8/24/2016.
- */
-
 public class GoogleSearchHandler {
 
     private IRCbutt butt;

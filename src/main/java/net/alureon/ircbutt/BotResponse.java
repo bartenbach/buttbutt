@@ -7,15 +7,8 @@ import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-/**
- * Created by alureon on 2/28/15.
- */
-
 public class BotResponse {
 
-
-    // TODO testing making this more generic.  Maybe just use GenericMessageEvent to simplify things
-    // Keep throwing exceptions here.
 
     private String message;
     private String additionalMessage;

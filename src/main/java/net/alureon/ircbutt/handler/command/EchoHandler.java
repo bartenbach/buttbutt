@@ -9,10 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by alureon on 3/1/15.
- */
-
 public class EchoHandler {
 
 
