@@ -5,10 +5,10 @@ import java.util.HashMap;
 public class ChatLoggingManager {
 
 
-    private HashMap<String,String> messageLog = new HashMap<String, String>();
+    private HashMap<String,String> messageLog = new HashMap<>();
 
 
-    public void logMessage(String nick, String message) {
+    void logMessage(String nick, String message) {
         messageLog.put(nick, message);
     }
 

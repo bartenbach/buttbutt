@@ -5,7 +5,6 @@ import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
-import org.pircbotx.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,14 +15,11 @@ import java.net.URLEncoder;
 
 public class GoogleSearchHandler {
 
-    private IRCbutt butt;
-    final static Logger log = LoggerFactory.getLogger(GoogleSearchHandler.class);
 
-    public GoogleSearchHandler(IRCbutt butt) {
-        this.butt = butt;
-    }
+    private final static Logger log = LoggerFactory.getLogger(GoogleSearchHandler.class);
 
-    public static void handleGoogleSearch(IRCbutt butt, BotResponse response, User user, String[] cmd) {
+
+    public static void handleGoogleSearch(IRCbutt butt, BotResponse response, String[] cmd) {
         // clear !more list
         butt.getMoreHandler().clearMore();
 

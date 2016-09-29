@@ -14,7 +14,7 @@ public class MoreHandler {
         this.more.add(more);
     }
 
-    public void setNoMore(String more) {
+    void setNoMore(String more) {
         this.noMore = more;
     }
     

@@ -42,7 +42,7 @@ public class IRCbutt {
     private final String programVersion = this.getClass().getPackage().getImplementationVersion();
 
     /* Logger */
-    final static Logger log = LoggerFactory.getLogger(IRCbutt.class);
+    private final static Logger log = LoggerFactory.getLogger(IRCbutt.class);
 
     /* Class instantiation */
     private BotChatHandler botChatHandler = new BotChatHandler();
@@ -57,7 +57,6 @@ public class IRCbutt {
     private MessageHandler messageHandler = new MessageHandler(this);
     private ChatLoggingManager chatLoggingManager = new ChatLoggingManager();
     private QuoteGrabHandler quoteGrabHandler = new QuoteGrabHandler(this);
-    private IRCUtils ircUtils = new IRCUtils(this);
     private KarmaTable karmaTable = new KarmaTable(this);
     private MoreHandler moreHandler = new MoreHandler();
     private PircBotX pircBotX;
@@ -144,10 +143,6 @@ public class IRCbutt {
 
     public QuoteGrabHandler getQuoteGrabHandler() {
         return this.quoteGrabHandler;
-    }
-
-    public IRCUtils getIrcUtils() {
-        return this.ircUtils;
     }
 
     public MoreHandler getMoreHandler() {

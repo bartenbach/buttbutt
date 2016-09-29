@@ -11,7 +11,7 @@ public class SqlManager {
 
     private Connection connection;
     private IRCbutt butt;
-    final static Logger log = LoggerFactory.getLogger(SqlManager.class);
+    private final static Logger log = LoggerFactory.getLogger(SqlManager.class);
 
 
     public SqlManager(IRCbutt butt) {
@@ -49,7 +49,7 @@ public class SqlManager {
                 "`karma` SMALLINT NOT NULL) ENGINE=MyISAM");
     }
 
-    public boolean sqlUpdate(String sql) {
+    private boolean sqlUpdate(String sql) {
         checkConnection();
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.executeUpdate();
@@ -60,7 +60,7 @@ public class SqlManager {
         return false;
     }
 
-    public void reconnect() {
+    private void reconnect() {
         log.warn("Disconnected from SQL Database. Reconnecting...");
         this.connectToDatabase();
     }
@@ -79,7 +79,7 @@ public class SqlManager {
         }
     }
 
-    public void prepareStatement(PreparedStatement ps, Object ... objects) {
+    void prepareStatement(PreparedStatement ps, Object ... objects) {
         checkConnection();
         try {
             for (int i = 0 ; i < objects.length ; i++) {
@@ -94,7 +94,7 @@ public class SqlManager {
         }
     }
 
-    public ResultSet getResultSet(PreparedStatement ps) {
+    ResultSet getResultSet(PreparedStatement ps) {
         checkConnection();
         try {
             return ps.executeQuery();
@@ -104,7 +104,7 @@ public class SqlManager {
         }
     }
 
-    public boolean isConnected() {
+    private boolean isConnected() {
         try {
             return connection.isValid(10);
         } catch (SQLException ex) {
@@ -113,7 +113,7 @@ public class SqlManager {
         }
     }
 
-    public void checkConnection() {
+    private void checkConnection() {
         if (!isConnected()) {
             reconnect();
         }

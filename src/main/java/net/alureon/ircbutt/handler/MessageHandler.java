@@ -39,8 +39,11 @@ public class MessageHandler {
             /* Check for URL or troll them */
             Preconditions.checkArgument(event.getUser() != null, "User was null");
             butt.getChatLoggingManager().logMessage(event.getUser().getNick(), event.getMessage());
-            // todo should return a boolean value below, and not respond to urls
-            KlongUrlTitleHandler.handleUrl(event.getChannel(), event.getMessage());
+
+            // don't troll URL's
+            if (KlongUrlTitleHandler.handleUrl(event.getChannel(), event.getMessage())) {
+                return;
+            }
 
             if (ButtMath.isRandomResponseTime()) {
                 final String buttFormat = butt.getButtReplaceHandler().buttformat(event.getMessage()).trim();

@@ -83,7 +83,7 @@ public class CommandHandler {
                 EchoHandler.handleEcho(butt, response, StringUtils.getArgs(cmd).split(" "), user.getNick());
                 break;
             case "g":
-                GoogleSearchHandler.handleGoogleSearch(butt, response, user, cmd);
+                GoogleSearchHandler.handleGoogleSearch(butt, response, cmd);
                 break;
             case "give":
                 GiveHandler.handleGive(butt, response, event, user, cmd);

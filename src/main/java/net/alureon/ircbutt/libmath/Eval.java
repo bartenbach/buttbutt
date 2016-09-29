@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 public class Eval {
 
 
-    final static Logger log = LoggerFactory.getLogger(Eval.class);
+    private final static Logger log = LoggerFactory.getLogger(Eval.class);
 
 
     public static void eval(BotResponse response, String eval) {

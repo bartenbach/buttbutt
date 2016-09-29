@@ -12,7 +12,7 @@ public class MagicEightBallHandler {
         response.chat(getMagic8BallResponse(rand));
     }
 
-    public static String getMagic8BallResponse(int number) {
+    private static String getMagic8BallResponse(int number) {
         switch (number) {
             case 0:
                 return "It is certain";

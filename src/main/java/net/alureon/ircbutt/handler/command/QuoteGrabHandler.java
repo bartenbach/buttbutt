@@ -13,7 +13,7 @@ public class QuoteGrabHandler {
 
 
     private IRCbutt butt;
-    final static Logger log = LoggerFactory.getLogger(QuoteGrabHandler.class);
+    private final static Logger log = LoggerFactory.getLogger(QuoteGrabHandler.class);
 
 
     public QuoteGrabHandler(IRCbutt butt) {

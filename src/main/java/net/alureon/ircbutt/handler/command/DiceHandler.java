@@ -29,8 +29,7 @@ public class DiceHandler {
             }
 
             String message1;
-            double rand = Math.random()*100;
-            if (rand < 50) {
+            if ((Math.random()*100) < 50) {
                 message1 = Colors.WHITE + "rolls a huge " + totalUsers + " sided die and it flattens " + Colors.YELLOW + victimName
                         + Colors.WHITE + " before coming to a halt on " + Colors.RED + "YOU LOSE" + Colors.NORMAL;
             } else {

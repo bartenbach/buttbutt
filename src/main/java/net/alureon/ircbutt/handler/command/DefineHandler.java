@@ -14,7 +14,7 @@ import org.jsoup.nodes.Element;
 public class DefineHandler {
 
 
-    final static Logger log = LoggerFactory.getLogger(DefineHandler.class);
+    private final static Logger log = LoggerFactory.getLogger(DefineHandler.class);
 
 
     public static void handleDefine(IRCbutt butt, BotResponse response, String word) {

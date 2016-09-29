@@ -21,7 +21,7 @@ import java.net.URLEncoder;
 public class UrbanDictionaryHandler {
 
 
-    final static Logger log = LoggerFactory.getLogger(UrbanDictionaryHandler.class);
+    private final static Logger log = LoggerFactory.getLogger(UrbanDictionaryHandler.class);
 
 
     public static void getDefinition(IRCbutt butt, BotResponse response, String[] cmd) {
@@ -52,15 +52,6 @@ public class UrbanDictionaryHandler {
             }
         } catch (UnsupportedEncodingException ex) {
             log.error("Failed to encode URL", ex);
-        }
-    }
-
-    public static Element getElement(Elements elements, int index) {
-        try {
-            Element e =  elements.get(index);
-            return e;
-        } catch (IndexOutOfBoundsException ex) {
-            return null;
         }
     }
 }

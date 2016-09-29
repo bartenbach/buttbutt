@@ -12,7 +12,7 @@ public class FactTable {
 
 
     private IRCbutt butt;
-    final static Logger log = LoggerFactory.getLogger(FactTable.class);
+    private final static Logger log = LoggerFactory.getLogger(FactTable.class);
 
     public FactTable(IRCbutt butt) {
         this.butt = butt;
@@ -109,7 +109,7 @@ public class FactTable {
         return firstResult;
     }
 
-    public String getFormattedFact(ResultSet rs) throws SQLException {
+    private String getFormattedFact(ResultSet rs) throws SQLException {
         return "(" + rs.getInt("id") + ") " + rs.getString("item") + ": " + rs.getString("data");
     }
 

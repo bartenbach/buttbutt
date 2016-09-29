@@ -6,14 +6,6 @@ import org.pircbotx.User;
 
 public class IRCUtils {
 
-
-    private IRCbutt butt;
-
-
-    public IRCUtils(IRCbutt butt) {
-        this.butt = butt;
-    }
-
     public static boolean isOpInBotChannel(IRCbutt butt, User user) {
         for (String x : butt.getYamlConfigurationFile().getChannelList()) {
             for (Channel y : user.getChannelsOpIn()) {

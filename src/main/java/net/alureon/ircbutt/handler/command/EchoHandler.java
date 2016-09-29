@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class EchoHandler {
 
 
-    final static Logger log = LoggerFactory.getLogger(EchoHandler.class);
+    private final static Logger log = LoggerFactory.getLogger(EchoHandler.class);
 
 
     public static void handleEcho(IRCbutt butt, BotResponse response, String[] cmd, String nick) {
@@ -20,7 +20,7 @@ public class EchoHandler {
         response.chat(message);
     }
 
-    public static String parseCommands(IRCbutt butt, BotResponse response, String input, String nick) {
+    static String parseCommands(IRCbutt butt, BotResponse response, String input, String nick) {
         Pattern p = Pattern.compile("\\$\\([^)]*\\)");
         Matcher m = p.matcher(input);
         while (m.find()) {

@@ -7,7 +7,7 @@ import org.slf4j.impl.SimpleLogger;
 public class LoggingHandler {
 
 
-    static Logger log;
+    private static Logger log;
 
 
     public LoggingHandler(String loglevel) {
