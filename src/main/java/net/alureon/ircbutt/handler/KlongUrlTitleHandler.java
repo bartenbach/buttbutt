@@ -12,14 +12,14 @@ import java.util.regex.Pattern;
 
 /* Created by Klong and alureon */
 
-public class KlongUrlTitleHandler {
+class KlongUrlTitleHandler {
 
 
-    public final static Logger log = LoggerFactory.getLogger(KlongUrlTitleHandler.class);
-    public static final String URL_REGEX = "((https?|ftp)://|(www|ftp)\\.)?[a-z0-9-]+(\\.[a-z0-9-]+)+([/?].*)?";
+    private final static Logger log = LoggerFactory.getLogger(KlongUrlTitleHandler.class);
+    private static final String URL_REGEX = "((https?|ftp)://|(www|ftp)\\.)?[a-z0-9-]+(\\.[a-z0-9-]+)+([/?].*)?";
 
 
-    public static void handleUrl(Channel channel, String message) {
+    static void handleUrl(Channel channel, String message) {
         Pattern p = Pattern.compile(URL_REGEX);
         Matcher m = p.matcher(message);
         if (m.find()) {
@@ -30,7 +30,7 @@ public class KlongUrlTitleHandler {
         }
     }
 
-    public static String getTitle(String url) {
+    private static String getTitle(String url) {
         try {
             Document doc = Jsoup.connect(url).get();
             Elements n = doc.select("title");

@@ -1,7 +1,7 @@
 package net.alureon.ircbutt;
 
 /**
-    Copyright Blake Bartenbach 2014-2015
+    Copyright Blake Bartenbach 2014-2016
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -73,7 +73,7 @@ public class IRCbutt {
         sqlManager.createTablesIfNotExists();
     }
 
-    public void start() {
+    void start() {
         /* Log initiation and current logging level */
         log.info("Starting IRCButt version " + programVersion);
         LoggingHandler.logCurrentLogLevel();

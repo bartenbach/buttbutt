@@ -26,7 +26,7 @@ public class Main {
         *  SimpleLogger works.  Once a Logger is created, the properties CAN NOT be changed!  This also means
         *  that I can't simply add a config option to change the logging level.  Open to ideas on ways to do this
         *  without using hardcoded values.  (Parsing config.yml before logging means no log messages related to I/O) */
-        LoggingHandler loggingHandler = new LoggingHandler(loglevel);
+        new LoggingHandler(loglevel);
 
         IRCbutt ircbutt = new IRCbutt();
         ircbutt.start();

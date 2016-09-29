@@ -16,7 +16,7 @@ public class MessageHandler {
 
 
     private IRCbutt butt;
-    final static Logger log = LoggerFactory.getLogger(MessageHandler.class);
+    private final static Logger log = LoggerFactory.getLogger(MessageHandler.class);
 
 
     public MessageHandler(IRCbutt butt) {

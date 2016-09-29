@@ -24,6 +24,9 @@ public class GoogleSearchHandler {
     }
 
     public static void handleGoogleSearch(IRCbutt butt, BotResponse response, User user, String[] cmd) {
+        // clear !more list
+        butt.getMoreHandler().clearMore();
+
         String google = "http://www.google.com/search?q=";
         String search = StringUtils.getArgs(cmd);
         String charset = "UTF-8";

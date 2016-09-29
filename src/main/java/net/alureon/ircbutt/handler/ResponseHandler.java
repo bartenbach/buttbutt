@@ -2,13 +2,9 @@ package net.alureon.ircbutt.handler;
 
 import net.alureon.ircbutt.BotResponse;
 
-/**
- * Created by alureon on 3/1/15.
- */
+class ResponseHandler {
 
-public class ResponseHandler {
-
-    public static void handleResponse(BotResponse response) {
+    static void handleResponse(BotResponse response) {
         switch (response.getIntention()) {
             case PRIVATE_MESSAGE_NO_OVERRIDE:
                 handlePrivateMessage(response);
