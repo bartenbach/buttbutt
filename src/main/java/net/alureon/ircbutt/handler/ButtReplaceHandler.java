@@ -12,7 +12,7 @@ public class ButtReplaceHandler {
         this.butt = butt;
     }
 
-    String buttformat(String message) {
+    String buttFormat(String message) {
         String[] split = message.split(" ");
         replaceButt(split);
         int x = (int) Math.ceil(split.length / 8);
@@ -59,8 +59,6 @@ public class ButtReplaceHandler {
                 suffix = "er";
             } else if (split[replace].endsWith("'s")) {
                 suffix = "'s";
-            } else if (split[replace].endsWith("s")) {
-                suffix = randomize();
             } else if (split[replace].endsWith("!")) {
                 suffix = "!";
             } else if (split[replace].endsWith(".")) {

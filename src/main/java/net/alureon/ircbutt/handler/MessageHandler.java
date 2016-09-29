@@ -45,9 +45,10 @@ public class MessageHandler {
                 return;
             }
 
+            // buttify sentence
             if (ButtMath.isRandomResponseTime()) {
-                final String buttFormat = butt.getButtReplaceHandler().buttformat(event.getMessage()).trim();
-                if (!buttFormat.equals(event.getMessage())) {
+                final String buttFormat = butt.getButtReplaceHandler().buttFormat(event.getMessage()).trim();
+                if (!buttFormat.equals(event.getMessage()) && buttFormat.contains(" ")) {
                     butt.getBotChatHandler().buttChat(event.getChannel(), buttFormat);
                 }
             }
