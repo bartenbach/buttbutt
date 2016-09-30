@@ -16,6 +16,8 @@ Most commands start with `!` followed by the command name, then arguments.
 
 Fact requests start with a `~` followed immediately by the fact name.
 
+You don't include the brackets `<>`
+
 ###Basic Functionality
 `!8 <question>`         -  Ask the Magic 8 Ball a question
 
@@ -67,7 +69,7 @@ Fact requests start with a `~` followed immediately by the fact name.
 
 `!append <factname> <string>` -  Appends `<string>` to a current factoid
 
-`!forget <factname>`          -  Delete a fact from the database
+`!forget <factname>`          -  Delete a fact from the database (MUST BE CHANNEL OP!)
 
 ###Quotegrab Functionality
 `!grab <username>`     -  Grab and store the last message from `<user>` in the database
