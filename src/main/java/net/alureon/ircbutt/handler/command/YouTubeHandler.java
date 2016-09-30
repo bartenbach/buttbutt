@@ -3,6 +3,7 @@ package net.alureon.ircbutt.handler.command;
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.StringUtils;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
@@ -28,7 +29,14 @@ public class YouTubeHandler {
             String link = "http://www.youtube.com/results?search_query=" + URLEncoder.encode(StringUtils.getArgs(cmd), "utf-8");
             String userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0";
             try {
-                Document doc = Jsoup.connect(link).userAgent(userAgent).get();
+                Connection.Response cResponse = Jsoup.connect(link)
+                        .ignoreContentType(true)
+                        .userAgent(userAgent)
+                        .referrer("http://www.google.com")
+                        .timeout(12000)
+                        .followRedirects(true)
+                        .execute();
+                Document doc = cResponse.parse();
                 Element result = doc.getElementById("results");
                 Elements videos = result.getElementsByClass("yt-lockup-title");
                 int size = videos.size();
