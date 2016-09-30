@@ -5,6 +5,13 @@ Original ideas, and some borrowed from phrik from #archlinux on freenode
 
 ![Real photograph of buttbutt](buttbot.gif "Real photographs of buttbutt")
 
+##Download
+You can test it here: http://alureon.net/irc/
+
+(Or conversely, join #afterlunch on freenode)
+
+Download the latest build here: http://alureon.net/IRCbutt-latest.jar
+
 ##Special Thanks:
 - *BullShark* - for ideas, showing me buttbot, and the name 'buttbutt'
 - *Klong* - for tons of contributions and several commits

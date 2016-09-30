@@ -20,9 +20,9 @@ import java.net.URLEncoder;
 public class YouTubeHandler {
 
 
-    final static Logger log = LoggerFactory.getLogger(YouTubeHandler.class);
+    private final static Logger log = LoggerFactory.getLogger(YouTubeHandler.class);
 
-    //TODO this is so sloppy it's hard to look at
+
     public static void getYouTubeVideo(IRCbutt butt, BotResponse response, String[] cmd) {
         butt.getMoreHandler().clearMore();
         try {
