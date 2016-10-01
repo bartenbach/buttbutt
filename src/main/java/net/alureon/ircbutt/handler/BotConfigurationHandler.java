@@ -12,16 +12,17 @@ public class BotConfigurationHandler {
         this.butt = butt;
     }
 
-    public Configuration<PircBotX> getConfiguration() {
-        Configuration.Builder<PircBotX> configBuilder = new Configuration.Builder<>();
+    public Configuration getConfiguration() {
+        Configuration.Builder configBuilder = new Configuration.Builder();
         configBuilder.setName(butt.getYamlConfigurationFile().getBotName())
                 .setLogin(butt.getYamlConfigurationFile().getBotLogin())
                 .setRealName(butt.getYamlConfigurationFile().getBotRealName())
-                .setServerHostname(butt.getYamlConfigurationFile().getServerHostname())
+             //   .setServerHostname(butt.getYamlConfigurationFile().getServerHostname()) - DEPRECATED as of 2.1
                 .setAutoReconnect(butt.getYamlConfigurationFile().getServerAutoReconnect())
                 .setMessageDelay(butt.getYamlConfigurationFile().getBotMessageDelay())
                 .setNickservPassword(butt.getYamlConfigurationFile().getBotPassword())
                 .setListenerManager(butt.getListenerManager())
+                .addServer(butt.getYamlConfigurationFile().getServerHostname(), butt.getYamlConfigurationFile().getServerPort())
                 .setVersion(butt.getProgramVersion());
         for (String x : butt.getYamlConfigurationFile().getChannelList()) {
             configBuilder.addAutoJoinChannel(x);

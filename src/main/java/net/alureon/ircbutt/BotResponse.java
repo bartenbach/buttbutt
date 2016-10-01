@@ -14,9 +14,9 @@ public class BotResponse {
     private String additionalMessage;
     private User recipient;
     private BotIntention intention;
-    private GenericMessageEvent<PircBotX> event;
+    private GenericMessageEvent event;
 
-    public BotResponse(GenericMessageEvent<PircBotX> event) {
+    public BotResponse(GenericMessageEvent event) {
         this.event = event;
         this.recipient = event.getUser();
         if (event instanceof PrivateMessageEvent) {
@@ -42,7 +42,7 @@ public class BotResponse {
 
     public Channel getChannel() {
         if (this.event instanceof MessageEvent) {
-            return ((MessageEvent<PircBotX>) event).getChannel();
+            return ((MessageEvent) event).getChannel();
         }
         return null;
     }
@@ -53,7 +53,7 @@ public class BotResponse {
         this.message = message;
     }
 
-    public GenericMessageEvent<PircBotX> getEvent() {
+    public GenericMessageEvent getEvent() {
         return this.event;
     }
 

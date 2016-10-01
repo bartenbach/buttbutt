@@ -11,9 +11,9 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 
 public class GiveHandler {
 
-    public static void handleGive(IRCbutt butt, BotResponse response, GenericMessageEvent<PircBotX> event, User user, String[] args) {
+    public static void handleGive(IRCbutt butt, BotResponse response, GenericMessageEvent event, User user, String[] args) {
         if (event instanceof MessageEvent) {
-            MessageEvent<PircBotX> event2 = (MessageEvent<PircBotX>) event;
+            MessageEvent event2 = (MessageEvent) event;
             if (args.length > 2) {
                 if (recipientExists(event2, args[1])) {
                     String parsed = EchoHandler.parseCommands(butt, response, StringUtils.getArgsOverOne(args), user.getNick());
@@ -25,7 +25,7 @@ public class GiveHandler {
         }
     }
 
-    private static boolean recipientExists(MessageEvent<PircBotX> event, String recipient) {
+    private static boolean recipientExists(MessageEvent event, String recipient) {
         ImmutableSortedSet<User> users = event.getChannel().getUsers();
         for (User x : users) {
             if(x.getNick().equals(recipient))

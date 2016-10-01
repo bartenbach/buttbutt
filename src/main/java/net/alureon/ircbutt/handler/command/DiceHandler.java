@@ -11,9 +11,9 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 
 public class DiceHandler {
 
-    public static void handleDice(GenericMessageEvent<PircBotX> event, BotResponse response) {
+    public static void handleDice(GenericMessageEvent event, BotResponse response) {
         if (event instanceof MessageEvent) {
-            Channel channel = ((MessageEvent<PircBotX>) event).getChannel();
+            Channel channel = ((MessageEvent) event).getChannel();
             ImmutableSortedSet<User> users = channel.getUsers();
             String victimName = "";
             int totalUsers = users.size();

@@ -23,7 +23,7 @@ public class MessageHandler {
         this.butt = butt;
     }
 
-    public void handleMessage(MessageEvent<PircBotX> event) {
+    public void handleMessage(MessageEvent event) {
         /* Handle a command */
         BotResponse response = new BotResponse(event);
         if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
@@ -55,7 +55,7 @@ public class MessageHandler {
         }
     }
 
-    public void handlePrivateMessage(PrivateMessageEvent<PircBotX> event) {
+    public void handlePrivateMessage(PrivateMessageEvent event) {
         BotResponse response = new BotResponse(event);
         Preconditions.checkArgument(event.getUser() != null, "User was null");
         if (butt.getYamlConfigurationFile().getBotNoVerify() || event.getUser().isVerified()) {

@@ -21,6 +21,7 @@ public class YAMLConfigurationFile {
     private boolean noVerify;
     private List<String> channelList;
     private String serverHostname;
+    private int serverPort;
     private boolean serverAutoReconnect;
     private String sqlUsername;
     private String sqlPassword;
@@ -58,6 +59,7 @@ public class YAMLConfigurationFile {
             this.botMessageDelay = Long.parseLong(String.valueOf(botSettings.get("Message-Delay")));
             this.noVerify = Boolean.parseBoolean(String.valueOf(botSettings.get("No-Verify")));
             this.serverHostname = (String) serverSettings.get("Hostname");
+            this.serverPort = Integer.parseInt(String.valueOf(serverSettings.get("Port")));
             this.serverAutoReconnect = Boolean.parseBoolean(String.valueOf(serverSettings.get("Auto-Reconnect")));
             this.sqlUsername = (String) sqlSettings.get("Username");
             this.sqlPassword = (String) sqlSettings.get("Password");
@@ -130,6 +132,10 @@ public class YAMLConfigurationFile {
 
     public String getServerHostname() {
         return serverHostname;
+    }
+
+    public int getServerPort() {
+        return serverPort;
     }
 
     public boolean getServerAutoReconnect() {

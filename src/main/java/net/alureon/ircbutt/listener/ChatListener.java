@@ -5,7 +5,7 @@ import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 
-public class ChatListener extends ListenerAdapter<PircBotX> {
+public class ChatListener extends ListenerAdapter {
 
     private IRCbutt butt;
 
@@ -14,7 +14,7 @@ public class ChatListener extends ListenerAdapter<PircBotX> {
     }
 
     @Override
-    public void onMessage(MessageEvent<PircBotX> event) {
+    public void onMessage(MessageEvent event) {
         butt.getMessageHandler().handleMessage(event);
     }
 

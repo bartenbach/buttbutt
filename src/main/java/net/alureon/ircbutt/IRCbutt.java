@@ -27,7 +27,6 @@ import net.alureon.ircbutt.listener.PrivateMessageListener;
 import net.alureon.ircbutt.sql.FactTable;
 import net.alureon.ircbutt.sql.QuoteGrabTable;
 import net.alureon.ircbutt.sql.SqlManager;
-import net.alureon.ircbutt.util.IRCUtils;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.managers.ListenerManager;
@@ -53,7 +52,7 @@ public class IRCbutt {
     private FactTable factTable = new FactTable(this);
     private QuoteGrabTable quoteGrabTable = new QuoteGrabTable(this);
     private FactHandler factHandler = new FactHandler(this);
-    private ListenerManager<PircBotX> listenerManager = new ThreadedListenerManager<>();
+    private ListenerManager listenerManager = new ThreadedListenerManager();
     private MessageHandler messageHandler = new MessageHandler(this);
     private ChatLoggingManager chatLoggingManager = new ChatLoggingManager();
     private QuoteGrabHandler quoteGrabHandler = new QuoteGrabHandler(this);
@@ -82,7 +81,7 @@ public class IRCbutt {
         listenerManager.addListener(new PrivateMessageListener(this));
 
         /* Set the bot's configuration variables */
-        Configuration<PircBotX> configuration = new BotConfigurationHandler(this).getConfiguration();
+        Configuration configuration = new BotConfigurationHandler(this).getConfiguration();
 
         /* Create the bot with our configuration */
         this.pircBotX = new PircBotX(configuration);
@@ -125,7 +124,7 @@ public class IRCbutt {
         return this.factHandler;
     }
 
-    public ListenerManager<PircBotX> getListenerManager() {
+    public ListenerManager getListenerManager() {
         return this.listenerManager;
     }
 
