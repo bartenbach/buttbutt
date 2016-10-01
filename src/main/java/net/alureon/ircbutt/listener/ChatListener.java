@@ -1,7 +1,6 @@
 package net.alureon.ircbutt.listener;
 
 import net.alureon.ircbutt.IRCbutt;
-import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 

@@ -10,7 +10,7 @@ You can test it here: http://alureon.net/irc/
 
 (Or conversely, join #afterlunch on freenode)
 
-Download the latest build here: http://alureon.net/IRCbutt-latest.jar
+Download builds here: http://alureon.net/ircbutt
 
 ##Special Thanks:
 - *BullShark* - for ideas, showing me buttbot, and the name 'buttbutt'

@@ -8,7 +8,6 @@ import net.alureon.ircbutt.libmath.Eval;
 import net.alureon.ircbutt.libmath.MathLib;
 import net.alureon.ircbutt.util.ButtMath;
 import net.alureon.ircbutt.util.StringUtils;
-import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 

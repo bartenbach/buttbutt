@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableSortedSet;
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.StringUtils;
-import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;

@@ -5,7 +5,6 @@ import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.handler.command.karma.KarmaHandler;
 import net.alureon.ircbutt.util.ButtMath;
-import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
