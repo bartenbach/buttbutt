@@ -1,31 +1,31 @@
-#IRCbutt
+# IRCbutt
 A Java port of buttbot, with various other functionality.
 
 Original ideas, and some borrowed from phrik from #archlinux on freenode
 
 ![Real photograph of buttbutt](buttbot.gif "Real photographs of buttbutt")
 
-##Download
+## Download
 You can test it here: http://alureon.net/irc/
 
 (Or conversely, join #afterlunch on freenode)
 
 Download builds here: http://alureon.net/ircbutt
 
-##Special Thanks:
+## Special Thanks:
 - *BullShark* - for ideas, showing me buttbot, and the name 'buttbutt'
 - *Klong* - for tons of contributions and several commits
 - *ebolahats* - for being a rubber duck
 - *MandL27* - for breaking the bot and pointing out what's annoying
 
-##Usage:
+## Usage:
 Most commands start with `!` followed by the command name, then arguments.
 
 Fact requests start with a `~` followed immediately by the fact name.
 
 You don't include the brackets `<>`
 
-###Basic Functionality
+### Basic Functionality
 `!8 <question>`         -  Ask the Magic 8 Ball a question
 
 `!g <query>`            -  Google something
@@ -56,14 +56,14 @@ You don't include the brackets `<>`
 
 `!version`              -  Get the current bot version
 
-###Math Functionality
+### Math Functionality
 `!sqrt <number>`      -  Get the square root of `<number>`
 
 `!pow <num1> <num2>`  -  Get the result of num1^num2
 
 `!eval <expression>`  -  Use Jeval to evaluate an expression. ex: !eval sin(0)
 
-###Fact Functionality
+### Fact Functionality
 `~<string>`                   -  Any string prefixed with a tilde finds the corresponding fact
 
 `!fact`                       -  Retrieve a random factoid from the database
@@ -78,7 +78,7 @@ You don't include the brackets `<>`
 
 `!forget <factname>`          -  Delete a fact from the database (MUST BE CHANNEL OP!)
 
-###Quotegrab Functionality
+### Quotegrab Functionality
 `!grab <username>`     -  Grab and store the last message from `<user>` in the database
 
 `!rq`                  -  Retrieve a random quote from the database
@@ -91,7 +91,7 @@ You don't include the brackets `<>`
 
 `!qsay <quotenum>`     -  Say quote by ID
 
-###Karma Functionality
+### Karma Functionality
 `<randomstring>++`      -  Increase the karma of `<whatever>`
 
 `<randomstring>--`      -  Decrease the karma of `<whatever>`
