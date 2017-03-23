@@ -23,8 +23,8 @@ dependencies {
   compile 'net.sourceforge.jeval:jeval:0.9.4'
 }
 
-sourceCompatibility = 1.8
-version = '0.3.8-indev-java8'
+sourceCompatibility = 1.7
+version = '0.3.8-indev-java7'
 
 jar {
   dependsOn configurations.runtime
