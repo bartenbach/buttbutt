@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/proxa/IRCbutt.svg?branch=master)](https://travis-ci.org/proxa/IRCbutt)
+
 # IRCbutt
 A Java port of buttbot, with various other functionality.
 
