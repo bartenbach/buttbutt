@@ -8,19 +8,22 @@ Original ideas, and some borrowed from phrik from #archlinux on freenode
 ![Real photograph of buttbutt](buttbot.gif "Real photographs of buttbutt")
 
 ## Download
+
+IRCbutt is built using OpenJDK 1.8
+
 You can test it here: http://alureon.net/irc/
 
 (Or you can just join #afterlunch on freenode)
 
 Download builds here: http://alureon.net/ircbutt (or check the releases tab on Github)
 
-IRCbutt is built using OpenJDK 1.8
+## Running
 
-## Special Thanks:
-- *BullShark* - for ideas, showing me buttbot, and the name 'buttbutt'
-- *Klong* - for tons of contributions and several commits
-- *ebolahats* - for being a rubber duck
-- *MandL27* - for breaking the bot and pointing out what's annoying
+Run with `java -jar IRCbutt*.jar`
+
+You can specify a log level as an argument.  Supported levels are TRACE, DEBUG, INFO, WARNING, ERROR, or INFO.  The default log level is INFO.
+
+`java -jar IRCbutt*.jar DEBUG`
 
 ## Usage:
 Most commands start with `!` followed by the command name, then arguments.
@@ -101,3 +104,10 @@ You don't include the brackets `<>`
 `<randomstring>--`      -  Decrease the karma of `<whatever>`
 
 `!karma <randomstring>` -  Retrieve the current karma of `<whatever>`
+
+## Special Thanks:
+- *BullShark* - for ideas, showing me buttbot, and the name 'buttbutt'
+- *Klong* - for tons of contributions and several commits
+- *ebolahats* - for being a rubber duck
+- *MandL27* - for breaking the bot and pointing out what's annoying
+
