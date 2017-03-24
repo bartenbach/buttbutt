@@ -10,9 +10,11 @@ Original ideas, and some borrowed from phrik from #archlinux on freenode
 ## Download
 You can test it here: http://alureon.net/irc/
 
-(Or conversely, join #afterlunch on freenode)
+(Or you can just join #afterlunch on freenode)
 
 Download builds here: http://alureon.net/ircbutt
+
+IRCbutt is built using OpenJDK 1.8
 
 ## Special Thanks:
 - *BullShark* - for ideas, showing me buttbot, and the name 'buttbutt'
