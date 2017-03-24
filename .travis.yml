@@ -8,7 +8,7 @@ deploy:
   provider: releases
   api_key:
     secure: o9rKsv2aRbX/+IHf3LfYjej0hhLLSr/RycyJBk+0URKUqkxLkVrd8mlvk5IBDfBZHJPnp4atsgPwapuCROK3GZilhw6eR++kZrB0WViBPX1jeX9dSQsGsg4ttRgRTAlXM48lNcRSYF5DqkVRJUsPx0XeV+ONL/Awz+l4rzDzqZaV2/Ma0TXN4rMoiU1qAmDzJa/ojzKEVCuCj6yIVQdfGZyDorMehC2D+NQOHONMkzsf7whlKkffQszwc+8z2X68wfXBEsOQeKEuUDsw/H0mv0AGyxu51Z+dTo5UvBNvIx2aLkktMJm93hH6Zz9CFDFz8naRQL77ZEzJr0+tTCRzlP0pvNPvxy4ucgeJOovZHxI05HFhFk7+isAJvG+nzTyKEAo3BDlEKIr0RrToYqznFKToZ+qIKzwP17uFk3IYspxmiPMWTichxyTUyYXxrOcrnlkEpc64h5Ih+a8fjgzirk83eE99C6Rrbv3Vj6C2koMKhztjslu5FJcFQOQ2MUGmvo4UPzOfJKuq8dF7rNv5mM3CdA4pk7LFRirz4CdC0ELKiHMOu/2d92VRtTu8eIzHJG8cqnGkM026nuYCELhiDuy4JjIwU7/V4xckrzjLeLfgULGVNG/Blv3fY6OxI70itrMs1CjTbh/vmj+BFcdWMEjQKh+QpO852MLkkrOwXAs=
-  file: build/libs/IRCbutt*.jar
+  file: $TRAVIS_BUILD_DIR/build/libs/IRCbutt*.jar
   skip_cleanup: true
   on:
     repo: proxa/IRCbutt
