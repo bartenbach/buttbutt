@@ -12,7 +12,7 @@ You can test it here: http://alureon.net/irc/
 
 (Or you can just join #afterlunch on freenode)
 
-Download builds here: http://alureon.net/ircbutt
+Download builds here: http://alureon.net/ircbutt (or check the releases tab on Github)
 
 IRCbutt is built using OpenJDK 1.8
 
