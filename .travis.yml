@@ -15,3 +15,6 @@ deploy:
     repo: proxa/IRCbutt
     tags: true
     all_branches: true
+notifications:
+  irc:
+    - "chat.freenode.net#afterlunch"
