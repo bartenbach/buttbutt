@@ -24,12 +24,6 @@ public class CommandHandler {
         this.butt = butt;
     }
 
-
-    // advice from Mandl:  /notice not query
-    //                     parse formatting characters
-    //                     .trim() ruining formatting
-
-
     public void handleCommand(GenericMessageEvent event, String[] cmd, BotResponse response) {
         /* For the sake of clearer code, let's just set these immediately */
         User user = event.getUser();
@@ -50,10 +44,11 @@ public class CommandHandler {
         /* remove the '!' from the command */
         cmd[0] = cmd[0].replaceFirst("!", "");
 
-        String commandsSubstituted = parseCommandSubstitutionAndVariables(butt, response, StringUtils.arrayToString(cmd), nick);
-        String[] commandsSubstitutedArray = commandsSubstituted.split(" ");
+        String commandSubstituted = parseCommandSubstitutionAndVariables(butt, response, StringUtils.arrayToString(cmd), nick);
+        String[] commandSubstitutedArray = commandSubstituted.split(" ");
 
         /* switch of main bot commands */
+        String result = "";
         switch (cmd[0]) {
             case "rq":
             case "grab":
@@ -64,7 +59,9 @@ public class CommandHandler {
             case "qsearch":
             case "qfind":
             case "qf":
-                butt.getQuoteGrabHandler().handleQuoteGrabs(response, cmd, user, nick);
+            case "rqnouser":
+            case "rqn":
+                butt.getQuoteGrabHandler().handleQuoteGrabs(response, commandSubstitutedArray, user, nick);
                 break;
             case "learn":
             case "append":
@@ -82,27 +79,28 @@ public class CommandHandler {
             case "ff":
             case "fi":
             case "fs":
-                butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
+                butt.getFactHandler().handleKnowledge(response, commandSubstitutedArray, user, nick);
                 break;
             case "echo":
-                EchoHandler.handleEcho(butt, response, StringUtils.getArgs(cmd).split(" "), user.getNick());
+                response.chat(StringUtils.getArgs(commandSubstitutedArray));
                 break;
             case "g":
-                GoogleSearchHandler.handleGoogleSearch(butt, response, cmd);
+                GoogleSearchHandler.handleGoogleSearch(butt, response, commandSubstitutedArray);
                 break;
             case "give":
-                GiveHandler.handleGive(butt, response, event, user, cmd);
+                result = GiveHandler.handleGive(response, event, user, commandSubstitutedArray);
+                response.chat(result);
                 break;
             case "rot13":
             case "rot":
-                String result = Rot13Handler.handleRot13(response, StringUtils.getArgs(commandsSubstitutedArray));
+                result = Rot13Handler.handleRot13(StringUtils.getArgs(commandSubstitutedArray));
                 response.chat(result);
                 break;
             case "yt":
-                YouTubeHandler.getYouTubeVideo(butt, response, cmd);
+                YouTubeHandler.getYouTubeVideo(butt, response, commandSubstitutedArray);
                 break;
             case "ud":
-                UrbanDictionaryHandler.getDefinition(butt, response, cmd);
+                UrbanDictionaryHandler.getDefinition(butt, response, commandSubstitutedArray);
                 break;
             case "version":
                 response.chat(butt.getProgramVersion());
@@ -115,10 +113,10 @@ public class CommandHandler {
                 break;
             case "sqrt":
             case "pow":
-                MathLib.handleMath(response, cmd);
+                MathLib.handleMath(response, commandSubstitutedArray);
                 break;
             case "check":
-                CheckHandler.handleCheck(response, StringUtils.getArgs(cmd));
+                CheckHandler.handleCheck(response, StringUtils.getArgs(commandSubstitutedArray));
                 break;
             case "define":
                 DefineHandler.handleDefine(butt, response, cmd[1]);
@@ -148,6 +146,10 @@ public class CommandHandler {
             case "8ball":
                 MagicEightBallHandler.handleMagicEightBall(response);
                 break;
+            case "butt":
+            case "buttify":
+                String buttified = butt.getButtReplaceHandler().buttFormat(StringUtils.getArgs(commandSubstitutedArray));
+                response.chat(buttified);
         }
         if (response.getIntention() == null) {
             response.noResponse();

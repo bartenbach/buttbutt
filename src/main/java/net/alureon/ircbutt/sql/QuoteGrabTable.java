@@ -41,7 +41,7 @@ public class QuoteGrabTable {
         return rs.next();
     }
 
-    public String getRandomQuote() {
+    public String getRandomQuoteAndUser() {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` ORDER BY RAND() LIMIT 1";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ResultSet rs = butt.getSqlManager().getResultSet(ps);
@@ -50,6 +50,21 @@ public class QuoteGrabTable {
                 String user = rs.getString("user");
                 String quote = rs.getString("quote");
                 return restructureQuote(user, quote);
+            }
+        } catch (SQLException ex) {
+            log.error("SQL Exception has occurred. StackTrace:", ex);
+        }
+        return null;
+    }
+
+
+    public String getRandomQuote() {
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` ORDER BY RAND() LIMIT 1";
+        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
+        ResultSet rs = butt.getSqlManager().getResultSet(ps);
+        try {
+            if (rs.next()) {
+                return rs.getString("quote");
             }
         } catch (SQLException ex) {
             log.error("SQL Exception has occurred. StackTrace:", ex);
@@ -85,7 +100,7 @@ public class QuoteGrabTable {
         return null;
     }
 
-    public String getRandomQuoteFromPlayer(String username) throws SQLException {
+    public String getRandomQuoteAndUserFromUser(String username) throws SQLException {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY RAND() LIMIT 1";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setString(1, username);
@@ -93,6 +108,17 @@ public class QuoteGrabTable {
         if (rs.next()) {
             String quote = rs.getString("quote");
             return restructureQuote(username, quote);
+        }
+        return null;
+    }
+
+    public String getRandomQuoteFromUser(String username) throws SQLException {
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY RAND() LIMIT 1";
+        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getString("quote");
         }
         return null;
     }

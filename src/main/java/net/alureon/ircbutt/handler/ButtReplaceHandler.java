@@ -12,7 +12,7 @@ public class ButtReplaceHandler {
         this.butt = butt;
     }
 
-    String buttFormat(String message) {
+    public String buttFormat(String message) {
         String[] split = message.split(" ");
         replaceButt(split);
         int x = (int) Math.ceil(split.length / 8);

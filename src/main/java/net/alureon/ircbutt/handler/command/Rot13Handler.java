@@ -1,10 +1,8 @@
 package net.alureon.ircbutt.handler.command;
 
-import net.alureon.ircbutt.BotResponse;
-
 public class Rot13Handler {
 
-    public static String handleRot13(BotResponse response, String in) {
+    public static String handleRot13(String in) {
         StringBuilder sb = new StringBuilder();
         for (char c : in.toCharArray()) {
             if (c >= 'A' && c <= 'Z') {

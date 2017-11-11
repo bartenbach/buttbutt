@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'pmd'
+apply plugin: 'jacoco'
 
 repositories {
   mavenCentral()
@@ -25,7 +26,7 @@ dependencies {
 }
 
 sourceCompatibility = 1.8
-version = '0.4.0-indev'
+version = '0.4.1-indev'
 
 jar {
   dependsOn configurations.runtime

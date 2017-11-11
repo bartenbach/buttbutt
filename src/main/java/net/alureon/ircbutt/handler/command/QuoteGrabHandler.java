@@ -52,7 +52,7 @@ public class QuoteGrabHandler {
                 break;
             case "rq":
                 if (cmd.length == 1) {
-                    String quote = butt.getQuoteGrabTable().getRandomQuote();
+                    String quote = butt.getQuoteGrabTable().getRandomQuoteAndUser();
                     if (quote != null) {
                         response.chat(quote);
                     } else {
@@ -61,7 +61,7 @@ public class QuoteGrabHandler {
                     }
                 } else {
                     try {
-                        String quote = butt.getQuoteGrabTable().getRandomQuoteFromPlayer(cmd[1]);
+                        String quote = butt.getQuoteGrabTable().getRandomQuoteAndUserFromUser(cmd[1]);
                         if (quote != null) {
                             response.chat(quote);
                         } else {
@@ -74,6 +74,33 @@ public class QuoteGrabHandler {
                     }
                 }
                 break;
+            case "rqn":
+            case "rqnouser":
+                if (cmd.length == 1) {
+                    String quote = butt.getQuoteGrabTable().getRandomQuote();
+                    if (quote != null) {
+                        response.chat(quote);
+                    } else {
+                        log.error("Error: couldn't retrieve a random quote!");
+                        response.chat("Uh oh...something's broken");
+                    }
+                } else {
+                    try {
+                        String quote = butt.getQuoteGrabTable().getRandomQuoteFromUser(cmd[1]);
+                        if (quote != null) {
+                            response.chat(quote);
+                        } else {
+                            response.privateMessage(user, "butt couldn't find anything for " + cmd[1]);
+                            log.warn("Attempted to get quote from: " + cmd[1]);
+                        }
+                    } catch (SQLException ex) {
+                        response.noResponse();
+                        log.error("Exception accessing database: ", ex);
+                    }
+                }
+                break;
+
+
             case "q":
                 if (cmd.length == 1) {
                     response.privateMessage(user, "!q <nick>");

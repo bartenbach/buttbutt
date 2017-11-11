@@ -23,6 +23,12 @@ public class BotResponse {
         }
     }
 
+    // for testing
+    public BotResponse() {
+        this.event = null;
+        this.recipient = null;
+    }
+
     public String getMessage() {
         return this.message;
     }

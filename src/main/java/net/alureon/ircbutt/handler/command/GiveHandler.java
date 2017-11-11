@@ -1,6 +1,7 @@
 package net.alureon.ircbutt.handler.command;
 
 import com.google.common.collect.ImmutableSortedSet;
+import net.alureon.ircbutt.BotIntention;
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.StringUtils;
@@ -10,18 +11,22 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 
 public class GiveHandler {
 
-    public static void handleGive(IRCbutt butt, BotResponse response, GenericMessageEvent event, User user, String[] args) {
+    public static String handleGive(BotResponse response, GenericMessageEvent event, User user, String[] args) {
         if (event instanceof MessageEvent) {
             MessageEvent event2 = (MessageEvent) event;
             if (args.length > 2) {
                 if (recipientExists(event2, args[1])) {
-                    String parsed = EchoHandler.parseCommands(butt, response, StringUtils.getArgsOverOne(args), user.getNick());
-                    response.chat(args[1] + ": " + parsed);
+                    //String parsed = EchoHandler.parseCommands(butt, response, StringUtils.getArgsOverOne(args), user.getNick());
+                    response.chat(args[1] + ": " + StringUtils.getArgsOverOne(args));
+                    return args[1] + ": " + StringUtils.getArgsOverOne(args);
+                    //response.chat(args[1] + ": " + StringUtils.getArgsOverOne(args));
                 }
             } else {
-                response.privateMessage(user, "!give <user> <thing>");
+                return "!give <user> <command>";
+                //response.privateMessage(user, "!give <user> <thing>");
             }
         }
+        return null;
     }
 
     private static boolean recipientExists(MessageEvent event, String recipient) {
