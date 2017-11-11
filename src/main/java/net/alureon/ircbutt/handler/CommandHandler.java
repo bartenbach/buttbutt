@@ -11,6 +11,9 @@ import net.alureon.ircbutt.util.StringUtils;
 import org.pircbotx.User;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class CommandHandler {
 
 
@@ -46,6 +49,9 @@ public class CommandHandler {
 
         /* remove the '!' from the command */
         cmd[0] = cmd[0].replaceFirst("!", "");
+
+        String commandsSubstituted = parseCommandSubstitutionAndVariables(butt, response, StringUtils.arrayToString(cmd), nick);
+        String[] commandsSubstitutedArray = commandsSubstituted.split(" ");
 
         /* switch of main bot commands */
         switch (cmd[0]) {
@@ -89,7 +95,8 @@ public class CommandHandler {
                 break;
             case "rot13":
             case "rot":
-                Rot13Handler.handleRot13(response, StringUtils.getArgs(cmd));
+                String result = Rot13Handler.handleRot13(response, StringUtils.getArgs(commandsSubstitutedArray));
+                response.chat(result);
                 break;
             case "yt":
                 YouTubeHandler.getYouTubeVideo(butt, response, cmd);
@@ -138,6 +145,7 @@ public class CommandHandler {
                 GoogleImageSearchHandler.handleGoogleImageSearch(response, StringUtils.getArgs(cmd));
                 break;
             case "8":
+            case "8ball":
                 MagicEightBallHandler.handleMagicEightBall(response);
                 break;
         }
@@ -145,4 +153,21 @@ public class CommandHandler {
             response.noResponse();
         }
     }
+
+    public static String parseCommandSubstitutionAndVariables(IRCbutt butt, BotResponse response, String input, String nick) {
+        Pattern p = Pattern.compile("\\$\\([^)]*\\)");
+        Matcher m = p.matcher(input);
+        while (m.find()) {
+            String command = m.group().substring(2, m.group().length() - 1);
+            BotResponse botResponse = new BotResponse(response.getEvent());
+            butt.getCommandHandler().handleCommand(response.getEvent(), command.split(" "), botResponse);
+            if (botResponse.toString() != null) {
+                input = input.replaceFirst(Pattern.quote(m.group()), botResponse.toString());
+            } else {
+                botResponse.privateMessage(response.getRecipient(), "butt didnt get this part: " + m.group());
+            }
+        }
+        return input.replaceAll("\\$USER", nick);
+    }
+
 }

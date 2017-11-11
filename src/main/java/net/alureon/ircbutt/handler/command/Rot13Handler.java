@@ -4,7 +4,7 @@ import net.alureon.ircbutt.BotResponse;
 
 public class Rot13Handler {
 
-    public static void handleRot13(BotResponse response, String in) {
+    public static String handleRot13(BotResponse response, String in) {
         StringBuilder sb = new StringBuilder();
         for (char c : in.toCharArray()) {
             if (c >= 'A' && c <= 'Z') {
@@ -23,6 +23,6 @@ public class Rot13Handler {
                 sb.append(c);
             }
         }
-        response.chat(sb.toString());
+        return sb.toString();
     }
 }
