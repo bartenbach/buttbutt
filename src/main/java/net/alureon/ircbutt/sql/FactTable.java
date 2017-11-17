@@ -51,7 +51,7 @@ public class FactTable {
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
             ps.setString(1, item);
             int rows = ps.executeUpdate();
-            return (rows > 0); // if no rows have been updated then we haven't actually deleted anything
+            return rows > 0; // if no rows have been updated then we haven't actually deleted anything
         } catch (SQLException ex) {
             log.error("Failed to delete knowledge from database. StackTrace:", ex);
         }
@@ -100,9 +100,8 @@ public class FactTable {
                 while (rs.next()) {
                      butt.getMoreHandler().addMore(getFormattedFact(rs));
                 }
-            } else {
-                //todo try to find a fact with similar name?
             }
+                //todo try to find a fact with similar name?
         } catch (SQLException ex) {
             log.error("SQL Exception, ", ex);
         }

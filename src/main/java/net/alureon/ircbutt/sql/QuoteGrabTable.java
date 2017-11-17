@@ -38,7 +38,10 @@ public class QuoteGrabTable {
         ps.setString(1, playerName);
         ps.setString(2, quote);
         ResultSet rs = ps.executeQuery();
-        return rs.next();
+        if (rs.next())
+            return true;
+        else
+            return false;
     }
 
     public String getRandomQuoteAndUser() {
