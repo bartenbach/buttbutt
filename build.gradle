@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'pmd'
 apply plugin: 'jacoco'
-apply plugin: 'checkstyle'
+//apply plugin: 'checkstyle'
 
 repositories {
   mavenCentral()
@@ -27,7 +27,7 @@ dependencies {
 }
 
 sourceCompatibility = 1.8
-version = '0.4.1-indev'
+version = '0.4.2-indev'
 
 jar {
   dependsOn configurations.runtime
