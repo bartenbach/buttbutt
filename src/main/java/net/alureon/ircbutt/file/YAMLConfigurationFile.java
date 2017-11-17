@@ -29,6 +29,7 @@ public class YAMLConfigurationFile {
     private int sqlPort;
     private String sqlDatabase;
     private String sqlTablePrefix;
+    private boolean sslEnabled;
 
 
     public void createConfigIfNotExists() {
@@ -61,6 +62,7 @@ public class YAMLConfigurationFile {
             this.serverHostname = (String) serverSettings.get("Hostname");
             this.serverPort = Integer.parseInt(String.valueOf(serverSettings.get("Port")));
             this.serverAutoReconnect = Boolean.parseBoolean(String.valueOf(serverSettings.get("Auto-Reconnect")));
+            this.sslEnabled = Boolean.parseBoolean(String.valueOf(serverSettings.get("SSL")));
             this.sqlUsername = (String) sqlSettings.get("Username");
             this.sqlPassword = (String) sqlSettings.get("Password");
             this.sqlIp = (String) sqlSettings.get("IP");
@@ -164,6 +166,10 @@ public class YAMLConfigurationFile {
 
     public String getSqlTablePrefix() {
         return sqlTablePrefix;
+    }
+
+    public boolean getSSLEnabled() {
+        return this.sslEnabled;
     }
 
 }

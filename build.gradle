@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'pmd'
 apply plugin: 'jacoco'
+apply plugin: 'checkstyle'
 
 repositories {
   mavenCentral()
@@ -52,4 +53,8 @@ tasks.withType(JavaCompile) {
   options.compilerArgs += [ '-Xlint:all', '-Xlint:-path' ]
   options.deprecation = true
   options.encoding = 'utf8'
+}
+
+tasks.withType(Checkstyle) {
+  configFile = new File('config/checkstyle/sun_checks.xml')
 }

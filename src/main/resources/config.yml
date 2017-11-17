@@ -10,6 +10,7 @@ Channels:
     - '##anotherchannel'
 Server:
     Hostname: 'chat.freenode.net'
+    SSL: true
     Port: 6667
     Auto-Reconnect: true
 SQL:

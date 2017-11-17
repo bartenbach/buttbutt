@@ -2,6 +2,9 @@ package net.alureon.ircbutt.handler;
 
 import net.alureon.ircbutt.IRCbutt;
 import org.pircbotx.Configuration;
+import org.pircbotx.cap.TLSCapHandler;
+
+import javax.net.ssl.SSLSocketFactory;
 
 public class BotConfigurationHandler {
 
@@ -23,6 +26,9 @@ public class BotConfigurationHandler {
                 .setListenerManager(butt.getListenerManager())
                 .addServer(butt.getYamlConfigurationFile().getServerHostname(), butt.getYamlConfigurationFile().getServerPort())
                 .setVersion(butt.getProgramVersion());
+        if (butt.getYamlConfigurationFile().getSSLEnabled()) {
+            configBuilder.setSocketFactory(SSLSocketFactory.getDefault());
+        }
         for (String x : butt.getYamlConfigurationFile().getChannelList()) {
             configBuilder.addAutoJoinChannel(x);
         }  // TODO this doesn't authenticate before joining channels
