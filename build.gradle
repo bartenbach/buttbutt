@@ -1,12 +1,14 @@
+/*
 plugins {
   id "com.github.spotbugs" version "1.6.0"
   id "com.github.mjdetullio.gradle.coverity" version "1.0.10"
-}
+} */
 apply plugin: 'java'
 apply plugin: 'idea'
 //apply plugin: 'checkstyle' this is so mad
 apply plugin: 'pmd'
 apply plugin: 'jacoco'
+
 
 repositories {
   mavenCentral()
@@ -62,9 +64,11 @@ tasks.withType(Checkstyle) {
   configFile = new File('config/checkstyle/google_checks.xml')
 }
 
+/*
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
   reports {
     xml.enabled = false
     html.enabled = true
   }
 }
+*/

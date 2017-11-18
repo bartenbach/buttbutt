@@ -44,118 +44,123 @@ public class CommandHandler {
         /* remove the '!' from the command */
         cmd[0] = cmd[0].replaceFirst("!", "");
 
-        String commandSubstituted = parseCommandSubstitutionAndVariables(butt, response, StringUtils.arrayToString(cmd), nick);
-        String[] commandSubstitutedArray = commandSubstituted.split(" ");
+        if (!cmd[0].equals("learn")) {
+            String commandSubstituted = parseCommandSubstitutionAndVariables(butt, response, StringUtils.arrayToString(cmd), nick);
+            String[] commandSubstitutedArray = commandSubstituted.split(" ");
 
-        /* switch of main bot commands */
-        String result = "";
-        switch (cmd[0]) {
-            case "rq":
-            case "grab":
-            case "q":
-            case "qinfo":
-            case "qi":
-            case "qsay":
-            case "qsearch":
-            case "qfind":
-            case "qf":
-            case "rqnouser":
-            case "rqn":
-                butt.getQuoteGrabHandler().handleQuoteGrabs(response, commandSubstitutedArray, user, nick);
-                break;
-            case "learn":
-            case "append":
-            case "forget":
-            case "fact":
-            case "factinfo":
-            case "factfind":
-            case "factsearch":
-            case "ffind":
-            case "fsearch":
-            case "finfo":
-            case "factbyid":
-            case "factid":
-            case "fid":
-            case "ff":
-            case "fi":
-            case "fs":
-                butt.getFactHandler().handleKnowledge(response, commandSubstitutedArray, user, nick);
-                break;
-            case "echo":
-                response.chat(StringUtils.getArgs(commandSubstitutedArray));
-                break;
-            case "g":
-                GoogleSearchHandler.handleGoogleSearch(butt, response, commandSubstitutedArray);
-                break;
-            case "give":
-                result = GiveHandler.handleGive(response, event, user, commandSubstitutedArray);
-                response.chat(result);
-                break;
-            case "rot13":
-            case "rot":
-                result = Rot13Handler.handleRot13(StringUtils.getArgs(commandSubstitutedArray));
-                response.chat(result);
-                break;
-            case "yt":
-                YouTubeHandler.getYouTubeVideo(butt, response, commandSubstitutedArray);
-                break;
-            case "ud":
-                UrbanDictionaryHandler.getDefinition(butt, response, commandSubstitutedArray);
-                break;
-            case "version":
-                response.chat(butt.getProgramVersion());
-                break;
-            case "dice":
-                DiceHandler.handleDice(event, response);
-                break;
-            case "random":
-                response.chat(String.valueOf(ButtMath.getRandom()));
-                break;
-            case "sqrt":
-            case "pow":
-                MathLib.handleMath(response, commandSubstitutedArray);
-                break;
-            case "check":
-                CheckHandler.handleCheck(response, StringUtils.getArgs(commandSubstitutedArray));
-                break;
-            case "define":
-                DefineHandler.handleDefine(butt, response, cmd[1]);
-                break;
-            case "invite":
-                InviteHandler.handleInvite(butt, StringUtils.getArgs(cmd).split(" "));
-                break;
-            case "more":
-                butt.getMoreHandler().handleMore(response);
-                break;
-            case "wr":
-                WakeRoomHandler.handleWakeRoom(response);
-                break;
-            case "eval":
-                Eval.eval(response, StringUtils.getArgs(cmd));
-                break;
-            case "karma":
-                KarmaHandler.getKarma(butt, response, user, StringUtils.getArgs(cmd));
-                break;
-            case "coin":
-                CoinHandler.handleCoin(response);
-                break;
-            case "gi":
-                GoogleImageSearchHandler.handleGoogleImageSearch(response, StringUtils.getArgs(cmd));
-                break;
-            case "8":
-            case "8ball":
-                MagicEightBallHandler.handleMagicEightBall(response);
-                break;
-            case "butt":
-            case "buttify":
-                String buttified = butt.getButtReplaceHandler().buttFormat(StringUtils.getArgs(commandSubstitutedArray));
-                response.chat(buttified);
-                break;
-            default:
-                break;
-        }
-        if (response.getIntention() == null) {
-            response.noResponse();
+            /* switch of main bot commands */
+            String result = "";
+            switch (cmd[0]) {
+                case "rq":
+                case "grab":
+                case "q":
+                case "qinfo":
+                case "qi":
+                case "qsay":
+                case "qsearch":
+                case "qfind":
+                case "qf":
+                case "rqnouser":
+                case "rqn":
+                    butt.getQuoteGrabHandler().handleQuoteGrabs(response, commandSubstitutedArray, user, nick);
+                    break;
+//              case "learn":
+                case "append":
+                case "forget":
+                case "fact":
+                case "factinfo":
+                case "factfind":
+                case "factsearch":
+                case "ffind":
+                case "fsearch":
+                case "finfo":
+                case "factbyid":
+                case "factid":
+                case "fid":
+                case "ff":
+                case "fi":
+                case "fs":
+                    butt.getFactHandler().handleKnowledge(response, commandSubstitutedArray, user, nick);
+                    break;
+                case "echo":
+                    response.chat(StringUtils.getArgs(commandSubstitutedArray));
+                    break;
+                case "g":
+                    GoogleSearchHandler.handleGoogleSearch(butt, response, commandSubstitutedArray);
+                    break;
+                case "give":
+                    result = GiveHandler.handleGive(response, event, user, commandSubstitutedArray);
+                    response.chat(result);
+                    break;
+                case "rot13":
+                case "rot":
+                    result = Rot13Handler.handleRot13(StringUtils.getArgs(commandSubstitutedArray));
+                    response.chat(result);
+                    break;
+                case "yt":
+                    YouTubeHandler.getYouTubeVideo(butt, response, commandSubstitutedArray);
+                    break;
+                case "ud":
+                    UrbanDictionaryHandler.getDefinition(butt, response, commandSubstitutedArray);
+                    break;
+                case "version":
+                    response.chat(butt.getProgramVersion());
+                    break;
+                case "dice":
+                    DiceHandler.handleDice(event, response);
+                    break;
+                case "random":
+                    response.chat(String.valueOf(ButtMath.getRandom()));
+                    break;
+                case "sqrt":
+                case "pow":
+                    MathLib.handleMath(response, commandSubstitutedArray);
+                    break;
+                case "check":
+                    CheckHandler.handleCheck(response, StringUtils.getArgs(commandSubstitutedArray));
+                    break;
+                case "define":
+                    DefineHandler.handleDefine(butt, response, cmd[1]);
+                    break;
+                case "invite":
+                    InviteHandler.handleInvite(butt, StringUtils.getArgs(cmd).split(" "));
+                    break;
+                case "more":
+                    butt.getMoreHandler().handleMore(response);
+                    break;
+                case "wr":
+                    WakeRoomHandler.handleWakeRoom(response);
+                    break;
+                case "eval":
+                    Eval.eval(response, StringUtils.getArgs(cmd));
+                    break;
+                case "karma":
+                    KarmaHandler.getKarma(butt, response, user, StringUtils.getArgs(cmd));
+                    break;
+                case "coin":
+                    CoinHandler.handleCoin(response);
+                    break;
+                case "gi":
+                    GoogleImageSearchHandler.handleGoogleImageSearch(response, StringUtils.getArgs(cmd));
+                    break;
+                case "8":
+                case "8ball":
+                    MagicEightBallHandler.handleMagicEightBall(response);
+                    break;
+                case "butt":
+                case "buttify":
+                    String buttified = butt.getButtReplaceHandler().buttFormat(StringUtils.getArgs(commandSubstitutedArray));
+                    response.chat(buttified);
+                    break;
+                default:
+                    break;
+            }
+            if (response.getIntention() == null) {
+                response.noResponse();
+            }
+        } else {
+            butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
+            return;
         }
     }
 
