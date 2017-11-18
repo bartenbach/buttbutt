@@ -172,6 +172,8 @@ public class QuoteGrabHandler {
                     }
                 }
                 break;
+            default:
+                break;
         }
     }
 }

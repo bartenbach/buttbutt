@@ -22,6 +22,8 @@ public class MathLib {
                 double y = Double.parseDouble(cmd[2]);
                 f = pow(x, y);
                 break;
+            default:
+                return;
         }
         response.chat(String.valueOf(f));
     }

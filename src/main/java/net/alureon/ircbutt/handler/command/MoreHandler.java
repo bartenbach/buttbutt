@@ -7,7 +7,7 @@ public class MoreHandler {
 
 
     private final ArrayList<String> more = new ArrayList<>();
-    private final String defaultNoMore = "butt don't have any more";
+    private static final String defaultNoMore = "butt don't have any more";
     private String noMore = defaultNoMore;
 
     public void addMore(String more) {

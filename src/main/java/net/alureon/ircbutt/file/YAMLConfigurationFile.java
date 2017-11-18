@@ -37,6 +37,8 @@ public class YAMLConfigurationFile {
             try {
                 exportResource("/config.yml");
                 log.info("Created new config.yml file in the current directory.");
+                log.info("Please edit the config file and fill in the appropriate details");
+                System.exit(0);
             } catch (Exception ex) {
                 log.error("Unable to copy configuration file: ", ex);
             }
@@ -93,6 +95,7 @@ public class YAMLConfigurationFile {
                 resStreamOut.write(buffer, 0, readBytes);
             }
         } catch (IOException ex) {
+            log.error("Failed to export config file!");
             throw ex;
         } finally {
             if (stream != null) {

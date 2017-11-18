@@ -150,6 +150,9 @@ public class CommandHandler {
             case "buttify":
                 String buttified = butt.getButtReplaceHandler().buttFormat(StringUtils.getArgs(commandSubstitutedArray));
                 response.chat(buttified);
+                break;
+            default:
+                break;
         }
         if (response.getIntention() == null) {
             response.noResponse();
@@ -163,11 +166,7 @@ public class CommandHandler {
             String command = m.group().substring(2, m.group().length() - 1);
             BotResponse botResponse = new BotResponse(response.getEvent());
             butt.getCommandHandler().handleCommand(response.getEvent(), command.split(" "), botResponse);
-            if (botResponse.toString() != null) {
-                input = input.replaceFirst(Pattern.quote(m.group()), botResponse.toString());
-            } else {
-                botResponse.privateMessage(response.getRecipient(), "butt didnt get this part: " + m.group());
-            }
+            input = input.replaceFirst(Pattern.quote(m.group()), botResponse.toString());
         }
         return input.replaceAll("\\$USER", nick);
     }

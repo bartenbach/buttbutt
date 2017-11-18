@@ -1,12 +1,27 @@
 package net.alureon.ircbutt.util;
 
-public class StringUtils {
+/**
+ * StringUtils provides many convenience methods for working with String arrays and String objects.
+ */
+public final class StringUtils {
 
-    public static String arrayToString(String[] args) {
+    /**
+     * This constructor is private to prevent object creation for a Utility class.
+     */
+    private StringUtils() {
+
+    }
+
+    /**
+     *
+     * @param args - The string array to convert to a String
+     * @return - The array converted to a String
+     */
+    public static String arrayToString(final String[] args) {
         return String.join(" ", args);
     }
 
-    public static String getArgs(String[] args) {
+    public static String getArgs(final String[] args) {
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i < args.length; i++) {
             String x = args[i];
@@ -18,7 +33,7 @@ public class StringUtils {
         return sb.toString();
     }
 
-    public static String getArgsOverOne(String[] args) {
+    public static String getArgsOverOne(final String[] args) {
         StringBuilder sb = new StringBuilder();
         for (int i = 2; i < args.length; i++) {
             String x = args[i];

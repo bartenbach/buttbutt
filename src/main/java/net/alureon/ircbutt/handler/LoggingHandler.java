@@ -7,7 +7,7 @@ import org.slf4j.impl.SimpleLogger;
 public class LoggingHandler {
 
 
-    private static Logger log;
+    private static Logger log = LoggerFactory.getLogger(LoggingHandler.class);
 
 
     public LoggingHandler(String loglevel) {
@@ -20,7 +20,6 @@ public class LoggingHandler {
         System.setProperty(SimpleLogger.WARN_LEVEL_STRING_KEY, "WARNING");
         /* If I log to file, SimpleLogger no longer logs to the console... */
         //System.setProperty(SimpleLogger.LOG_FILE_KEY, "bot.log");
-        log = LoggerFactory.getLogger(LoggingHandler.class);
     }
 
     public static void logCurrentLogLevel() {

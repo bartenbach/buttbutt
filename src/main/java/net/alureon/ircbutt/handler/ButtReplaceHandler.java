@@ -15,7 +15,7 @@ public class ButtReplaceHandler {
     public String buttFormat(String message) {
         String[] split = message.split(" ");
         replaceButt(split);
-        int x = (int) Math.ceil(split.length / 8);
+        int x = (int) Math.ceil(split.length / 8.0);
         for (int i = 1; i < x; i++) {
             attemptReplace(split);
         }
