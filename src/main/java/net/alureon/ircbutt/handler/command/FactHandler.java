@@ -88,7 +88,7 @@ public class FactHandler {
             butt.getMoreHandler().clearMore();
             String info = butt.getFactTable().findFact(StringUtils.getArgs(cmd));
             if (info != null) {
-                response.highlightChat(user, info);
+                response.chat(info);
             } else {
                 response.highlightChat(user, "butt find nothing");
             }
