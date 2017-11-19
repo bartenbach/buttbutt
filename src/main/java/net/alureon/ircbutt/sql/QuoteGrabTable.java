@@ -21,11 +21,11 @@ public class QuoteGrabTable {
 
     public void addQuote(String nick, String quote, String grabber) {
         String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` (user,quote,grabbed_by) VALUES(?,?,?)";
-        try(PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
-        log.trace(nick + quote + grabber);
-        Object[] objects = { nick, quote, grabber };
-        butt.getSqlManager().prepareStatement(ps, objects);
-        ps.executeUpdate();
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
+            log.trace(nick + quote + grabber);
+            Object[] objects = {nick, quote, grabber};
+            butt.getSqlManager().prepareStatement(ps, objects);
+            ps.executeUpdate();
         } catch (SQLException ex) {
             log.error("SQL Exception has occurred. StackTrace:", ex);
         }
@@ -38,10 +38,11 @@ public class QuoteGrabTable {
         ps.setString(1, playerName);
         ps.setString(2, quote);
         ResultSet rs = ps.executeQuery();
-        if (rs.next())
+        rs.close();
+        if (rs.next()) {
             return true;
-        else
-            return false;
+        }
+        return false;
     }
 
     public String getRandomQuoteAndUser() {
@@ -83,8 +84,10 @@ public class QuoteGrabTable {
         if (rs.next()) {
             String user = rs.getString("user");
             String quote = rs.getString("quote");
+            rs.close();
             return restructureQuote(id, user, quote);
         }
+        rs.close();
         return null;
     }
 
@@ -98,8 +101,10 @@ public class QuoteGrabTable {
             int id = rs.getInt("id");
             String user = rs.getString("user");
             String quote = rs.getString("quote");
+            rs.close();
             return restructureQuote(id, user, quote);
         }
+        rs.close();
         return null;
     }
 
@@ -110,8 +115,10 @@ public class QuoteGrabTable {
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             String quote = rs.getString("quote");
+            rs.close();
             return restructureQuote(username, quote);
         }
+        rs.close();
         return null;
     }
 
@@ -121,8 +128,11 @@ public class QuoteGrabTable {
         ps.setString(1, username);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
-            return rs.getString("quote");
+            String value = rs.getString("quote");
+            rs.close();
+            return value;
         }
+        rs.close();
         return null;
     }
 
@@ -141,20 +151,24 @@ public class QuoteGrabTable {
             String[] quotes = new String[2];
             quotes[0] = formattedQuote;
             quotes[1] = quoteInfo;
+            rs.close();
             return quotes;
         }
+        rs.close();
         return null;
     }
 
     public String getLastQuoteFromPlayer(String username) throws SQLException {
-        String query = "SELECT * FROM `" +butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY id DESC LIMIT 1";
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY id DESC LIMIT 1";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setString(1, username);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             String quote = rs.getString("quote");
+            rs.close();
             return restructureQuote(username, quote);
         }
+        rs.close();
         return null;
     }
 

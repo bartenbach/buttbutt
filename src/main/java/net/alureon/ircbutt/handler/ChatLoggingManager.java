@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class ChatLoggingManager {
 
 
-    private HashMap<String,String> messageLog = new HashMap<>();
+    private HashMap<String, String> messageLog = new HashMap<>();
 
 
     void logMessage(String nick, String message) {

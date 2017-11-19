@@ -9,12 +9,14 @@ import org.slf4j.LoggerFactory;
 public class KarmaHandler {
 
 
-    private static String[] karmaEndings = { "--;", "++;", "++", "--" };
+    private static String[] karmaEndings = {"--;", "++;", "++", "--"};
     private final static Logger log = LoggerFactory.getLogger(KarmaHandler.class);
 
 
     public static void handleKarma(IRCbutt butt, BotResponse response, User user, String message) {
-        if (message.contains(" ")) { return; }
+        if (message.contains(" ")) {
+            return;
+        }
         for (String x : karmaEndings) {
             if (message.endsWith(x)) {
                 Karma karma = new Karma();

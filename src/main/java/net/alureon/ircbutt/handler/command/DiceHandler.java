@@ -8,6 +8,8 @@ import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
+import java.util.Random;
+
 public class DiceHandler {
 
     public static void handleDice(GenericMessageEvent event, BotResponse response) {
@@ -16,7 +18,8 @@ public class DiceHandler {
             ImmutableSortedSet<User> users = channel.getUsers();
             String victimName = "";
             int totalUsers = users.size();
-            int victimIndex = (int) (Math.random()*totalUsers);
+            Random random = new Random();
+            int victimIndex = random.nextInt(totalUsers);
             int i = 0;
             for (User u : users) {
                 if (i < victimIndex) {
@@ -28,7 +31,7 @@ public class DiceHandler {
             }
 
             String message1;
-            if ((Math.random()*100) < 50) {
+            if ((Math.random() * 100) < 50) {
                 message1 = Colors.WHITE + "rolls a huge " + totalUsers + " sided die and it flattens " + Colors.YELLOW + victimName
                         + Colors.WHITE + " before coming to a halt on " + Colors.RED + "YOU LOSE" + Colors.NORMAL;
             } else {

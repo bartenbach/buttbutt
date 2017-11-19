@@ -40,7 +40,7 @@ public class GoogleSearchHandler {
                     continue; // Ads/news/etc.
                 }
 
-                if (i==0) {
+                if (i == 0) {
                     response.chat("Title: " + title, url);
                 } else {
                     butt.getMoreHandler().addMore("Title: " + title + " " + url);

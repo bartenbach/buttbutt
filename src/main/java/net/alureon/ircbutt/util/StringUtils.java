@@ -13,7 +13,6 @@ public final class StringUtils {
     }
 
     /**
-     *
      * @param args - The string array to convert to a String
      * @return - The array converted to a String
      */

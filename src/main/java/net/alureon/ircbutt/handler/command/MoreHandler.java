@@ -1,7 +1,8 @@
 package net.alureon.ircbutt.handler.command;
 
-import java.util.ArrayList;
 import net.alureon.ircbutt.BotResponse;
+
+import java.util.ArrayList;
 
 public class MoreHandler {
 
@@ -17,7 +18,7 @@ public class MoreHandler {
     void setNoMore(String more) {
         this.noMore = more;
     }
-    
+
     public void handleMore(BotResponse response) {
         if (!this.more.isEmpty()) {
             String e = this.more.get(0);

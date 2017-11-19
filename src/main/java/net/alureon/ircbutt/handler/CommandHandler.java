@@ -24,7 +24,7 @@ public class CommandHandler {
         this.butt = butt;
     }
 
-    public void handleCommand(GenericMessageEvent event, String[] cmd, BotResponse response) {
+    void handleCommand(GenericMessageEvent event, String[] cmd, BotResponse response) {
         /* For the sake of clearer code, let's just set these immediately */
         User user = event.getUser();
         String nick = user.getNick();
@@ -49,7 +49,7 @@ public class CommandHandler {
             String[] commandSubstitutedArray = commandSubstituted.split(" ");
 
             /* switch of main bot commands */
-            String result = "";
+            String result;
             switch (cmd[0]) {
                 case "rq":
                 case "grab":
@@ -64,7 +64,6 @@ public class CommandHandler {
                 case "rqn":
                     butt.getQuoteGrabHandler().handleQuoteGrabs(response, commandSubstitutedArray, user, nick);
                     break;
-//              case "learn":
                 case "append":
                 case "forget":
                 case "fact":
@@ -160,11 +159,10 @@ public class CommandHandler {
             }
         } else {
             butt.getFactHandler().handleKnowledge(response, cmd, user, nick);
-            return;
         }
     }
 
-    public static String parseCommandSubstitutionAndVariables(IRCbutt butt, BotResponse response, String input, String nick) {
+    static String parseCommandSubstitutionAndVariables(IRCbutt butt, BotResponse response, String input, String nick) {
         Pattern p = Pattern.compile("\\$\\([^)]*\\)");
         Matcher m = p.matcher(input);
         while (m.find()) {

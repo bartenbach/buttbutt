@@ -48,12 +48,11 @@ public class YAMLConfigurationFile {
     @SuppressWarnings("unchecked")  // if the user fucks the config up that's their problem
     public void parseConfig() {
         Yaml yaml = new Yaml();
-        try {
-            InputStream is = new FileInputStream(config);
-            Map<String,Object> map = (Map<String,Object>) yaml.load(is);
-            Map<String,Object> botSettings = (Map<String,Object>) map.get("Bot");
-            Map<String,Object> serverSettings = (Map<String,Object>) map.get("Server");
-            Map<String,Object> sqlSettings = (Map<String,Object>) map.get("SQL");
+        try (InputStream is = new FileInputStream(config)) {
+            Map<String, Object> map = (Map<String, Object>) yaml.load(is);
+            Map<String, Object> botSettings = (Map<String, Object>) map.get("Bot");
+            Map<String, Object> serverSettings = (Map<String, Object>) map.get("Server");
+            Map<String, Object> sqlSettings = (Map<String, Object>) map.get("SQL");
             this.channelList = (List<String>) map.get("Channels");
             this.botName = (String) botSettings.get("Name");
             this.botLogin = (String) botSettings.get("Login");
@@ -74,6 +73,9 @@ public class YAMLConfigurationFile {
         } catch (FileNotFoundException ex) {
             log.error("config.yml not found!", ex);
             System.exit(1);
+        } catch (IOException ex) {
+            log.error("Failed to parse config!", ex);
+            System.exit(1);
         }
         log.info("[Configuration file loaded]");
     }
@@ -84,7 +86,7 @@ public class YAMLConfigurationFile {
         String jarFolder;
         try {
             stream = YAMLConfigurationFile.class.getResourceAsStream(resourceName);
-            if(stream == null) {
+            if (stream == null) {
                 throw new Exception("Cannot get resource \"" + resourceName + "\" from Jar file.");
             }
             int readBytes;

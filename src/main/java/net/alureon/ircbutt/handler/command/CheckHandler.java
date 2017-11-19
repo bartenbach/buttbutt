@@ -9,7 +9,7 @@ public class CheckHandler {
         StringBuilder sb = new StringBuilder("Testing ");
         sb.append(checking).append(": ");
 
-        double random = Math.random()*100;
+        double random = Math.random() * 100;
         String result;
         if (random < 2) {
             result = Colors.WHITE + "[" + Colors.YELLOW + "PANIC" + Colors.WHITE + "]";

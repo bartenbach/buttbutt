@@ -33,7 +33,7 @@ public class UrbanDictionaryHandler {
                 Document doc = Jsoup.connect(link).userAgent(userAgent).get();
                 Elements meanings = doc.getElementsByClass("meaning");
                 try {
-                    int size =  meanings.size();
+                    int size = meanings.size();
                     for (int i = 0; i < size; i++) {
                         Element meaning = meanings.get(i);
                         if (i == 0) {

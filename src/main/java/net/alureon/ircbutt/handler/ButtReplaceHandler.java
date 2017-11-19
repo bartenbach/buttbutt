@@ -36,8 +36,8 @@ public class ButtReplaceHandler {
     }
 
     private boolean replaceButt(String[] split) {
-        int replace = (int) (Math.random()*split.length);
-        if(!isAWordWeDontReplace(split[replace])) {
+        int replace = (int) (Math.random() * split.length);
+        if (!isAWordWeDontReplace(split[replace])) {
             if (split[replace].equalsIgnoreCase(butt.getYamlConfigurationFile().getBotName())) {
                 split[replace] = randomize();
                 return true;
@@ -146,7 +146,7 @@ public class ButtReplaceHandler {
     }
 
     private String randomize() {
-        double ran = Math.random()*100;
+        double ran = Math.random() * 100;
         if (ran < 80) {
             return "butt";
         }

@@ -32,16 +32,16 @@ public class FactTable {
 
     public String queryKnowledge(String item) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE item=?";
-        try(PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
-        Object[] objects = { item };
-        butt.getSqlManager().prepareStatement(ps, objects);
-        ResultSet rs = butt.getSqlManager().getResultSet(ps);
-                if (rs.next()) {
-                    return rs.getString("data");
-                }
-            } catch (SQLException ex) {
-                log.error("Failed to query knowledge database. StackTrace:", ex);
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
+            Object[] objects = {item};
+            butt.getSqlManager().prepareStatement(ps, objects);
+            ResultSet rs = butt.getSqlManager().getResultSet(ps);
+            if (rs.next()) {
+                return rs.getString("data");
             }
+        } catch (SQLException ex) {
+            log.error("Failed to query knowledge database. StackTrace:", ex);
+        }
         return null;
     }
 
@@ -80,8 +80,10 @@ public class FactTable {
                 int id = rs.getInt("id");
                 String user = rs.getString("added_by");
                 String time = rs.getString("timestamp");
+                rs.close();
                 return "(" + id + ") " + name + ": added by " + user + " on " + time;
             }
+            rs.close();
         } catch (SQLException ex) {
             log.error("SQL Exception.  StackTrace:", ex);
         }
@@ -92,16 +94,17 @@ public class FactTable {
         butt.getMoreHandler().clearMore();
         String firstResult = null;
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE data LIKE ? LIMIT 24";
-        try(PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             ps.setString(1, "%" + search + "%");
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 firstResult = getFormattedFact(rs);
                 while (rs.next()) {
-                     butt.getMoreHandler().addMore(getFormattedFact(rs));
+                    butt.getMoreHandler().addMore(getFormattedFact(rs));
                 }
             }
-                //todo try to find a fact with similar name?
+            rs.close();
+            //todo try to find a fact with similar name?
         } catch (SQLException ex) {
             log.error("SQL Exception, ", ex);
         }
@@ -121,8 +124,10 @@ public class FactTable {
                 int id = rs.getInt("id");
                 String item = rs.getString("item");
                 String data = rs.getString("data");
+                rs.close();
                 return "(" + id + ") " + item + ": " + data;
             }
+            rs.close();
         } catch (SQLException ex) {
             log.error("SQL Exception, ", ex);
         }

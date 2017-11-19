@@ -5,7 +5,7 @@ import net.alureon.ircbutt.BotResponse;
 public class CoinHandler {
 
     public static void handleCoin(BotResponse response) {
-        double random = Math.random()*100;
+        double random = Math.random() * 100;
         String result;
         if (random < 2) {
             result = "penis";

@@ -67,13 +67,13 @@ public class FactHandler {
                 butt.getMessageHandler().handleInvalidCommand(user);
             }
         } else if (cmd[0].equals("fact")) {
-                String info = butt.getFactTable().getRandomData();
-                if (info != null) {
-                    response.chat(info);
-                } else {
-                    response.noResponse();
-                    butt.getMessageHandler().handleInvalidCommand(user);
-                }
+            String info = butt.getFactTable().getRandomData();
+            if (info != null) {
+                response.chat(info);
+            } else {
+                response.noResponse();
+                butt.getMessageHandler().handleInvalidCommand(user);
+            }
         } else if (cmd[0].equals("factinfo") || cmd[0].equals("finfo") || cmd[0].equals("fi")) {
             String info = butt.getFactTable().getFactInfo(StringUtils.getArgs(cmd));
             if (info != null) {
@@ -113,7 +113,9 @@ public class FactHandler {
         if (data.length > 2) {
             String command = StringUtils.getArgs(data);
             String[] split = command.split(" ", 2);
-            if (split[0].endsWith(":")) { split[0] = split[0].replace(":",""); } //backwards compatibility
+            if (split[0].endsWith(":")) {
+                split[0] = split[0].replace(":", "");
+            } //backwards compatibility
             String item = split[0].substring(0, split[0].length()).trim();
             if (getFact(item) == null) {
                 String information = StringUtils.getArgsOverOne(data);

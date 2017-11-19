@@ -65,9 +65,9 @@ public class SqlManager {
         this.connectToDatabase();
     }
 
- //   public Connection getConnection() {
- //       return this.connection;
- //   }
+    //   public Connection getConnection() {
+    //       return this.connection;
+    //   }
 
     public PreparedStatement getPreparedStatement(String query) {
         checkConnection();
@@ -79,14 +79,14 @@ public class SqlManager {
         }
     }
 
-    void prepareStatement(PreparedStatement ps, Object ... objects) {
+    void prepareStatement(PreparedStatement ps, Object... objects) {
         checkConnection();
         try {
-            for (int i = 0 ; i < objects.length ; i++) {
+            for (int i = 0; i < objects.length; i++) {
                 if (objects[i] instanceof String) {
-                    ps.setString((i+1), (String) objects[i]);
+                    ps.setString((i + 1), (String) objects[i]);
                 } else {
-                    ps.setInt((i+1), Integer.parseInt(String.valueOf(objects[i])));
+                    ps.setInt((i + 1), Integer.parseInt(String.valueOf(objects[i])));
                 }
             }
         } catch (SQLException ex) {

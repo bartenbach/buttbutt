@@ -1,9 +1,7 @@
 package net.alureon.ircbutt.handler.command;
 
 import com.google.common.collect.ImmutableSortedSet;
-import net.alureon.ircbutt.BotIntention;
 import net.alureon.ircbutt.BotResponse;
-import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.StringUtils;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -32,7 +30,7 @@ public class GiveHandler {
     private static boolean recipientExists(MessageEvent event, String recipient) {
         ImmutableSortedSet<User> users = event.getChannel().getUsers();
         for (User x : users) {
-            if(x.getNick().equals(recipient))
+            if (x.getNick().equals(recipient))
                 return true;
         }
         return false;

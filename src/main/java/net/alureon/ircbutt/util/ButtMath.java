@@ -1,14 +1,18 @@
 package net.alureon.ircbutt.util;
 
+import java.util.Random;
+
 public class ButtMath {
 
     public static boolean isRandomResponseTime() {
-        int test = (int) (Math.random()*150);
-        return test==0;
+        Random random = new Random();
+        int test = random.nextInt(151);
+        return test == 0;
     }
 
     public static int getRandom() {
-        return (int) (Math.random() * 100);
+        Random random = new Random();
+        return random.nextInt(101);
     }
 
 }

@@ -24,11 +24,13 @@ public class KarmaTable {
     private boolean itemExists(String item) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` WHERE item=?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
-        ps.setString(1, item);
-        ResultSet rs = ps.executeQuery();
+            ps.setString(1, item);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
+                rs.close();
                 return true;
             }
+            rs.close();
         } catch (SQLException ex) {
             log.error("KarmaTable: SQL Exception, ", ex);
         }
@@ -38,13 +40,7 @@ public class KarmaTable {
     void decrementKarma(Karma karma, User user, BotResponse response) {
         if (itemExists(karma.getItem())) {
             String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` SET karma = karma -1 WHERE item=?";
-            try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
-                ps.setString(1, karma.getItem());
-                ps.executeUpdate();
-            } catch (SQLException ex) {
-                log.error("KarmaTable ", ex);
-                response.privateMessage(user, "failed to update karma :(");
-            }
+            updateKarma(update, karma, response, user);
         } else {
             String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` (item,karma) VALUES(?,?)";
             try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
@@ -64,8 +60,11 @@ public class KarmaTable {
             ps.setString(1, item);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getInt("karma");
+                int result = rs.getInt("karma");
+                rs.close();
+                return result;
             }
+            rs.close();
         } catch (SQLException ex) {
             log.error("KarmaTable: SQL Exception, ", ex);
         }
@@ -75,13 +74,7 @@ public class KarmaTable {
     void incrementKarma(Karma karma, User user, BotResponse response) {
         if (itemExists(karma.getItem())) {
             String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` SET karma = karma +1 WHERE item=?";
-            try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
-                ps.setString(1, karma.getItem());
-                ps.executeUpdate();
-            } catch (SQLException ex) {
-                log.error("KarmaTable ", ex);
-                response.privateMessage(user, "failed to update karma :(");
-                }
+            updateKarma(update, karma, response, user);
         } else {
             String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` (item,karma) VALUES(?,?)";
             try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
@@ -92,6 +85,16 @@ public class KarmaTable {
                 log.error("KarmaTable ", ex);
                 response.privateMessage(user, "failed to update karma :(");
             }
+        }
+    }
+
+    private void updateKarma(String update, Karma karma, BotResponse response, User user) {
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
+            ps.setString(1, karma.getItem());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            log.error("KarmaTable ", ex);
+            response.privateMessage(user, "failed to update karma :(");
         }
     }
 }

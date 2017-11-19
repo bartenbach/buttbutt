@@ -11,57 +11,57 @@ apply plugin: 'jacoco'
 
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 configurations {
-  provided
+    provided
     compile.extendsFrom provided
 }
 
 dependencies {
-  compile 'com.google.guava:guava:18.0'
-  compile 'org.pircbotx:pircbotx:2.1'
-  compile 'org.slf4j:slf4j-simple:1.7.9'
-  compile 'org.apache.commons:commons-lang3:3.4'
-  compile 'org.yaml:snakeyaml:1.14'
-  compile 'mysql:mysql-connector-java:5.1.36'
-  compile 'junit:junit:4.12-beta-3'
-  compile 'com.google.code.gson:gson:2.3.1'
-  compile 'org.jsoup:jsoup:1.8.3'
-  compile 'net.sourceforge.jeval:jeval:0.9.4'
+    compile 'com.google.guava:guava:18.0'
+    compile 'org.pircbotx:pircbotx:2.1'
+    compile 'org.slf4j:slf4j-simple:1.7.9'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'org.yaml:snakeyaml:1.14'
+    compile 'mysql:mysql-connector-java:5.1.36'
+    compile 'junit:junit:4.12-beta-3'
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'org.jsoup:jsoup:1.8.3'
+    compile 'net.sourceforge.jeval:jeval:0.9.4'
 }
 
 sourceCompatibility = 1.8
 version = '0.4.2-indev'
 
 jar {
-  dependsOn configurations.runtime
-  from {
-    (configurations.runtime - configurations.provided).collect {
-      it.isDirectory() ? it : zipTree(it)
+    dependsOn configurations.runtime
+    from {
+        (configurations.runtime - configurations.provided).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    } {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
     }
-  } {
-    exclude "META-INF/*.SF"
-    exclude "META-INF/*.DSA"
-    exclude "META-INF/*.RSA"
-  }
-  manifest {
-    attributes 'Implementation-Title': 'IRCbutt',
-               'Implementation-Version': version,
-               'Implementation-Vendor': 'http://github.com/proxa/IRCbutt',
-               'Main-Class': 'net.alureon.ircbutt.Main',
-               'Built-By': System.properties['user.name']
-  }
+    manifest {
+        attributes 'Implementation-Title': 'IRCbutt',
+                'Implementation-Version': version,
+                'Implementation-Vendor': 'http://github.com/proxa/IRCbutt',
+                'Main-Class': 'net.alureon.ircbutt.Main',
+                'Built-By': System.properties['user.name']
+    }
 }
 
 tasks.withType(JavaCompile) {
-  options.compilerArgs += [ '-Xlint:all', '-Xlint:-path' ]
-  options.deprecation = true
-  options.encoding = 'utf8'
+    options.compilerArgs += ['-Xlint:all', '-Xlint:-path']
+    options.deprecation = true
+    options.encoding = 'utf8'
 }
 
 tasks.withType(Checkstyle) {
-  configFile = new File('config/checkstyle/google_checks.xml')
+    configFile = new File('config/checkstyle/google_checks.xml')
 }
 
 /*
