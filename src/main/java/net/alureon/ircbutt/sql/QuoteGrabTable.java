@@ -38,10 +38,11 @@ public class QuoteGrabTable {
         ps.setString(1, playerName);
         ps.setString(2, quote);
         ResultSet rs = ps.executeQuery();
-        rs.close();
         if (rs.next()) {
+            rs.close();
             return true;
         }
+        rs.close();
         return false;
     }
 
