@@ -18,7 +18,7 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-core:2.9.1'
     compile 'org.yaml:snakeyaml:1.14'
     compile 'mysql:mysql-connector-java:5.1.36'
-    compile 'junit:junit:4.12-beta-3'
+    testCompile 'junit:junit:4.12-beta-3'
     compile 'org.jsoup:jsoup:1.8.3'
     compile 'net.sourceforge.jeval:jeval:0.9.4'
 }
@@ -54,4 +54,11 @@ tasks.withType(JavaCompile) {
 
 tasks.withType(Checkstyle) {
     configFile = new File('config/checkstyle/google_checks.xml')
+}
+
+// more informative tests
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
 }
