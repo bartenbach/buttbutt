@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/proxa/IRCbutt.svg?branch=master)](https://travis-ci.org/proxa/IRCbutt)
 
 # IRCbutt
-A Java port of buttbot, with various other functionality.
+A Java IRC bot inspired by buttbot, with various other functionality.
 
 Original ideas, and some borrowed from phrik from #archlinux on freenode
 
@@ -15,15 +15,17 @@ You can test it here: http://alureon.net/irc/
 
 (Or you can just join #afterlunch on freenode)
 
-Download builds here: http://alureon.net/ircbutt (or check the releases tab on Github)
+Download builds here: http://alureon.net/ircbutt
 
 ## Running
 
 Run with `java -jar IRCbutt*.jar`
 
-You can specify a log level as an argument.  Supported levels are TRACE, DEBUG, INFO, WARNING, ERROR, or INFO.  The default log level is INFO.
+~~You can specify a log level as an argument.  Supported levels are TRACE, DEBUG, INFO, WARNING, ERROR, or INFO.  The default log level is INFO.~~
 
-`java -jar IRCbutt*.jar DEBUG`
+~~`java -jar IRCbutt*.jar DEBUG`~~
+
+As of version 0.4.4, this project has switched to log4j.  This is no longer supported.
 
 ## Usage:
 Most commands start with `!` followed by the command name, then arguments.
@@ -39,6 +41,8 @@ You don't include the brackets `<>`
 
 `!gi <query>`           -  Google Image Search
 
+`!buttify <query`       -  Replace random words in the text with 'butt' (for mature audiences only)
+
 `!check <query>`        -  Get a random response on whether or not something passes or fails
 
 `!coin <query>`         -  Get a random heads or tails response
@@ -53,7 +57,7 @@ You don't include the brackets `<>`
 
 `!define <query>`       -  Get the definition of a word from Merriam Webster
 
-`!rot13 <query>`        -  Get the rot13 equivalent of `<query>`
+`!rot13 <query>`        -  Get the rot13 equivalent of `<query>`.  Alias: !rot
 
 `!wr`                   -  Wake the room!  Ping everbody in the room.
 
@@ -108,6 +112,6 @@ You don't include the brackets `<>`
 ## Special Thanks:
 - *BullShark* - for ideas, showing me buttbot, and the name 'buttbutt'
 - *Klong* - for tons of contributions and several commits
-- *ebolahats* - for being a rubber duck
+- *ebolahats* - for being a rubber duck and for several commits
 - *MandL27* - for breaking the bot and pointing out what's annoying
 
