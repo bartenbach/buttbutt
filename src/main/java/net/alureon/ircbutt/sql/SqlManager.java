@@ -1,8 +1,8 @@
 package net.alureon.ircbutt.sql;
 
 import net.alureon.ircbutt.IRCbutt;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 
@@ -11,7 +11,7 @@ public class SqlManager {
 
     private Connection connection;
     private IRCbutt butt;
-    private final static Logger log = LoggerFactory.getLogger(SqlManager.class);
+    private final static Logger log = LogManager.getLogger();
 
 
     public SqlManager(IRCbutt butt) {

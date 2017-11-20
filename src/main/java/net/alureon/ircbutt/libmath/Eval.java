@@ -3,13 +3,13 @@ package net.alureon.ircbutt.libmath;
 import net.alureon.ircbutt.BotResponse;
 import net.sourceforge.jeval.EvaluationException;
 import net.sourceforge.jeval.Evaluator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Eval {
 
 
-    private final static Logger log = LoggerFactory.getLogger(Eval.class);
+    private final static Logger log = LogManager.getLogger(Eval.class);
 
 
     public static void eval(BotResponse response, String eval) {

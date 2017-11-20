@@ -5,17 +5,17 @@ import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.handler.command.karma.KarmaHandler;
 import net.alureon.ircbutt.util.ButtMath;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class MessageHandler {
 
 
     private IRCbutt butt;
-    private final static Logger log = LoggerFactory.getLogger(MessageHandler.class);
+    private final static Logger log = LogManager.getLogger();
 
 
     public MessageHandler(IRCbutt butt) {

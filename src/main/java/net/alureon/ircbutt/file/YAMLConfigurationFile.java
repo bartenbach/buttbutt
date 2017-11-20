@@ -1,7 +1,7 @@
 package net.alureon.ircbutt.file;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
@@ -12,7 +12,7 @@ public class YAMLConfigurationFile {
 
 
     private final static File config = new File("config.yml");
-    private final static Logger log = LoggerFactory.getLogger(YAMLConfigurationFile.class);
+    private final static Logger log = LogManager.getLogger();
     private String botName;
     private String botLogin;
     private String botPassword;

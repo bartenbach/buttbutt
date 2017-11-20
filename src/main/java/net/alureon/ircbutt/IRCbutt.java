@@ -1,7 +1,7 @@
 package net.alureon.ircbutt;
 
 /**
- * Copyright Blake Bartenbach 2014-2016
+ * Copyright Blake Bartenbach 2014-2017
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -27,21 +27,20 @@ import net.alureon.ircbutt.listener.PrivateMessageListener;
 import net.alureon.ircbutt.sql.FactTable;
 import net.alureon.ircbutt.sql.QuoteGrabTable;
 import net.alureon.ircbutt.sql.SqlManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.managers.ListenerManager;
 import org.pircbotx.hooks.managers.ThreadedListenerManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class IRCbutt {
-
 
     /* Program-related constants */
     private final String programVersion = this.getClass().getPackage().getImplementationVersion();
 
     /* Logger */
-    private final static Logger log = LoggerFactory.getLogger(IRCbutt.class);
+    private final static Logger log = LogManager.getLogger();
 
     /* Class instantiation */
     private BotChatHandler botChatHandler = new BotChatHandler();
