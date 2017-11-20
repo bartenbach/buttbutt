@@ -6,21 +6,21 @@ import static org.junit.Assert.assertEquals;
 public class StringUtilsTest {
 
 
-    private final String[] args = { "x", "y", "z"};
+    private final String[] args = { " x", "y", "z "};
 
     @Test
     public void testArrayToString() {
-        assertEquals(StringUtils.arrayToString(args), "x y z");
+        assertEquals("x y z", StringUtils.arrayToString(args));
     }
 
     @Test
     public void testGetArgs() {
-        assertEquals(StringUtils.getArgs(args), "y z");
+        assertEquals("y z", StringUtils.getArgs(args));
     }
 
     @Test
     public void testGetArgsOverOne() {
-        assertEquals(StringUtils.getArgsOverOne(args), "z");
+        assertEquals("z", StringUtils.getArgsOverOne(args));
     }
 
 }

@@ -17,7 +17,7 @@ public final class StringUtils {
      * @return - The array converted to a String
      */
     public static String arrayToString(final String[] args) {
-        return String.join(" ", args);
+        return String.join(" ", args).trim();
     }
 
     public static String getArgs(final String[] args) {
@@ -29,7 +29,7 @@ public final class StringUtils {
                 sb.append(" ");
             }
         }
-        return sb.toString();
+        return sb.toString().trim();
     }
 
     public static String getArgsOverOne(final String[] args) {
@@ -41,7 +41,7 @@ public final class StringUtils {
                 sb.append(" ");
             }
         }
-        return sb.toString();
+        return sb.toString().trim();
     }
 
 }

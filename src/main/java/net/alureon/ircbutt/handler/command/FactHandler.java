@@ -139,6 +139,9 @@ public class FactHandler {
         if (data.length > 2) {
             String command = StringUtils.getArgs(data);
             String[] split = command.split(" ", 2);
+            if (split[0].endsWith(":")) {
+                split[0] = split[0].replace(":", "");
+            } //backwards compatibility
             String item = split[0].substring(0, split[0].length()).trim();
             if (getFact(item) != null) {
                 String information = StringUtils.getArgsOverOne(data);
