@@ -1,12 +1,29 @@
 package net.alureon.ircbutt;
 
+/**
+ * Copyright Blake Bartenbach 2014-2017
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ **/
+
 import net.alureon.ircbutt.handler.LoggingHandler;
 
 public class Main {
 
     public static void main(String[] args) {
-        /* Parse command line arguments for log level */
-        String loglevel = "INFO";
+        // setting the loglevel like this appears to be impossible with log4j
+        // however, I'm open to being proven wrong
+        /*String loglevel = "INFO";
         if (args.length > 0) {
             switch (args[0].toUpperCase()) {
                 case "TRACE":
@@ -21,12 +38,9 @@ public class Main {
                     break;
             }
         }
-
-       /*  This was driving me crazy.  This HAS to happen before essentially any logging because of how
-        *  SimpleLogger works.  Once a Logger is created, the properties CAN NOT be changed!  This also means
-        *  that I can't simply add a config option to change the logging level.  Open to ideas on ways to do this
-        *  without using hardcoded values.  (Parsing config.yml before logging means no log messages related to I/O) */
-        new LoggingHandler(loglevel);
+        */
+//        new LoggingHandler(loglevel);
+        new LoggingHandler();
 
         IRCbutt ircbutt = new IRCbutt();
         ircbutt.start();
