@@ -4,15 +4,15 @@ import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.IRCUtils;
 import net.alureon.ircbutt.util.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.pircbotx.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FactHandler {
 
 
     private IRCbutt butt;
-    public final static Logger log = LoggerFactory.getLogger(FactHandler.class);
+    public final static Logger log = LogManager.getLogger(FactHandler.class);
 
     public FactHandler(IRCbutt butt) {
         this.butt = butt;

@@ -2,15 +2,15 @@ package net.alureon.ircbutt.handler.command.karma;
 
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.pircbotx.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class KarmaHandler {
 
 
     private static String[] karmaEndings = {"--;", "++;", "++", "--"};
-    private final static Logger log = LoggerFactory.getLogger(KarmaHandler.class);
+    private final static Logger log = LogManager.getLogger(KarmaHandler.class);
 
 
     public static void handleKarma(IRCbutt butt, BotResponse response, User user, String message) {

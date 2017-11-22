@@ -2,19 +2,19 @@ package net.alureon.ircbutt.handler.command;
 
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class DefineHandler {
 
 
-    private final static Logger log = LoggerFactory.getLogger(DefineHandler.class);
+    private final static Logger log = LogManager.getLogger(DefineHandler.class);
 
 
     public static void handleDefine(IRCbutt butt, BotResponse response, String word) {

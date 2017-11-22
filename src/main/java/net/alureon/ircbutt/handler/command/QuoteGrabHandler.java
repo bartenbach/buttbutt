@@ -3,9 +3,9 @@ package net.alureon.ircbutt.handler.command;
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.pircbotx.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 
@@ -13,7 +13,7 @@ public class QuoteGrabHandler {
 
 
     private IRCbutt butt;
-    private final static Logger log = LoggerFactory.getLogger(QuoteGrabHandler.class);
+    private final static Logger log = LogManager.getLogger(QuoteGrabHandler.class);
 
 
     public QuoteGrabHandler(IRCbutt butt) {

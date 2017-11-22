@@ -3,14 +3,14 @@ package net.alureon.ircbutt.handler.command;
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -20,7 +20,7 @@ import java.net.URLEncoder;
 public class YouTubeHandler {
 
 
-    private final static Logger log = LoggerFactory.getLogger(YouTubeHandler.class);
+    private final static Logger log = LogManager.getLogger(YouTubeHandler.class);
 
 
     public static void getYouTubeVideo(IRCbutt butt, BotResponse response, String[] cmd) {

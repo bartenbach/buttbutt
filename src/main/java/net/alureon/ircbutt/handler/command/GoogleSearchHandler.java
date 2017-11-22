@@ -3,10 +3,10 @@ package net.alureon.ircbutt.handler.command;
 import net.alureon.ircbutt.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -16,7 +16,7 @@ import java.net.URLEncoder;
 public class GoogleSearchHandler {
 
 
-    private final static Logger log = LoggerFactory.getLogger(GoogleSearchHandler.class);
+    private final static Logger log = LogManager.getLogger(GoogleSearchHandler.class);
 
 
     public static void handleGoogleSearch(IRCbutt butt, BotResponse response, String[] cmd) {
