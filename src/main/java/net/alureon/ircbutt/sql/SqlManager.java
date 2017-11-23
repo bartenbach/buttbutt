@@ -11,7 +11,7 @@ public class SqlManager {
 
     private Connection connection;
     private IRCbutt butt;
-    private final static Logger log = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger();
 
 
     public SqlManager(IRCbutt butt) {
