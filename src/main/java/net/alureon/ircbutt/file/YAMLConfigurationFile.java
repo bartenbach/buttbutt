@@ -11,8 +11,8 @@ import java.util.Map;
 public class YAMLConfigurationFile {
 
 
-    private final static File config = new File("config.yml");
-    private final static Logger log = LogManager.getLogger();
+    private static final File config = new File("config.yml");
+    private static final Logger log = LogManager.getLogger();
     private String botName;
     private String botLogin;
     private String botPassword;
