@@ -2,10 +2,12 @@
 <!DOCTYPE xml>
 <Configuration status="warn" name="IRCbutt">
     <Appenders>
+        <!-- log to file with this format -->
         <File name="File" fileName="ircbutt.log">
             <PatternLayout
                     pattern="%d{MM/dd/yyyy - hh:mm} [%level] | %logger{36} -> %M() -> %msg%n" />
         </File>
+        <!-- log to console with this format -->
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout
                     pattern="%d{MM/dd/yyyy - hh:mm} [%level] %msg%n" />
@@ -13,10 +15,17 @@
     </Appenders>
 
     <Loggers>
+        <!-- The logger for the bot.  Logs WARN+ to file, all other to console -->
         <logger name="net.alureon.ircbutt" level="ALL" additivity="false">
             <AppenderRef ref="File" level="WARN" />
             <AppenderRef ref="Console" level="ALL"/>
         </logger>
+        <!-- The logger for the pircbotx API.  Logs WARN+ to file, INFO to console -->
+        <logger name="org.pircbotx" level="ALL" additivity="false">
+            <AppenderRef ref="File" level="WARN" />
+            <AppenderRef ref="Console" level="INFO"/>
+        </logger>
+        <!-- The level we're actually logging at (I think) -->
         <Root level="INFO">
         </Root>
     </Loggers>

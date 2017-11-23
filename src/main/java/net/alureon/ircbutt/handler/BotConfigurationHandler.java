@@ -18,7 +18,6 @@ public class BotConfigurationHandler {
         configBuilder.setName(butt.getYamlConfigurationFile().getBotName())
                 .setLogin(butt.getYamlConfigurationFile().getBotLogin())
                 .setRealName(butt.getYamlConfigurationFile().getBotRealName())
-                //   .setServerHostname(butt.getYamlConfigurationFile().getServerHostname()) - DEPRECATED as of 2.1
                 .setAutoReconnect(butt.getYamlConfigurationFile().getServerAutoReconnect())
                 .setMessageDelay(butt.getYamlConfigurationFile().getBotMessageDelay())
                 .setNickservPassword(butt.getYamlConfigurationFile().getBotPassword())
