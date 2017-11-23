@@ -4,9 +4,27 @@ import net.alureon.ircbutt.BotResponse;
 
 import static java.lang.Math.*;
 
-public class MathLib {
+/**
+ * MathLib houses static methods for dealing with arithmetic operations.
+ */
+public final class MathLib {
 
-    public static void handleMath(BotResponse response, String[] cmd) {
+    /**
+     * Prevent object instantiation.
+     */
+    private MathLib() {
+
+    }
+
+    /**
+     * The handleMath method handles a few basic math functions.
+     * It replaces the word "pi" with the actual value of pi, and
+     * is able to do exponential multiplication, and perform square
+     * root operations.
+     * @param response - The BotResponse object
+     * @param cmd - The command passed to the method.
+     */
+    public static void handleMath(final BotResponse response, final String[] cmd) {
         double x;
         if (cmd[1].equals("pi")) {
             x = PI;

@@ -34,16 +34,26 @@ import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.managers.ListenerManager;
 import org.pircbotx.hooks.managers.ThreadedListenerManager;
 
-public class IRCbutt {
+/**
+ * The main class for IRCbutt.  This class instantiates the bot.
+ */
+public final class IRCbutt {
 
-    /* Program-related constants */
+    /**
+     * Grabs the current program version from the build.gradle file.
+     */
     private final String programVersion = this.getClass().getPackage().getImplementationVersion();
-
-    /* Logger */
-    private final static Logger log = LogManager.getLogger();
-
-    /* Class instantiation */
+    /**
+     * Create a log4j logger.
+     */
+    private static final Logger log = LogManager.getLogger();
+    /**
+     * Instantiate the BotChatHandler object.
+     */
     private BotChatHandler botChatHandler = new BotChatHandler();
+    /**
+     * Instantiate the ButtReplaceHandler object.
+     */
     private ButtReplaceHandler buttReplaceHandler = new ButtReplaceHandler(this);
     private CommandHandler commandHandler = new CommandHandler(this);
     private YAMLConfigurationFile yamlConfigurationFile = new YAMLConfigurationFile();
@@ -60,6 +70,11 @@ public class IRCbutt {
     private PircBotX pircBotX;
 
 
+    /**
+     * The Class Constructor creates the configuration file for the bot if it doesn't exist.
+     * If it does, it parses it.  Then, it attempts to acquire an SQL connection.
+     * This is bot instantiation.
+     */
     public IRCbutt() {
         /* Create / parse yaml configuration file */
         yamlConfigurationFile.createConfigIfNotExists();
@@ -70,6 +85,9 @@ public class IRCbutt {
         sqlManager.createTablesIfNotExists();
     }
 
+    /**
+     * This function actually starts the bot.
+     */
     void start() {
         /* Log initiation and current logging level */
         log.info("Starting IRCButt version " + programVersion);
@@ -93,66 +111,130 @@ public class IRCbutt {
         }
     }
 
+    /**
+     * Returns the BotChatHandler.
+     * @return BotChatHandler
+     */
     public BotChatHandler getBotChatHandler() {
         return this.botChatHandler;
     }
 
+    /**
+     * Returns the ButtReplaceHandler.
+     * @return ButtReplaceHandler
+     */
     public ButtReplaceHandler getButtReplaceHandler() {
         return this.buttReplaceHandler;
     }
 
+    /**
+     * Returns the current version of the program.
+     * @return String - current version of the program
+     */
     public String getProgramVersion() {
         return this.programVersion;
     }
 
+    /**
+     * Returns the CommandHandler object.
+     * @return CommandHandler
+     */
     public CommandHandler getCommandHandler() {
         return this.commandHandler;
     }
 
+    /**
+     * Returns the YAMLConfigurationFile object.
+     * @return YAMLConfigurationFile
+     */
     public YAMLConfigurationFile getYamlConfigurationFile() {
         return this.yamlConfigurationFile;
     }
 
+    /**
+     * Returns the SqlManager object.
+     * @return SQLManager
+     */
     public SqlManager getSqlManager() {
         return this.sqlManager;
     }
 
+    /**
+     * Returns the FactTable object.
+     * @return FactTable
+     */
     public FactTable getFactTable() {
         return this.factTable;
     }
 
+    /**
+     * Returns the FactHandler object.
+     * @return FactHandler
+     */
     public FactHandler getFactHandler() {
         return this.factHandler;
     }
 
+    /**
+     * Returns the ListenerManager object.
+     * @return ListenerManager
+     */
     public ListenerManager getListenerManager() {
         return this.listenerManager;
     }
 
+    /**
+     * Returns the MessageHandler object.
+     * @return MessageHandler
+     */
     public MessageHandler getMessageHandler() {
         return this.messageHandler;
     }
 
+    /**
+     * Returns the ChatLoggingManager object.
+     * @return ChatLoggingManager
+     */
     public ChatLoggingManager getChatLoggingManager() {
         return this.chatLoggingManager;
     }
 
+    /**
+     * Returns the QuoteGrabTable object.
+     * @return QuoteGrabTable
+     */
     public QuoteGrabTable getQuoteGrabTable() {
         return this.quoteGrabTable;
     }
 
+    /**
+     * Returns the QuoteGrabHandler object.
+     * @return QuoteGrabHandler
+     */
     public QuoteGrabHandler getQuoteGrabHandler() {
         return this.quoteGrabHandler;
     }
 
+    /**
+     * Returns the MoreHandler object.
+     * @return MoreHandler
+     */
     public MoreHandler getMoreHandler() {
         return this.moreHandler;
     }
 
+    /**
+     * Returns the PircBotX API object.
+     * @return PircBotX
+     */
     public PircBotX getPircBotX() {
         return this.pircBotX;
     }
 
+    /**
+     * Returns the KarmaTable object.
+     * @return KarmaTable
+     */
     public KarmaTable getKarmaTable() {
         return this.karmaTable;
     }

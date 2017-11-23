@@ -16,32 +16,27 @@ package net.alureon.ircbutt;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  **/
 
-import net.alureon.ircbutt.handler.LoggingHandler;
+/**
+ * Represents the entry point for the program.
+ */
+public final class Main {
 
-public class Main {
+    /**
+     * Prevent instantiation.
+     */
+    private Main() {
 
-    public static void main(String[] args) {
-        // setting the loglevel like this appears to be impossible with log4j
-        // however, I'm open to being proven wrong
-        /*String loglevel = "INFO";
-        if (args.length > 0) {
-            switch (args[0].toUpperCase()) {
-                case "TRACE":
-                case "DEBUG":
-                case "INFO":
-                case "WARNING":
-                case "ERROR":
-                    loglevel = args[0];
-                    break;
-                default:
-                    loglevel = "INFO";
-                    break;
-            }
-        }
-        */
-//        new LoggingHandler(loglevel);
-        new LoggingHandler();
+    }
 
+    /**
+     * The main method of the program. This method creates a new IRCbutt
+     * object, and starts it.  That's all.
+     * @param args - String array of arguments to the program.
+     */
+    public static void main(final String[] args) {
+        // setting the logging level here would be preferable, if possible.
+        // it would be nice if this could be configured via either command line flags,
+        // or through the configuration file.
         IRCbutt ircbutt = new IRCbutt();
         ircbutt.start();
     }

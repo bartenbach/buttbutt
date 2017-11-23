@@ -6,29 +6,61 @@ import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
+/**
+ * This class encompasses a bot's response.  The message, the intention,
+ * the user the message is directed to, and the event object.
+ */
 public class BotResponse {
 
-
+    /**
+     * The message the bot wishes to send.
+     */
     private String message;
+    /**
+     * In some cases, messages may be longer than one line.
+     * Additional text may be stored here.
+     */
     private String additionalMessage;
+    /**
+     * The intended recipient of the message.
+     */
     private User recipient;
+    /**
+     * The bot's intention (chat, private message, etc).
+     */
     private BotIntention intention;
+    /**
+     * The original MessageEvent object (may be a private interaction).
+     */
     private GenericMessageEvent event;
 
-    public BotResponse(GenericMessageEvent event) {
-        this.event = event;
-        this.recipient = event.getUser();
-        if (event instanceof PrivateMessageEvent) {
+    /**
+     * Creates a new BotResponse object. If the user is interacting with
+     * the bot via a private message, it's important not to chat back into
+     * a channel.  The constructor ensures this doesn't happen.
+     * @param theEvent - The MessageEvent from PircBotX
+     */
+    public BotResponse(final GenericMessageEvent theEvent) {
+        this.event = theEvent;
+        this.recipient = theEvent.getUser();
+        if (theEvent instanceof PrivateMessageEvent) {
             this.intention = BotIntention.PRIVATE_MESSAGE_NO_OVERRIDE;
         }
     }
 
-    // for testing
+    /**
+     * This is currently only used for JUnit testing.  Can we hide this?
+     * //TODO this is fucked up
+     */
     public BotResponse() {
         this.event = null;
         this.recipient = null;
     }
 
+    /**
+     * Get the message the bot wishes to reply with
+     * @return String - the message the bot wishes to relay.
+     */
     public String getMessage() {
         return this.message;
     }
