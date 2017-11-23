@@ -65,18 +65,36 @@ public class BotResponse {
         return this.message;
     }
 
+    /**
+     * Return this response's intention.
+     * @return BotIntention
+     */
     public BotIntention getIntention() {
         return this.intention;
     }
 
+    /**
+     * Return the intended recipient.
+     * @return The user the message was intended for.
+     */
     public User getRecipient() {
         return this.recipient;
     }
 
+    /**
+     * Return the bot's additional message, may be null.
+     * @return The additional message the bot has.
+     */
     public String getAdditionalMessage() {
         return this.additionalMessage;
     }
 
+    /**
+     * Return the channel that the event took place in.  This may
+     * be a private message buffer, in which case, this method will
+     * return null.
+     * @return The Channel object the message took place in.
+     */
     public Channel getChannel() {
         if (this.event instanceof MessageEvent) {
             return ((MessageEvent) event).getChannel();

@@ -6,13 +6,31 @@ import net.sourceforge.jeval.Evaluator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Eval {
+/**
+ * Contains the methods necessary to work with JEval.
+ */
+public final class Eval {
 
+    /**
+     * Prevent instantiation.
+     */
+    private Eval() {
 
-    private final static Logger log = LogManager.getLogger(Eval.class);
+    }
 
+    /**
+     * The logger for this class.
+     */
+    private static final Logger log = LogManager.getLogger();
 
-    public static void eval(BotResponse response, String eval) {
+    /**
+     * Evaluates an expression using JEval.  The function first calls
+     * replacePi() and replaceE() to replace them to their respective
+     * constants.
+     * @param response The BotResponse object
+     * @param eval The string to evaluate
+     */
+    public static void eval(final BotResponse response, final String eval) {
         Evaluator evaluator = new Evaluator();
         String x = replacePi(eval);
         String y = replaceE(x);
@@ -24,24 +42,22 @@ public class Eval {
         }
     }
 
-    private static String replaceE(String x) {
-        if (x.contains("e"))
-            x = x.replaceAll("e", String.valueOf(Math.E));
-        return x;
+    /**
+     * Replaces any instance of the letter 'e' with the value of Math.E.
+     * @param x The string to perform replacement in.
+     * @return The string with 'e' replaced.
+     */
+    private static String replaceE(final String x) {
+        return x.replaceAll("e", String.valueOf(Math.E));
     }
 
-    private static String replacePi(String x) {
-        if (x.contains("pi") || x.contains("π"))
-            x = x.replaceAll("pi", String.valueOf(Math.PI)).replaceAll("π", String.valueOf(Math.PI));
-        return x;
+    /**
+     * Returns all occurrences of the word 'pi' or 'π' with the value of pi.
+     * @param x The string to perform replacement in.
+     * @return The string with pi replaced with the constant.
+     */
+    private static String replacePi(final String x) {
+        return x.replaceAll("pi", String.valueOf(Math.PI)).replaceAll("π", String.valueOf(Math.PI));
     }
-
-    /*private static String fixExponents(String x) {
-        if (x.contains("^")) {
-            String[] exp  = x.split(" ");
-            //fixme  this would suck to code...have to check for all mathematical operators on both sides
-            //fixme   also parenthesis like 2-5^(5*4)+7
-        }
-    }*/
 
 }
