@@ -24,7 +24,7 @@ public class QuoteGrabTable {
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
             log.trace(nick + quote + grabber);
             Object[] objects = {nick, quote, grabber};
-            butt.getSqlManager().prepareStatement(ps, objects);
+            SqlManager.prepareStatement(ps, objects);
             ps.executeUpdate();
         } catch (SQLException ex) {
             log.error("SQL Exception has occurred. StackTrace:", ex);
@@ -49,7 +49,7 @@ public class QuoteGrabTable {
     public String getRandomQuoteAndUser() {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` ORDER BY RAND() LIMIT 1";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
-        ResultSet rs = butt.getSqlManager().getResultSet(ps);
+        ResultSet rs = SqlManager.getResultSet(ps);
         try {
             if (rs.next()) {
                 String user = rs.getString("user");
@@ -66,7 +66,7 @@ public class QuoteGrabTable {
     public String getRandomQuote() {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` ORDER BY RAND() LIMIT 1";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
-        ResultSet rs = butt.getSqlManager().getResultSet(ps);
+        ResultSet rs = SqlManager.getResultSet(ps);
         try {
             if (rs.next()) {
                 return rs.getString("quote");

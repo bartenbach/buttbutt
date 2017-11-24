@@ -81,7 +81,8 @@ public final class IRCbutt {
         yamlConfigurationFile.parseConfig();
 
         /* Connect to SQL database */
-        sqlManager.connectToDatabase();
+        SqlManager.connectToDatabase();
+        sqlManager.createDatabaseIfNotExists();
         sqlManager.createTablesIfNotExists();
     }
 

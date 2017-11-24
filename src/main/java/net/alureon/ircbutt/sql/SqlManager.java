@@ -51,6 +51,14 @@ public class SqlManager {
     }
 
     /**
+     * Creates the database if it doesn't exist with UTF-8 character set.
+     */
+    public void createDatabaseIfNotExists() {
+        boolean result = sqlUpdate("CREATE DATABASE IF NOT EXISTS ircbutt CHARACTER SET utf8;");
+        log.debug("Create database returned {}", result);
+    }
+
+    /**
      * Creates the necessary SQL tables the bot needs.  Requires access to the
      * IRCbutt object to get custom table prefixes.
      */
