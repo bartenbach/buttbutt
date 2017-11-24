@@ -1,6 +1,6 @@
 package net.alureon.ircbutt.math;
 
-import net.alureon.ircbutt.BotResponse;
+import net.alureon.ircbutt.response.BotResponse;
 import net.sourceforge.jeval.EvaluationException;
 import net.sourceforge.jeval.Evaluator;
 import org.apache.logging.log4j.LogManager;

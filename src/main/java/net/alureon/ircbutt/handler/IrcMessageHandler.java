@@ -1,9 +1,9 @@
 package net.alureon.ircbutt.handler;
 
 import com.google.common.base.Preconditions;
-import net.alureon.ircbutt.BotResponse;
+import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
-import net.alureon.ircbutt.handler.command.commands.karma.KarmaCommand;
+import net.alureon.ircbutt.command.commands.karma.KarmaCommand;
 import net.alureon.ircbutt.util.MathUtils;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;

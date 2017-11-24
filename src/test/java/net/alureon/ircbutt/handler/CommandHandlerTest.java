@@ -1,6 +1,6 @@
 package net.alureon.ircbutt.handler;
 
-import net.alureon.ircbutt.handler.command.CommandHandler;
+import net.alureon.ircbutt.command.CommandHandler;
 import net.alureon.ircbutt.util.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;

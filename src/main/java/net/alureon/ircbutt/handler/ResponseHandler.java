@@ -1,6 +1,6 @@
 package net.alureon.ircbutt.handler;
 
-import net.alureon.ircbutt.BotResponse;
+import net.alureon.ircbutt.response.BotResponse;
 
 class ResponseHandler {
 

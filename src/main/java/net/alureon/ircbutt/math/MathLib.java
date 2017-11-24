@@ -1,6 +1,6 @@
 package net.alureon.ircbutt.math;
 
-import net.alureon.ircbutt.BotResponse;
+import net.alureon.ircbutt.response.BotResponse;
 
 import static java.lang.Math.*;
 
