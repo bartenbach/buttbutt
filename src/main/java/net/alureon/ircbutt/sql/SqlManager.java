@@ -125,7 +125,7 @@ public class SqlManager {
      * @param ps The PreparedStatement to populate with data
      * @param objects An array of String or Integer objects to put into the PreparedStatement.
      */
-    static void prepareStatement(final PreparedStatement ps, final Object... objects) {
+    public static void prepareStatement(final PreparedStatement ps, final Object... objects) {
         checkConnection();
         try {
             for (int i = 0; i < objects.length; i++) {
@@ -146,7 +146,7 @@ public class SqlManager {
      * @param ps The PreparedStatement object to execute query on.
      * @return The resulting ResultSet object.
      */
-    static ResultSet getResultSet(final PreparedStatement ps) {
+    public static ResultSet getResultSet(final PreparedStatement ps) {
         checkConnection();
         try {
             return ps.executeQuery();

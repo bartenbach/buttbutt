@@ -1,5 +1,4 @@
 package net.alureon.ircbutt;
-
 /**
  * Copyright Blake Bartenbach 2014-2017
  * This program is free software: you can redistribute it and/or modify
@@ -18,14 +17,16 @@ package net.alureon.ircbutt;
 
 import net.alureon.ircbutt.file.YAMLConfigurationFile;
 import net.alureon.ircbutt.handler.*;
-import net.alureon.ircbutt.handler.command.FactHandler;
-import net.alureon.ircbutt.handler.command.MoreHandler;
-import net.alureon.ircbutt.handler.command.QuoteGrabHandler;
-import net.alureon.ircbutt.handler.command.karma.KarmaTable;
+import net.alureon.ircbutt.handler.command.CommandHandler;
+import net.alureon.ircbutt.handler.command.commands.fact.FactCommand;
+import net.alureon.ircbutt.handler.command.commands.MoreCommand;
+import net.alureon.ircbutt.handler.command.commands.quotegrabs.QuoteGrabCommand;
+import net.alureon.ircbutt.handler.command.commands.karma.KarmaTable;
 import net.alureon.ircbutt.listener.ChatListener;
 import net.alureon.ircbutt.listener.PrivateMessageListener;
-import net.alureon.ircbutt.sql.FactTable;
-import net.alureon.ircbutt.sql.QuoteGrabTable;
+import net.alureon.ircbutt.handler.command.commands.fact.FactTable;
+import net.alureon.ircbutt.handler.command.commands.quotegrabs.QuoteGrabTable;
+import net.alureon.ircbutt.logging.LoggingHandler;
 import net.alureon.ircbutt.sql.SqlManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,18 +56,57 @@ public final class IRCbutt {
      * Instantiate the ButtReplaceHandler object.
      */
     private ButtReplaceHandler buttReplaceHandler = new ButtReplaceHandler(this);
+    /**
+     * Instantiate the ComamandHandler object.
+     */
     private CommandHandler commandHandler = new CommandHandler(this);
+    /**
+     * Instantiate the YAMLConfigurationFile object.
+     */
     private YAMLConfigurationFile yamlConfigurationFile = new YAMLConfigurationFile();
+    /**
+     * Instantiate the SqlManager object.
+     */
     private SqlManager sqlManager = new SqlManager(this);
+    /**
+     * Instantiate the FactTable object.
+     */
     private FactTable factTable = new FactTable(this);
+    /**
+     * Instantiate the QuoteGrabTable object.
+     */
     private QuoteGrabTable quoteGrabTable = new QuoteGrabTable(this);
-    private FactHandler factHandler = new FactHandler(this);
+    /**
+     * Instantiate the FactCommand object.
+     */
+    private FactCommand factCommand = new FactCommand(this);
+    /**
+     * Instantiates a ListenerManager object.
+     */
     private ListenerManager listenerManager = new ThreadedListenerManager();
-    private MessageHandler messageHandler = new MessageHandler(this);
+    /**
+     * Instantiates a IrcMessageHandler object.
+     */
+    private IrcMessageHandler ircMessageHandler = new IrcMessageHandler(this);
+    /**
+     * Instantiates a ChatLoggingManager object for logging the chat.
+     */
     private ChatLoggingManager chatLoggingManager = new ChatLoggingManager();
-    private QuoteGrabHandler quoteGrabHandler = new QuoteGrabHandler(this);
+    /**
+     * Instantiates a QuoteGrabCommand object for managing quotegrabs.
+     */
+    private QuoteGrabCommand quoteGrabCommand = new QuoteGrabCommand(this);
+    /**
+     * Instantiates a KarmaTable object for handling SQL-related Karma operations.
+     */
     private KarmaTable karmaTable = new KarmaTable(this);
-    private MoreHandler moreHandler = new MoreHandler();
+    /**
+     * Instantiates a MoreCommand object to handle bot responses where there are many results.
+     */
+    private MoreCommand moreCommand = new MoreCommand();
+    /**
+     * Instantiates the PircBotX object, the API used for connecting to IRC.
+     */
     private PircBotX pircBotX;
 
 
@@ -169,11 +209,11 @@ public final class IRCbutt {
     }
 
     /**
-     * Returns the FactHandler object.
-     * @return FactHandler
+     * Returns the FactCommand object.
+     * @return FactCommand
      */
-    public FactHandler getFactHandler() {
-        return this.factHandler;
+    public FactCommand getFactCommand() {
+        return this.factCommand;
     }
 
     /**
@@ -185,11 +225,11 @@ public final class IRCbutt {
     }
 
     /**
-     * Returns the MessageHandler object.
-     * @return MessageHandler
+     * Returns the IrcMessageHandler object.
+     * @return IrcMessageHandler
      */
-    public MessageHandler getMessageHandler() {
-        return this.messageHandler;
+    public IrcMessageHandler getIrcMessageHandler() {
+        return this.ircMessageHandler;
     }
 
     /**
@@ -209,19 +249,19 @@ public final class IRCbutt {
     }
 
     /**
-     * Returns the QuoteGrabHandler object.
-     * @return QuoteGrabHandler
+     * Returns the QuoteGrabCommand object.
+     * @return QuoteGrabCommand
      */
-    public QuoteGrabHandler getQuoteGrabHandler() {
-        return this.quoteGrabHandler;
+    public QuoteGrabCommand getQuoteGrabCommand() {
+        return this.quoteGrabCommand;
     }
 
     /**
-     * Returns the MoreHandler object.
-     * @return MoreHandler
+     * Returns the MoreCommand object.
+     * @return MoreCommand
      */
-    public MoreHandler getMoreHandler() {
-        return this.moreHandler;
+    public MoreCommand getMoreCommand() {
+        return this.moreCommand;
     }
 
     /**
