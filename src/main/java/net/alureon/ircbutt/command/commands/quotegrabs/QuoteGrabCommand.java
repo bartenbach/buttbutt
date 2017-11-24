@@ -51,8 +51,8 @@ public class QuoteGrabCommand {
                     } else if (cmd[1].equalsIgnoreCase(butt.getYamlConfigurationFile().getBotName())) {
                         response.highlightChat(response.getRecipient(), "get your hands off me, creep!");
                     } else {
-                        if (butt.getChatLoggingManager().hasQuoteFrom(cmd[1])) {
-                            String quote = butt.getChatLoggingManager().getLastQuoteFrom(cmd[1]);
+                        if (butt.getChatStorage().hasQuoteFrom(cmd[1])) {
+                            String quote = butt.getChatStorage().getLastQuoteFrom(cmd[1]);
                             log.trace("Quote grabbed: " + quote);
                             try {
                                 if (!butt.getQuoteGrabTable().quoteAlreadyExists(cmd[1], quote)) {

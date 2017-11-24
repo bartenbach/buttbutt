@@ -19,22 +19,15 @@ import java.util.Random;
 public final class DiceCommand implements Executable {
 
     /**
-     * Prevent instantiation.
-     */
-    private DiceCommand() {
-
-    }
-
-    /**
      * Executes the !dice command and returns the result.
      * @param butt
      * @param response
      * @param cmd
      * @return
      */
-    public BotResponse executeCommand(final IRCbutt butt, BotResponse response, String[] cmd) {
-        if (event instanceof MessageEvent) {
-            Channel channel = ((MessageEvent) event).getChannel();
+    public void executeCommand(final IRCbutt butt, BotResponse response, String[] cmd) {
+        if (response.getEvent() instanceof MessageEvent) {
+            Channel channel = ((MessageEvent) response.getEvent()).getChannel();
             ImmutableSortedSet<User> users = channel.getUsers();
             String victimName = "";
             int totalUsers = users.size();
@@ -52,13 +45,17 @@ public final class DiceCommand implements Executable {
 
             String message1;
             if ((Math.random() * 100) < 50) {
-                message1 = Colors.WHITE + "rolls a huge " + totalUsers + " sided die and it flattens " + Colors.YELLOW + victimName
-                        + Colors.WHITE + " before coming to a halt on " + Colors.RED + "YOU LOSE" + Colors.NORMAL;
+                message1 = Colors.WHITE + "rolls a huge " + totalUsers + " sided die and it flattens "
+                        + Colors.YELLOW + victimName + Colors.WHITE + " before coming to a halt on "
+                        + Colors.RED + "YOU LOSE" + Colors.NORMAL;
             } else {
-                message1 = Colors.WHITE + "rolls a huge " + totalUsers + " sided die and it lands near " + Colors.YELLOW + victimName
-                        + Colors.WHITE + " before coming to a halt on " + Colors.GREEN + "YOU WIN" + Colors.NORMAL;
+                message1 = Colors.WHITE + "rolls a huge " + totalUsers + " sided die and it lands near "
+                        + Colors.YELLOW + victimName + Colors.WHITE + " before coming to a halt on "
+                        + Colors.GREEN + "YOU WIN" + Colors.NORMAL;
             }
             response.me(message1);
+        } else {
+            // do what?
         }
     }
 

@@ -7,7 +7,7 @@ import net.alureon.ircbutt.response.BotResponse;
  * Handles outgoing message from the bot back into IRC - be it a channel
  * message, a private message, a /me command, or nothing at all.
  */
-public final class ResponseHandler {
+final class ResponseHandler {
 
     /**
      * Private constructor to prevent instantiation.
@@ -21,7 +21,7 @@ public final class ResponseHandler {
      * based upon the bot's intention.
      * @param response The BotResponse object to handle.
      */
-    public static void handleResponse(final BotResponse response) {
+    static void handleResponse(final BotResponse response) {
         switch (response.getIntention()) {
             case PRIVATE_MESSAGE_NO_OVERRIDE:
                 handlePrivateMessage(response);

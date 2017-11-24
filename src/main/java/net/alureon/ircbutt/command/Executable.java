@@ -17,8 +17,7 @@ public interface Executable {
      * @param butt     The instance of IRCbutt (for access to other classes).
      * @param response The BotResponseObject.
      * @param cmd      The command the user entered.
-     * @return The BotResponse object.
      */
-    BotResponse executeCommand(IRCbutt butt, BotResponse response, String[] cmd);
+    void executeCommand(IRCbutt butt, BotResponse response, String[] cmd);
 
 }

@@ -120,7 +120,7 @@ public class CommandHandler {
                     break;
                 case "dice":
                     //DiceCommand.handleDice(event, response);
-                    DiceCommand.executeCommand(butt, response, commandSubstitutedArray);
+                    new DiceCommand().executeCommand(butt, response, commandSubstitutedArray);
                     break;
                 case "random":
                     response.chat(String.valueOf(MathUtils.getRandom()));

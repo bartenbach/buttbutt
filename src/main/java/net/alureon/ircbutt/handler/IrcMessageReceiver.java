@@ -52,7 +52,7 @@ public class IrcMessageReceiver {
             /* Check for URL or troll them */
             // TODO is this the only instance of using this API?  Do we need this?
             Preconditions.checkArgument(event.getUser() != null, "User was null");
-            butt.getChatLoggingManager().logMessage(event.getUser().getNick(), event.getMessage());
+            butt.getChatStorage().storeMessage(event.getUser().getNick(), event.getMessage());
 
             // don't troll URL's
             if (UrlTitleHandler.handleUrl(event.getChannel(), event.getMessage())) {

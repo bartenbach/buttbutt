@@ -85,9 +85,9 @@ public final class IRCbutt {
      */
     private IrcMessageReceiver ircMessageReceiver = new IrcMessageReceiver(this);
     /**
-     * Instantiates a ChatLoggingManager object for logging the chat.
+     * Instantiates a ChatStorage object for logging the chat.
      */
-    private ChatLoggingManager chatLoggingManager = new ChatLoggingManager();
+    private ChatStorage chatStorage = new ChatStorage();
     /**
      * Instantiates a QuoteGrabCommand object for managing quotegrabs.
      */
@@ -117,7 +117,7 @@ public final class IRCbutt {
         yamlConfigurationFile.parseConfig();
 
         /* Connect to SQL database */
-        SqlManager.connectToDatabase();
+        sqlManager.connectToDatabase();
         sqlManager.createDatabaseIfNotExists();
         sqlManager.createTablesIfNotExists();
     }
@@ -221,11 +221,11 @@ public final class IRCbutt {
     }
 
     /**
-     * Returns the ChatLoggingManager object.
-     * @return ChatLoggingManager
+     * Returns the ChatStorage object.
+     * @return ChatStorage
      */
-    public ChatLoggingManager getChatLoggingManager() {
-        return this.chatLoggingManager;
+    public ChatStorage getChatStorage() {
+        return this.chatStorage;
     }
 
     /**

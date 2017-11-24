@@ -1,7 +1,6 @@
 package net.alureon.ircbutt.command.commands.fact;
 
 import net.alureon.ircbutt.IRCbutt;
-import net.alureon.ircbutt.sql.SqlManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,8 +41,8 @@ public class FactTable {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE item=?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             Object[] objects = {item};
-            SqlManager.prepareStatement(ps, objects);
-            ResultSet rs = SqlManager.getResultSet(ps);
+            butt.getSqlManager().prepareStatement(ps, objects);
+            ResultSet rs = butt.getSqlManager().getResultSet(ps);
             assert rs != null;
             if (rs.next()) {
                 return rs.getString("data");
@@ -70,7 +69,7 @@ public class FactTable {
     public String getRandomData() {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` ORDER BY RAND() LIMIT 1";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
-             ResultSet rs = SqlManager.getResultSet(ps)) {
+             ResultSet rs = butt.getSqlManager().getResultSet(ps)) {
             assert rs != null;
             if (rs.next()) {
                 return rs.getString("data");
