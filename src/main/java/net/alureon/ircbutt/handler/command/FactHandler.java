@@ -12,7 +12,7 @@ public class FactHandler {
 
 
     private IRCbutt butt;
-    public final static Logger log = LogManager.getLogger(FactHandler.class);
+    public static final Logger log = LogManager.getLogger(FactHandler.class);
 
     public FactHandler(IRCbutt butt) {
         this.butt = butt;
@@ -28,7 +28,7 @@ public class FactHandler {
             }
         } else if (cmd[0].equals("append")) {
             if (butt.getYamlConfigurationFile().getBotNoVerify() || user.isVerified()) {
-                boolean added = appendToKnowledge(response, user, nick, cmd);
+                boolean added = appendToKnowledge(response, user, cmd);
                 if (added) {
                     response.highlightChat(user, "ok got it!");
                 }
@@ -135,7 +135,7 @@ public class FactHandler {
         return false;
     }
 
-    private boolean appendToKnowledge(BotResponse response, User user, String commandSender, String[] data) {
+    private boolean appendToKnowledge(BotResponse response, User user, String[] data) {
         if (data.length > 2) {
             String command = StringUtils.getArgs(data);
             String[] split = command.split(" ", 2);
@@ -151,7 +151,7 @@ public class FactHandler {
                 }
                 log.trace("Item: " + item);
                 log.trace("Data: " + information);
-                butt.getFactTable().appendKnowledge(item, information, commandSender);
+                butt.getFactTable().appendKnowledge(item, information);
                 response.highlightChat(user, "ok got it!");
                 return true;
             } else {

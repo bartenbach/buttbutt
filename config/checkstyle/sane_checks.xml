@@ -11,7 +11,7 @@
     - Star imports are fine (IDE's do this a lot)
     - Line length can be a maximum of 120 characters
     - Constants named 'log' or 'logger' are allowed
-    - Class variables do not need JavaDocs
+    - Packages do not require JavaDocs as the 'package-info.java'
 
     Javadoc guidelines at
       http://java.sun.com/j2se/javadoc/writingdoccomments/index.html
@@ -30,7 +30,9 @@
 
     <!-- Checks that a package-info.java file exists for each package.     -->
     <!-- See http://checkstyle.sf.net/config_javadoc.html#JavadocPackage -->
+    <!-- I can see where this could be useful, but just no.
     <module name="JavadocPackage"/>
+    -->
 
     <!-- Checks whether files end with a new line.                        -->
     <!-- See http://checkstyle.sf.net/config_misc.html#NewlineAtEndOfFile -->
@@ -70,9 +72,7 @@
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
         <module name="JavadocMethod"/>
         <module name="JavadocType"/>
-        <!-- There are many instances where this is redundant.
-        Open to reconsidering though...
-        <module name="JavadocVariable"/> -->
+        <module name="JavadocVariable"/>
         <module name="JavadocStyle"/>
 
         <!-- Checks for Naming Conventions.                  -->

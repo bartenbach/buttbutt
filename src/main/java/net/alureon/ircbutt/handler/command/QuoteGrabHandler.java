@@ -9,18 +9,40 @@ import org.pircbotx.User;
 
 import java.sql.SQLException;
 
+/**
+ * The QuoteGrabHandler class provides a method for handling all QuoteGrab-related commands.
+ */
 public class QuoteGrabHandler {
 
 
+    /**
+     * The instance of the IRCbutt object.
+     */
     private IRCbutt butt;
-    private final static Logger log = LogManager.getLogger(QuoteGrabHandler.class);
+    /**
+     * The logger for the class.
+     */
+    private static final Logger log = LogManager.getLogger(QuoteGrabHandler.class);
 
 
-    public QuoteGrabHandler(IRCbutt butt) {
+    /**
+     * Constructor simply sets a reference to the IRCbutt singleton.
+     *
+     * @param butt The IRCbutt reference
+     */
+    public QuoteGrabHandler(final IRCbutt butt) {
         this.butt = butt;
     }
 
-    public void handleQuoteGrabs(BotResponse response, String[] cmd, User user, String nick) {
+    /**
+     * This function handles the argument parsing specific to QuoteGrab functionality.
+     *
+     * @param response The BotReponse object
+     * @param cmd      The command from the user
+     * @param user     The user who gave the command
+     * @param nick     The user's nick
+     */
+    public void handleQuoteGrabs(final BotResponse response, final String[] cmd, final User user, final String nick) {
         switch (cmd[0]) {
             case "grab":
                 if (cmd.length == 2) {
@@ -141,16 +163,11 @@ public class QuoteGrabHandler {
                 if (cmd.length == 1) {
                     response.privateMessage(user, "!qsay <id>");
                 } else {
-                    try {
-                        String quote = butt.getQuoteGrabTable().getQuoteById(Integer.parseInt(cmd[1]));
-                        if (quote != null) {
-                            response.chat(quote);
-                        } else {
-                            response.privateMessage(user, "no quote record with id of " + cmd[1]);
-                        }
-                    } catch (SQLException ex) {
-                        response.noResponse();
-                        log.error("Exception accessing database: ", ex);
+                    String quote = butt.getQuoteGrabTable().getQuoteById(Integer.parseInt(cmd[1]));
+                    if (quote != null) {
+                        response.chat(quote);
+                    } else {
+                        response.privateMessage(user, "butt don't find no quote with id " + cmd[1]);
                     }
                 }
                 break;
@@ -160,15 +177,11 @@ public class QuoteGrabHandler {
                 if (cmd.length == 1) {
                     response.privateMessage(user, "!qfind <string>");
                 } else {
-                    try {
-                        String quote = butt.getQuoteGrabTable().findQuote(StringUtils.getArgs(cmd));
-                        if (quote != null) {
-                            response.chat(quote);
-                        } else {
-                            response.privateMessage(user, "sry butt find noting");
-                        }
-                    } catch (SQLException ex) {
-                        log.error("Exception accessing database: ", ex);
+                    String quote = butt.getQuoteGrabTable().findQuote(StringUtils.getArgs(cmd));
+                    if (quote != null) {
+                        response.chat(quote);
+                    } else {
+                        response.privateMessage(user, "butt find noting");
                     }
                 }
                 break;

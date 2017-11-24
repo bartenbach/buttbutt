@@ -143,7 +143,7 @@ public class FactTable {
         return null;
     }
 
-    public void appendKnowledge(String item, String data, String grabber) {
+    public void appendKnowledge(String item, String data) {
         String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
                 + "_knowledge` SET data = CONCAT(data, ?) WHERE item = ?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {

@@ -46,11 +46,18 @@ public class QuoteGrabTable {
         return false;
     }
 
+    /**
+     * Returns a String containing a random quote from the database, and the user who said it
+     * in the format "name: quote".
+     * @return The user and the quote that was captured.
+     */
     public String getRandomQuoteAndUser() {
-        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` ORDER BY RAND() LIMIT 1";
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_quotes` ORDER BY RAND() LIMIT 1";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ResultSet rs = SqlManager.getResultSet(ps);
         try {
+            assert rs != null;
             if (rs.next()) {
                 String user = rs.getString("user");
                 String quote = rs.getString("quote");
@@ -62,12 +69,18 @@ public class QuoteGrabTable {
         return null;
     }
 
-
+    /**
+     * Retrieves a completely random quote from the database, without the user who
+     * said the quote.
+     * @return A random quote from the database.
+     */
     public String getRandomQuote() {
-        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` ORDER BY RAND() LIMIT 1";
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_quotes` ORDER BY RAND() LIMIT 1";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ResultSet rs = SqlManager.getResultSet(ps);
         try {
+            assert rs != null;
             if (rs.next()) {
                 return rs.getString("quote");
             }
@@ -77,35 +90,52 @@ public class QuoteGrabTable {
         return null;
     }
 
-    public String getQuoteById(int id) throws SQLException {
+    /**
+     * Retrieves a quote from the database by its quote ID.  Quote ID's can be retrieved by
+     * using !qinfo.
+     * @param id The id of the quote to retrieve.
+     * @return The quote from the database with the specified ID.
+     */
+    public String getQuoteById(final int id) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE id=?";
-        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
-        ps.setInt(1, id);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            String user = rs.getString("user");
-            String quote = rs.getString("quote");
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                String user = rs.getString("user");
+                String quote = rs.getString("quote");
+                rs.close();
+                return restructureQuote(id, user, quote);
+            }
             rs.close();
-            return restructureQuote(id, user, quote);
+        } catch (SQLException ex) {
+            log.error("Unable to retrieve quote from database by id.\n{}", ex.getMessage());
         }
-        rs.close();
         return null;
     }
 
-    public String findQuote(String search) throws SQLException {
+    /**
+     * Searches the database for a quote containing the specified String.
+     * @param search The string to search the database for.
+     * @return Any quote found matching the search.
+     */
+    public String findQuote(final String search) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE quote LIKE ?";
-        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
-        ps.setString(1, "%" + search + "%");
-        ResultSet rs = ps.executeQuery();
-        //TODO this could certainly return more than one item
-        if (rs.next()) {
-            int id = rs.getInt("id");
-            String user = rs.getString("user");
-            String quote = rs.getString("quote");
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
+            ps.setString(1, "%" + search + "%");
+            ResultSet rs = ps.executeQuery();
+            //TODO this could certainly return more than one item
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String user = rs.getString("user");
+                String quote = rs.getString("quote");
+                rs.close();
+                return restructureQuote(id, user, quote);
+            }
             rs.close();
-            return restructureQuote(id, user, quote);
+        } catch (SQLException ex) {
+            log.error("Unable to retrieve quote from the database\n{}", ex.getMessage());
         }
-        rs.close();
         return null;
     }
 
