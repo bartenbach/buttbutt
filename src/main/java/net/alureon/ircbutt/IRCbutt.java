@@ -49,10 +49,6 @@ public final class IRCbutt {
      */
     private static final Logger log = LogManager.getLogger();
     /**
-     * Instantiate the BotChatHandler object.
-     */
-    private BotChatHandler botChatHandler = new BotChatHandler();
-    /**
      * Instantiate the ButtReplaceHandler object.
      */
     private ButtReplaceHandler buttReplaceHandler = new ButtReplaceHandler(this);
@@ -85,9 +81,9 @@ public final class IRCbutt {
      */
     private ListenerManager listenerManager = new ThreadedListenerManager();
     /**
-     * Instantiates a IrcMessageHandler object.
+     * Instantiates a IrcMessageReceiver object.
      */
-    private IrcMessageHandler ircMessageHandler = new IrcMessageHandler(this);
+    private IrcMessageReceiver ircMessageReceiver = new IrcMessageReceiver(this);
     /**
      * Instantiates a ChatLoggingManager object for logging the chat.
      */
@@ -150,14 +146,6 @@ public final class IRCbutt {
         } catch (Exception ex) {  // several exceptions can be thrown here
             log.error("Unable to start bot.  StackTrace: ", ex);
         }
-    }
-
-    /**
-     * Returns the BotChatHandler.
-     * @return BotChatHandler
-     */
-    public BotChatHandler getBotChatHandler() {
-        return this.botChatHandler;
     }
 
     /**
@@ -225,11 +213,11 @@ public final class IRCbutt {
     }
 
     /**
-     * Returns the IrcMessageHandler object.
-     * @return IrcMessageHandler
+     * Returns the IrcMessageReceiver object.
+     * @return IrcMessageReceiver
      */
-    public IrcMessageHandler getIrcMessageHandler() {
-        return this.ircMessageHandler;
+    public IrcMessageReceiver getIrcMessageReceiver() {
+        return this.ircMessageReceiver;
     }
 
     /**

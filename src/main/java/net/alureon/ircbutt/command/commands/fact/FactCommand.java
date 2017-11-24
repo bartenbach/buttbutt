@@ -46,7 +46,7 @@ public class FactCommand {
                     }
                 } else {
                     response.noResponse();
-                    butt.getIrcMessageHandler().handleInvalidCommand(user);
+                    butt.getIrcMessageReceiver().handleInvalidCommand(user);
                 }
             } else {
                 response.noResponse();
@@ -64,7 +64,7 @@ public class FactCommand {
                 response.chat(info.replaceAll("\\$USER", user.getNick()));
             } else {
                 response.noResponse();
-                butt.getIrcMessageHandler().handleInvalidCommand(user);
+                butt.getIrcMessageReceiver().handleInvalidCommand(user);
             }
         } else if (cmd[0].equals("fact")) {
             String info = butt.getFactTable().getRandomData();
@@ -72,7 +72,7 @@ public class FactCommand {
                 response.chat(info);
             } else {
                 response.noResponse();
-                butt.getIrcMessageHandler().handleInvalidCommand(user);
+                butt.getIrcMessageReceiver().handleInvalidCommand(user);
             }
         } else if (cmd[0].equals("factinfo") || cmd[0].equals("finfo") || cmd[0].equals("fi")) {
             String info = butt.getFactTable().getFactInfo(StringUtils.getArgs(cmd));
@@ -80,7 +80,7 @@ public class FactCommand {
                 response.chat(info);
             } else {
                 response.noResponse();
-                butt.getIrcMessageHandler().handleInvalidCommand(user);
+                butt.getIrcMessageReceiver().handleInvalidCommand(user);
             }
         } else if (cmd[0].equalsIgnoreCase("factfind") || cmd[0].equalsIgnoreCase("factsearch")
                 || cmd[0].equalsIgnoreCase("fsearch") || cmd[0].equalsIgnoreCase("ffind")
@@ -101,10 +101,10 @@ public class FactCommand {
                     response.chat(info);
                 } else {
                     response.noResponse();
-                    butt.getIrcMessageHandler().handleInvalidCommand(user, "butt find noting");
+                    butt.getIrcMessageReceiver().handleInvalidCommand(user, "butt find noting");
                 }
             } catch (Exception e) {
-                butt.getIrcMessageHandler().handleInvalidCommand(user, "not a number");
+                butt.getIrcMessageReceiver().handleInvalidCommand(user, "not a number");
             }
         }
     }

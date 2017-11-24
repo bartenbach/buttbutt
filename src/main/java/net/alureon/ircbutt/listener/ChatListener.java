@@ -7,7 +7,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 /**
  * The ChatListener is the listener class that utilizes the PircBotX API to
  * listen for chat messages in the IRC channel.  When any message is passed from
- * the listener, we pass it to the IrcMessageHandler.
+ * the listener, we pass it to the IrcMessageReceiver.
  */
 public class ChatListener extends ListenerAdapter {
 
@@ -26,7 +26,7 @@ public class ChatListener extends ListenerAdapter {
 
     @Override
     public void onMessage(final MessageEvent event) {
-        butt.getIrcMessageHandler().handleMessage(event);
+        butt.getIrcMessageReceiver().handleMessage(event);
     }
 
 }

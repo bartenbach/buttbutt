@@ -17,7 +17,7 @@ public class PrivateMessageListener extends ListenerAdapter {
 
     @Override
     public void onPrivateMessage(PrivateMessageEvent event) {
-        butt.getIrcMessageHandler().handlePrivateMessage(event);
+        butt.getIrcMessageReceiver().handlePrivateMessage(event);
     }
 
 }

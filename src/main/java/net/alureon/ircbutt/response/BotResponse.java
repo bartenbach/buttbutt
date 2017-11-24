@@ -32,6 +32,7 @@ public class BotResponse {
     /**
      * The original MessageEvent object (may be a private interaction).
      */
+    //TODO is this needed?
     private GenericMessageEvent event;
 
     /**

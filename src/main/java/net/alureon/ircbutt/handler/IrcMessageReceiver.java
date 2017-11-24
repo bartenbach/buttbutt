@@ -4,17 +4,18 @@ import com.google.common.base.Preconditions;
 import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.command.commands.karma.KarmaCommand;
+import net.alureon.ircbutt.util.IRCUtils;
 import net.alureon.ircbutt.util.MathUtils;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
 
 /**
- * The IrcMessageHandler class handles all chat messages picked up by the PircBotX listener
+ * The IrcMessageReceiver class handles all chat messages picked up by the PircBotX listener
  * defined in ChatListener and PrivateMessageListener.  It then decides what to do with
  * the message based on whether it is a fact request, a command, or just chatter.
  */
-public class IrcMessageHandler {
+public class IrcMessageReceiver {
 
     /**
      * The private instance of the IRCbutt class.
@@ -26,7 +27,7 @@ public class IrcMessageHandler {
      * Constructor sets the private instance of the IRCbutt class.
      * @param butt The IRCbutt instance.
      */
-    public IrcMessageHandler(final IRCbutt butt) {
+    public IrcMessageReceiver(final IRCbutt butt) {
         this.butt = butt;
     }
 
@@ -62,7 +63,7 @@ public class IrcMessageHandler {
             if (MathUtils.isRandomResponseTime()) {
                 final String buttFormat = butt.getButtReplaceHandler().buttFormat(event.getMessage()).trim();
                 if (!buttFormat.equals(event.getMessage()) && buttFormat.contains(" ")) {
-                    butt.getBotChatHandler().buttChat(event.getChannel(), buttFormat);
+                    IRCUtils.sendChannelMessage(event.getChannel(), buttFormat);
                 }
             }
         }
@@ -95,7 +96,7 @@ public class IrcMessageHandler {
      * @param user The user that gave the command.
      */
     public void handleInvalidCommand(final User user) {
-        butt.getBotChatHandler().buttPM(user, "butt dont kno nothin bout that");
+        IRCUtils.sendPrivateMessage(user, "butt dont kno nothin bout that");
     }
 
     /**
@@ -104,6 +105,6 @@ public class IrcMessageHandler {
      * @param message The custom error message to deliver to the user.
      */
     public void handleInvalidCommand(final User user, final String message) {
-        butt.getBotChatHandler().buttPM(user, message);
+        IRCUtils.sendPrivateMessage(user, message);
     }
 }
