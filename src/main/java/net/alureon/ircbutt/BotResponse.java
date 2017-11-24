@@ -58,7 +58,7 @@ public class BotResponse {
     }
 
     /**
-     * Get the message the bot wishes to reply with
+     * Get the message the bot wishes to reply with.
      * @return String - the message the bot wishes to relay.
      */
     public String getMessage() {
@@ -102,12 +102,22 @@ public class BotResponse {
         return null;
     }
 
-    public void privateMessage(User recipient, String message) {
+    /**
+     * Sets the bot's intention to private message with supplied message and
+     * recipient.
+     * @param recipient The intended recipient of the private message.
+     * @param message The message to send.
+     */
+    public void privateMessage(final User recipient, final String message) {
         this.intention = BotIntention.PRIVATE_MESSAGE;
         this.recipient = recipient;
         this.message = message;
     }
 
+    /**
+     * Get the MessageEvent tied to this response object
+     * @return The original MessageEvent
+     */
     public GenericMessageEvent getEvent() {
         return this.event;
     }

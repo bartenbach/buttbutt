@@ -3,7 +3,7 @@
 <Configuration status="warn" name="IRCbutt">
     <Appenders>
         <!-- log to file with this format -->
-        <File name="File" fileName="ircbutt.log">
+        <File name="File" fileName="errors.log">
             <PatternLayout
                     pattern="%d{MM/dd/yyyy - hh:mm} [%level] | %logger{36} -> %M() -> %msg%n" />
         </File>
