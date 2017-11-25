@@ -19,8 +19,9 @@ public interface Command {
      * @param butt     The instance of IRCbutt (for access to other classes).
      * @param event    The message event from PircBotX.
      * @param cmd      The command the user entered.
+     * @return A BotResponse object containing information about how the bot intends to respond.
      */
-    BotResponse executeCommand(IRCbutt butt, GenericMessageEvent event, String[] cmd);
+     BotResponse executeCommand(IRCbutt butt, GenericMessageEvent event, String[] cmd);
 
     /**
      * Returns the Strings that fire this command.  This will be the command after '!'.

@@ -8,7 +8,7 @@ import net.alureon.ircbutt.util.MathUtils;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Flips a coin and returns the result based on random number generation.
@@ -47,6 +47,6 @@ public final class CoinCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Arrays.asList("coin");
+        return (ArrayList<String>) Collections.singletonList("coin");
     }
 }

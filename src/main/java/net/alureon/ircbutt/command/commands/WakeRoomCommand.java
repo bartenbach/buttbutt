@@ -4,6 +4,9 @@ import net.alureon.ircbutt.response.BotResponse;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 
+/**
+ * This command wakes an IRC channel by pinging every user in the room.
+ */
 public class WakeRoomCommand {
 
     public static void handleWakeRoom(BotResponse response) {

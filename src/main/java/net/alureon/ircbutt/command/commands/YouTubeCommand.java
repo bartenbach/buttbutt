@@ -50,7 +50,7 @@ public class YouTubeCommand {
                         butt.getMoreCommand().addMore(URLDecoder.decode(video.text(), "utf-8") + " http://youtube.com" + url);
                     }
                 }
-                butt.getMoreCommand().setNoMore("how about you refine your search terms instead?");
+                butt.getMoreCommand().setNoMoreMessage("how about you refine your search terms instead?");
             } catch (IOException | NullPointerException ex) {
                 log.error("Found no video", ex);
                 response.privateMessage(response.getRecipient(), "Found no video");

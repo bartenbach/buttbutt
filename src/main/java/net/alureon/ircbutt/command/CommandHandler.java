@@ -1,5 +1,6 @@
 package net.alureon.ircbutt.command;
 
+import jdk.internal.joptsimple.internal.Strings;
 import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
@@ -54,17 +55,16 @@ public class CommandHandler {
     /**
      * The main function that handles all commands passed to the bot.
      * @param event The GenericMessageEvent received from the PircBotX API.
-     * @param cmd The command the user has given.
+     * @param commandString The entire command the user has entered.
      * @return The bot's intended response in a BotResponse object.
      */
-    public BotResponse handleCommand(final GenericMessageEvent event, final String[] cmd) {
-        /* For the sake of clearer code, let's just set these immediately */
-        User user = event.getUser();
-        String nick = user.getNick();
+    public BotResponse handleCommand(final GenericMessageEvent event, final String commandString) {
+        /* Split the command on whitespace */
+        String[] cmd = commandString.split("\\s");
 
         /* if it's prefixed with a tilde it's a fact request */
         if (cmd[0].startsWith("~")) {
-            response = butt.getFactCommand().handleKnowledge(cmd, user, nick);
+            response = butt.getFactCommand().handleKnowledge(cmd, user);
             return;
         }
 
@@ -90,7 +90,7 @@ public class CommandHandler {
                 case "qf":
                 case "rqnouser":
                 case "rqn":
-                    butt.getQuoteGrabCommand().handleQuoteGrabs(response, commandSubstitutedArray, user, nick);
+                    butt.getQuoteGrabCommand().handleQuoteGrabs(response, commandSubstitutedArray, user);
                     break;
                 case "append":
                 case "forget":
@@ -127,15 +127,17 @@ public class CommandHandler {
                     YouTubeCommand.getYouTubeVideo(butt, response, commandSubstitutedArray);
                     break;
                 case "ud":
-                    UrbanDictionaryCommand.getDefinition(butt, response, commandSubstitutedArray);
+                    return new UrbanDictionaryCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "version":
-                    // handle version somewhere
+                    // TODO should be implemented its own class
+                    return new BotResponse(BotIntention.CHAT, null, butt.getProgramVersion());
                     break;
                 case "dice":
                     return new DiceCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "random":
+                    // TODO should be implemented in its own class.
                     return new BotResponse(BotIntention.CHAT, null,
                             String.valueOf(MathUtils.getRandom(0, 10000)));
                     break;
@@ -153,7 +155,7 @@ public class CommandHandler {
                     return new InviteCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "more":
-                    butt.getMoreCommand().handleMore(response);
+                    return new MoreCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "wr":
                     WakeRoomCommand.handleWakeRoom(response);
@@ -202,15 +204,17 @@ public class CommandHandler {
      * @param input The input from the user.
      * @return a string with all commands expanded to their values.
      */
-    private static String parseCommandSubstitutionAndVariables(final IRCbutt butt, final GenericMessageEvent event, String input) {
+    private static String parseCommandSubstitutionAndVariables(final IRCbutt butt, final GenericMessageEvent event,
+                                                               final String input) {
+        String result = Strings.EMPTY;
         Pattern p = Pattern.compile("\\$\\([^)]*\\)");
         Matcher m = p.matcher(input);
         while (m.find()) {
             String command = m.group().substring(2, m.group().length() - 1);
-            BotResponse response = butt.getCommandHandler().handleCommand(event, command.split(" "));
-            input = input.replaceFirst(Pattern.quote(m.group()), response.toString());
+            BotResponse response = butt.getCommandHandler().handleCommand(event, command);
+            result = input.replaceFirst(Pattern.quote(m.group()), response.toString());
         }
-        return input.replaceAll("\\$USER", event.getUser().getNick());
+        return result.replaceAll("\\$USER", event.getUser().getNick());
     }
 
 }

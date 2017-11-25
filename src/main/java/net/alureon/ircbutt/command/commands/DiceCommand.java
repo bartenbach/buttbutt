@@ -13,7 +13,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -73,7 +73,7 @@ public final class DiceCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Arrays.asList("dice");
+        return (ArrayList<String>) Collections.singletonList("dice");
     }
 
 }

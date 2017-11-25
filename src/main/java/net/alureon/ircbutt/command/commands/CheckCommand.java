@@ -10,7 +10,7 @@ import org.pircbotx.Colors;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Checks if something passes, fails, or panics based on random number generation.
@@ -51,6 +51,6 @@ public final class CheckCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Arrays.asList("check");
+        return (ArrayList<String>) Collections.singletonList("check");
     }
 }

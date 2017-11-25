@@ -1,5 +1,7 @@
 package net.alureon.ircbutt.command.commands;
 
+import net.alureon.ircbutt.command.Command;
+import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.StringUtils;
@@ -9,25 +11,31 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
- * Created by alureon and Klong on 5/13/15.
+ *  This command retrieves word definitions from UrbanDictionary.
  */
+public final class UrbanDictionaryCommand implements Command {
 
-public class UrbanDictionaryCommand {
+    /**
+     * The logger for this class.
+     */
+    private static final Logger log = LogManager.getLogger();
 
-
-    private final static Logger log = LogManager.getLogger(UrbanDictionaryCommand.class);
-
-
-    public static void getDefinition(IRCbutt butt, BotResponse response, String[] cmd) {
+    @Override
+    public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
         butt.getMoreCommand().clearMore();
+        BotResponse response = new BotResponse(BotIntention.CHAT, null, "this should never happen");
         try {
-            String link = "http://www.urbandictionary.com/define.php?term=" + URLEncoder.encode(StringUtils.getArgs(cmd), "utf-8");
+            String link = "http://www.urbandictionary.com/define.php?term="
+                    + URLEncoder.encode(StringUtils.getArgs(cmd), "utf-8");
             String userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0";
             try {
                 Document doc = Jsoup.connect(link).userAgent(userAgent).get();
@@ -37,21 +45,27 @@ public class UrbanDictionaryCommand {
                     for (int i = 0; i < size; i++) {
                         Element meaning = meanings.get(i);
                         if (i == 0) {
-                            response.chat(meaning.text());
+                            response = new BotResponse(BotIntention.CHAT, null, meaning.text());
                         } else {
                             butt.getMoreCommand().addMore(meaning.text());
                         }
                     }
-                    butt.getMoreCommand().setNoMore(link);
+                    butt.getMoreCommand().setNoMoreMessage(link);
                 } catch (NullPointerException ex) {
                     log.info("No more definitions to get");
                 }
             } catch (IOException ex) {
                 log.error("Exception encountered", ex);
-                response.privateMessage(response.getRecipient(), "Found no definition");
+                response = new BotResponse(BotIntention.CHAT, null, "butt don't see that word nowhere");
             }
         } catch (UnsupportedEncodingException ex) {
             log.error("Failed to encode URL", ex);
         }
+        return response;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return (ArrayList<String>) Collections.singletonList("ud");
     }
 }

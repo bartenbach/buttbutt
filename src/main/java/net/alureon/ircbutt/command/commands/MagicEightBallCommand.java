@@ -21,6 +21,7 @@ public final class MagicEightBallCommand implements Command {
      * All actual responses from the Magic 8 Ball are implemented.
      * @param number The number of the response to return (probably generated randomly)
      * @return returns the Magic 8 Ball's response.
+     * //TODO riddled with magic numbers
      */
     private static String getMagic8BallResponse(final int number) {
         switch (number) {

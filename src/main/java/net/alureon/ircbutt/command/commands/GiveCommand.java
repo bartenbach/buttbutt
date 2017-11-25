@@ -10,7 +10,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Command to !give a user something.
@@ -33,6 +33,6 @@ public final class GiveCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Arrays.asList("give");
+        return (ArrayList<String>) Collections.singletonList("give");
     }
 }

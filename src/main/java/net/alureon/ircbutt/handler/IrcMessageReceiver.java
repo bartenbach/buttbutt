@@ -38,9 +38,8 @@ public class IrcMessageReceiver {
      */
     public void handleMessage(final MessageEvent event) {
         /* Handle a command */
-        BotResponse response = new BotResponse(event);
         if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
-            butt.getCommandHandler().handleCommand(event, event.getMessage().split(" "), response);
+            BotResponse response = butt.getCommandHandler().handleCommand(event, event.getMessage());
             ResponseHandler.handleResponse(response);
 
         /* Handle karma */
@@ -50,8 +49,7 @@ public class IrcMessageReceiver {
 
         } else {
             /* Check for URL or troll them */
-            // TODO is this the only instance of using this API?  Do we need this?
-            Preconditions.checkArgument(event.getUser() != null, "User was null");
+            Preconditions.checkNotNull(event.getUser(), "Attempted to store message of null user.");
             butt.getChatStorage().storeMessage(event.getUser().getNick(), event.getMessage());
 
             // don't troll URL's

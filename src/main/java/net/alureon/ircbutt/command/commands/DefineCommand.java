@@ -14,7 +14,7 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Class retrieves definitions of words from MerriamWebster.com.
@@ -30,6 +30,7 @@ public final class DefineCommand implements Command {
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
         butt.getMoreCommand().clearMore();
+        BotResponse response = new BotResponse(BotIntention.CHAT, null, "this should never happen");
         String userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0";
         try {
             String link = "http://www.merriam-webster.com/dictionary/" + cmd[1];
@@ -39,25 +40,25 @@ public final class DefineCommand implements Command {
             if (size > 0) {
                 for (int i = 0; i < size; i++) {
                     Element definition = definitions.get(i);
-                    String text = definition.text().replaceAll("  ", " ");
+                    String text = definition.text().replaceAll("\\s\\s", " ");
                     if (i == 0) {
-                        return new BotResponse(BotIntention.CHAT, null, text);
+                        response = new BotResponse(BotIntention.CHAT, null, text);
                     } else {
                         butt.getMoreCommand().addMore(text);
                     }
                 }
                 butt.getMoreCommand().addMore(link);
             } else {
-                return new BotResponse(BotIntention.CHAT, null, "butt didnt find nothin for that");
+                response = new BotResponse(BotIntention.CHAT, null, "butt didnt find nothin for that");
             }
         } catch (IOException | NullPointerException ex) {
             log.error("DefineCommand Exception: " + ex.getMessage());
         }
-        return new BotResponse(BotIntention.CHAT, null, "butt didnt find that word");
+        return response;
     }
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Arrays.asList("define");
+        return (ArrayList<String>) Collections.singletonList("define");
     }
 }
