@@ -1,6 +1,8 @@
 package net.alureon.ircbutt.command;
 
 import jdk.internal.joptsimple.internal.Strings;
+import net.alureon.ircbutt.command.commands.fact.FactCommand;
+import net.alureon.ircbutt.command.commands.quotegrabs.QuoteGrabCommand;
 import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
@@ -8,11 +10,10 @@ import net.alureon.ircbutt.command.commands.*;
 import net.alureon.ircbutt.command.commands.google.GoogleImageSearchCommand;
 import net.alureon.ircbutt.command.commands.google.GoogleSearchCommand;
 import net.alureon.ircbutt.command.commands.karma.KarmaCommand;
-import net.alureon.ircbutt.math.Eval;
+import net.alureon.ircbutt.command.commands.EvalCommand;
 import net.alureon.ircbutt.math.MathLib;
 import net.alureon.ircbutt.util.MathUtils;
 import net.alureon.ircbutt.util.StringUtils;
-import org.pircbotx.User;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.reflections.Reflections;
 
@@ -64,8 +65,7 @@ public class CommandHandler {
 
         /* if it's prefixed with a tilde it's a fact request */
         if (cmd[0].startsWith("~")) {
-            response = butt.getFactCommand().handleKnowledge(cmd, user);
-            return;
+            return new FactCommand().executeCommand(butt, event, cmd);
         }
 
         /* remove the '!' from the command */
@@ -77,7 +77,6 @@ public class CommandHandler {
             String[] commandSubstitutedArray = commandSubstituted.split(" ");
 
             /* switch of main bot commands */
-            String result;
             switch (cmd[0]) {
                 case "rq":
                 case "grab":
@@ -90,7 +89,7 @@ public class CommandHandler {
                 case "qf":
                 case "rqnouser":
                 case "rqn":
-                    butt.getQuoteGrabCommand().handleQuoteGrabs(response, commandSubstitutedArray, user);
+                    return new QuoteGrabCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "append":
                 case "forget":
@@ -101,30 +100,27 @@ public class CommandHandler {
                 case "ffind":
                 case "fsearch":
                 case "finfo":
-                case "factbyid":
-                case "factid":
-                case "fid":
                 case "ff":
                 case "fi":
                 case "fs":
-                    butt.getFactCommand().handleKnowledge(response, commandSubstitutedArray, user, nick);
+                    return new FactCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "echo":
                     return new BotResponse(BotIntention.CHAT, null,
                             StringUtils.getArgs(commandSubstitutedArray));
                     break;
                 case "g":
-                    GoogleSearchCommand.handleGoogleSearch(butt, response, commandSubstitutedArray);
+                    return new GoogleSearchCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "give":
-                    response = new GiveCommand().executeCommand(butt, event, commandSubstitutedArray);
+                    return new GiveCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "rot13":
                 case "rot":
-                    response = new Rot13Command().executeCommand(butt, event, commandSubstitutedArray);
+                    return new Rot13Command().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "yt":
-                    YouTubeCommand.getYouTubeVideo(butt, response, commandSubstitutedArray);
+                    return new YouTubeCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "ud":
                     return new UrbanDictionaryCommand().executeCommand(butt, event, commandSubstitutedArray);
@@ -158,19 +154,19 @@ public class CommandHandler {
                     return new MoreCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "wr":
-                    WakeRoomCommand.handleWakeRoom(response);
+                    return new WakeRoomCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "eval":
-                    Eval.eval(response, StringUtils.getArgs(cmd));
+                    return new EvalCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "karma":
-                    KarmaCommand.getKarma(butt, response, user, StringUtils.getArgs(cmd));
+                    return new KarmaCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "coin":
                     return new CoinCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "gi":
-                    GoogleImageSearchCommand.handleGoogleImageSearch(response, StringUtils.getArgs(cmd));
+                    return new GoogleImageSearchCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "8":
                 case "8ball":
@@ -179,18 +175,15 @@ public class CommandHandler {
                 case "butt":
                 case "buttify":
                     //TODO needs its own class implementation
-                    String buttified = butt.getButtReplaceHandler().buttFormat(StringUtils.getArgs(commandSubstitutedArray));
+                    String buttified =
+                            butt.getButtReplaceHandler().buttFormat(StringUtils.getArgs(commandSubstitutedArray));
                     return new BotResponse(BotIntention.CHAT, null, buttified);
                     break;
                 default:
                     break;
             }
-            /* handle this logic elsewhere
-            if (response.getIntention() == null) {
-                response.noResponse();
-            }*/
         } else {
-            butt.getFactCommand().handleKnowledge(response, cmd, user, nick);
+            return new FactCommand().executeCommand(butt, event, cmd);
         }
     }
 

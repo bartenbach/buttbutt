@@ -1,27 +1,43 @@
 package net.alureon.ircbutt.command.commands.karma;
 
-import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.pircbotx.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class KarmaTable {
+/**
+ * Provides the SQL-related functionality for working with the Karma command.
+ */
+public final class KarmaTable {
 
 
+    /**
+     * The instance of IRCbutt for accessing the database.
+     */
     private IRCbutt butt;
-    private final static Logger log = LogManager.getLogger(KarmaTable.class);
+    /**
+     * The logger for this class.
+     */
+    private static final Logger log = LogManager.getLogger();
 
 
-    public KarmaTable(IRCbutt butt) {
+    /**
+     * Constructor sets the class field for IRCbutt.
+     * @param butt The IRCbutt instance needed for accessing the database.
+     */
+    public KarmaTable(final IRCbutt butt) {
         this.butt = butt;
     }
 
-    private boolean itemExists(String item) {
+    /**
+     * Checks to see whether we have Karma for an item.
+     * @param item The item to check for existing Karma level.
+     * @return True if the item is in the database, false if it is not.
+     */
+    private boolean itemExists(final String item) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` WHERE item=?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             ps.setString(1, item);
@@ -32,29 +48,39 @@ public class KarmaTable {
             }
             rs.close();
         } catch (SQLException ex) {
-            log.error("KarmaTable: SQL Exception, ", ex);
+            log.error("Failed to check if Karma item '" + item + "' exists: ", ex.getMessage());
         }
         return false;
     }
 
-    void decrementKarma(Karma karma, User user, BotResponse response) {
+    /**
+     * Decrements an item's Karma level.
+     * @param karma The Karma object to decrement in the database.
+     */
+    void decrementKarma(final Karma karma) {
         if (itemExists(karma.getItem())) {
-            String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` SET karma = karma -1 WHERE item=?";
-            updateKarma(update, karma, response, user);
+            String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                    + "_karma` SET karma = karma -1 WHERE item=?";
+            updateKarma(update, karma);
         } else {
-            String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` (item,karma) VALUES(?,?)";
+            String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                    + "_karma` (item,karma) VALUES(?,?)";
             try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
                 ps.setString(1, karma.getItem());
                 ps.setInt(2, -1);
                 ps.execute();
             } catch (SQLException ex) {
-                log.error("KarmaTable ", ex);
-                response.privateMessage(user, "failed to update karma :(");
+                log.error("Failed to update Karma: ", ex.getMessage());
             }
         }
     }
 
-    Integer getKarmaLevel(String item) {
+    /**
+     * Retrieves an object's current Karma level from the database.
+     * @param item The String containing the item we'd like to search for a Karma level for.
+     * @return The current Karma level of the item, or null, if it doesn't exist.
+     */
+    Integer getKarmaLevel(final String item) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` WHERE item=?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             ps.setString(1, item);
@@ -66,35 +92,44 @@ public class KarmaTable {
             }
             rs.close();
         } catch (SQLException ex) {
-            log.error("KarmaTable: SQL Exception, ", ex);
+            log.error("Failed to retrieve karma level for " + item, ex.getMessage());
         }
         return null;
     }
 
-    void incrementKarma(Karma karma, User user, BotResponse response) {
+    /**
+     * Increments a Karma object's Karma level in the database.
+     * @param karma The Karma object we'd like to increment Karma level for.
+     */
+    void incrementKarma(final Karma karma) {
         if (itemExists(karma.getItem())) {
-            String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` SET karma = karma +1 WHERE item=?";
-            updateKarma(update, karma, response, user);
+            String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                    + "_karma` SET karma = karma +1 WHERE item=?";
+            updateKarma(update, karma);
         } else {
-            String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` (item,karma) VALUES(?,?)";
+            String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                    + "_karma` (item,karma) VALUES(?,?)";
             try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
                 ps.setString(1, karma.getItem());
                 ps.setInt(2, 1);
                 ps.execute();
             } catch (SQLException ex) {
-                log.error("KarmaTable ", ex);
-                response.privateMessage(user, "failed to update karma :(");
+                log.error("Failed to increment Karma: ", ex.getMessage());
             }
         }
     }
 
-    private void updateKarma(String update, Karma karma, BotResponse response, User user) {
+    /**
+     * Convenience function for updating an object's Karma in the database.
+     * @param update The SQL string to execute.
+     * @param karma The Karma object pertaining to the update operation.
+     */
+    private void updateKarma(final String update, final Karma karma) {
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
             ps.setString(1, karma.getItem());
             ps.executeUpdate();
         } catch (SQLException ex) {
-            log.error("KarmaTable ", ex);
-            response.privateMessage(user, "failed to update karma :(");
+            log.error("Failed to update Karma: ", ex.getMessage());
         }
     }
 }

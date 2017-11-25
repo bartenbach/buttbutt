@@ -1,7 +1,6 @@
 package net.alureon.ircbutt.command.commands.quotegrabs;
 
 import net.alureon.ircbutt.IRCbutt;
-import net.alureon.ircbutt.sql.SqlManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,7 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class QuoteGrabTable {
+/**
+ * Provides an interface for working with SQL-related Quotegrab functionality.
+ */
+public final class QuoteGrabTable {
 
 
     private IRCbutt butt;
@@ -140,7 +142,7 @@ public class QuoteGrabTable {
         return null;
     }
 
-    public String getRandomQuoteAndUserFromUser(String username) throws SQLException {
+    public String getRandomQuoteAndUserFromUser(final String username) throws SQLException {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY RAND() LIMIT 1";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ps.setString(1, username);
