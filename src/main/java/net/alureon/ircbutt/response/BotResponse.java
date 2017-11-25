@@ -1,10 +1,6 @@
 package net.alureon.ircbutt.response;
 
-import org.pircbotx.Channel;
 import org.pircbotx.User;
-import org.pircbotx.hooks.events.MessageEvent;
-import org.pircbotx.hooks.events.PrivateMessageEvent;
-import org.pircbotx.hooks.types.GenericMessageEvent;
 
 /**
  * This class encompasses a bot's response.  The message, the intention,
@@ -29,33 +25,19 @@ public class BotResponse {
      * The bot's intention (chat, private message, etc).
      */
     private BotIntention intention;
-    /**
-     * The original MessageEvent object (may be a private interaction).
-     */
-    //TODO is this needed?
-    private GenericMessageEvent event;
 
-    /**
-     * Creates a new BotResponse object. If the user is interacting with
-     * the bot via a private message, it's important not to chat back into
-     * a channel.  The constructor ensures this doesn't happen.
-     * @param theEvent - The MessageEvent from PircBotX
-     */
-    public BotResponse(final GenericMessageEvent theEvent) {
-        this.event = theEvent;
-        this.recipient = theEvent.getUser();
-        if (theEvent instanceof PrivateMessageEvent) {
-            this.intention = BotIntention.PRIVATE_MESSAGE_NO_OVERRIDE;
-        }
+    public BotResponse(final BotIntention intention, final User recipient, final String message) {
+        this.intention = intention;
+        this.recipient = recipient;
+        this.message = message;
     }
 
-    /**
-     * This is currently only used for JUnit testing.  Can we hide this?
-     * //TODO this is fucked up
-     */
-    public BotResponse() {
-        this.event = null;
-        this.recipient = null;
+    public BotResponse(final BotIntention intention, final User recipient, final String message,
+                       final String additionalMessage) {
+        this.message = message;
+        this.additionalMessage = additionalMessage;
+        this.recipient = recipient;
+        this.intention = intention;
     }
 
     /**
@@ -90,88 +72,4 @@ public class BotResponse {
         return this.additionalMessage;
     }
 
-    /**
-     * Return the channel that the event took place in.  This may
-     * be a private message buffer, in which case, this method will
-     * return null.
-     * @return The Channel object the message took place in.
-     */
-    public Channel getChannel() {
-        if (this.event instanceof MessageEvent) {
-            return ((MessageEvent) event).getChannel();
-        }
-        return null;
-    }
-
-    /**
-     * Sets the bot's intention to private message with supplied message and
-     * recipient.
-     * @param recipient The intended recipient of the private message.
-     * @param message The message to send.
-     */
-    public void privateMessage(final User recipient, final String message) {
-        this.intention = BotIntention.PRIVATE_MESSAGE;
-        this.recipient = recipient;
-        this.message = message;
-    }
-
-    /**
-     * Get the MessageEvent tied to this response object
-     * @return The original MessageEvent
-     */
-    public GenericMessageEvent getEvent() {
-        return this.event;
-    }
-
-    public void highlightChat(User recipient, String message) {
-        if (this.event instanceof PrivateMessageEvent) {  // sometimes we don't want highlight chat if PM
-            privateMessage(recipient, message);
-            return;
-        }
-        this.intention = BotIntention.HIGHLIGHT;
-        this.recipient = recipient;
-        this.message = message;
-    }
-
-    public void me(String message) {
-        this.intention = BotIntention.ME;
-        this.message = message;
-    }
-
-    public void me(String message, String additionalMessage) {
-        this.intention = BotIntention.ME;
-        this.message = message;
-        this.additionalMessage = additionalMessage;
-    }
-
-    public void chat(String message) {
-        this.intention = BotIntention.CHAT;
-        this.message = message;
-    }
-
-    public void chat(String message, String additionalMessage) {
-        this.intention = BotIntention.CHAT;
-        this.message = message;
-        this.additionalMessage = additionalMessage;
-    }
-
-    public void noResponse() {
-        this.intention = BotIntention.NO_REPLY;
-    }
-
-    public void setPrivateMessageNoOverride() {
-        this.intention = BotIntention.PRIVATE_MESSAGE_NO_OVERRIDE;
-    }
-
-    public boolean hasAdditionalMessage() {
-        return !(this.additionalMessage == null);
-    }
-
-    @Override
-    public String toString() {
-        if (this.hasAdditionalMessage()) {
-            return this.message + " " + this.additionalMessage;
-        }
-        return this.message;
-    }
 }

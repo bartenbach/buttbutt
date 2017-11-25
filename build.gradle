@@ -10,7 +10,7 @@ apply plugin: 'jacoco'
 
 dependencyManagement {
   imports {
-    mavenBom 'org.apache.logging.log4j:log4j-bom:2.10.0'
+    mavenBom 'org.apache.logging.log4j:log4j-bom:2.10.0' // keeps log4j versions in sync
   }
 }
 
@@ -24,16 +24,17 @@ configurations {
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12-beta-3'
+    testCompile 'junit:junit:4.12-beta-3' // for junit tests
     //yes, we need 3 jars for logging.  don't ask me about it.  I don't want to talk about it.
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.10.0'
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.10.0'
     compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.10.0'
-    compile 'org.pircbotx:pircbotx:2.1'
-    compile 'org.yaml:snakeyaml:1.14'
-    compile 'mysql:mysql-connector-java:5.1.36'
-    compile 'org.jsoup:jsoup:1.8.3'
-    compile 'net.sourceforge.jeval:jeval:0.9.4'
+    compile 'org.reflections:reflections:0.9.11' // reflections API for interfaces
+    compile 'org.pircbotx:pircbotx:2.1' // the irc bot API
+    compile 'org.yaml:snakeyaml:1.14' // for the yaml config file
+    compile 'mysql:mysql-connector-java:5.1.36' // for mysql connection
+    compile 'org.jsoup:jsoup:1.8.3' // for web scraping
+    compile 'net.sourceforge.jeval:jeval:0.9.4' // for math operations
 }
 
 sourceCompatibility = 1.8

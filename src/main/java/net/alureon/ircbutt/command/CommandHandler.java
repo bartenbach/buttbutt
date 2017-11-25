@@ -12,7 +12,9 @@ import net.alureon.ircbutt.util.MathUtils;
 import net.alureon.ircbutt.util.StringUtils;
 import org.pircbotx.User;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.reflections.Reflections;
 
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,20 +39,26 @@ public class CommandHandler {
         this.butt = butt;
     }
 
-    public void handleCommand(GenericMessageEvent event, String[] cmd, BotResponse response) {
+    public static Set<Class> getCommandClasses() {
+        Reflections reflections = new Reflections("net.alureon.ircbutt");
+        Set<Class<? extends Command>> classes = reflections.getSubTypesOf(Command.class);
+        for (Class c : classes) {
+            System.out.println(c.getName());
+        }
+        return null;
+    }
+
+    public void handleCommand(final GenericMessageEvent event, final String[] cmd) {
         /* For the sake of clearer code, let's just set these immediately */
         User user = event.getUser();
         String nick = user.getNick();
 
-/*        for (String x : cmd) {
-            if (x.equals(">>") || x.equals(">")) {
-                //todo redirection handler
-            }
-        }*/
+        /* The response of the bot */
+        BotResponse response = null;
 
         /* if it's prefixed with a tilde it's a fact request */
         if (cmd[0].startsWith("~")) {
-            butt.getFactCommand().handleKnowledge(response, cmd, user, nick);
+            response = butt.getFactCommand().handleKnowledge(cmd, user, nick);
             return;
         }
 
@@ -116,11 +124,10 @@ public class CommandHandler {
                     UrbanDictionaryCommand.getDefinition(butt, response, commandSubstitutedArray);
                     break;
                 case "version":
-                    response.chat(butt.getProgramVersion());
+                    // handle version somewhere
                     break;
                 case "dice":
-                    //DiceCommand.handleDice(event, response);
-                    new DiceCommand().executeCommand(butt, response, commandSubstitutedArray);
+                    response = new DiceCommand().executeCommand(butt, commandSubstitutedArray);
                     break;
                 case "random":
                     response.chat(String.valueOf(MathUtils.getRandom()));

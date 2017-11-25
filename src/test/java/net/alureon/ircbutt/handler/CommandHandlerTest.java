@@ -22,4 +22,9 @@ public class CommandHandlerTest {
         Assert.assertEquals("this is a test", result);
     }
 */
+
+    @Test
+    public void testReflection() {
+        CommandHandler.getCommandClasses();
+    }
 }

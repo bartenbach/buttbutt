@@ -11,9 +11,9 @@ public class MathUtils {
     }
 
     //TODO hardcoded magic number
-    public static int getRandom() {
+    public static int getRandom(final int highSide) {
         Random random = new Random();
-        return random.nextInt(101);
+        return random.nextInt(highSide);
     }
 
 }
