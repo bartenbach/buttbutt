@@ -1,5 +1,6 @@
 package net.alureon.ircbutt.command;
 
+import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.command.commands.*;
@@ -24,12 +25,10 @@ import java.util.regex.Pattern;
  */
 public class CommandHandler {
 
-
     /**
      * The instance of the IRCbutt object.
      */
     private IRCbutt butt;
-
 
     /**
      * Constructor sets the field of the IRCbutt instance.
@@ -39,6 +38,10 @@ public class CommandHandler {
         this.butt = butt;
     }
 
+    /**
+     * Gets all classes that implement the Command interface.
+     * @return Set of all classes implementing Command.
+     */
     public static Set<Class> getCommandClasses() {
         Reflections reflections = new Reflections("net.alureon.ircbutt");
         Set<Class<? extends Command>> classes = reflections.getSubTypesOf(Command.class);
@@ -48,13 +51,16 @@ public class CommandHandler {
         return null;
     }
 
-    public void handleCommand(final GenericMessageEvent event, final String[] cmd) {
+    /**
+     * The main function that handles all commands passed to the bot.
+     * @param event The GenericMessageEvent received from the PircBotX API.
+     * @param cmd The command the user has given.
+     * @return The bot's intended response in a BotResponse object.
+     */
+    public BotResponse handleCommand(final GenericMessageEvent event, final String[] cmd) {
         /* For the sake of clearer code, let's just set these immediately */
         User user = event.getUser();
         String nick = user.getNick();
-
-        /* The response of the bot */
-        BotResponse response = null;
 
         /* if it's prefixed with a tilde it's a fact request */
         if (cmd[0].startsWith("~")) {
@@ -66,7 +72,8 @@ public class CommandHandler {
         cmd[0] = cmd[0].replaceFirst("!", "");
 
         if (!cmd[0].equals("learn")) {
-            String commandSubstituted = parseCommandSubstitutionAndVariables(butt, response, StringUtils.arrayToString(cmd), nick);
+            String commandSubstituted = parseCommandSubstitutionAndVariables(butt, event,
+                    StringUtils.arrayToString(cmd));
             String[] commandSubstitutedArray = commandSubstituted.split(" ");
 
             /* switch of main bot commands */
@@ -103,19 +110,18 @@ public class CommandHandler {
                     butt.getFactCommand().handleKnowledge(response, commandSubstitutedArray, user, nick);
                     break;
                 case "echo":
-                    response.chat(StringUtils.getArgs(commandSubstitutedArray));
+                    return new BotResponse(BotIntention.CHAT, null,
+                            StringUtils.getArgs(commandSubstitutedArray));
                     break;
                 case "g":
                     GoogleSearchCommand.handleGoogleSearch(butt, response, commandSubstitutedArray);
                     break;
                 case "give":
-                    result = GiveCommand.handleGive(response, event, user, commandSubstitutedArray);
-                    response.chat(result);
+                    response = new GiveCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "rot13":
                 case "rot":
-                    result = Rot13Command.handleRot13(StringUtils.getArgs(commandSubstitutedArray));
-                    response.chat(result);
+                    response = new Rot13Command().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "yt":
                     YouTubeCommand.getYouTubeVideo(butt, response, commandSubstitutedArray);
@@ -127,23 +133,24 @@ public class CommandHandler {
                     // handle version somewhere
                     break;
                 case "dice":
-                    response = new DiceCommand().executeCommand(butt, commandSubstitutedArray);
+                    return new DiceCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "random":
-                    response.chat(String.valueOf(MathUtils.getRandom()));
+                    return new BotResponse(BotIntention.CHAT, null,
+                            String.valueOf(MathUtils.getRandom(0, 10000)));
                     break;
                 case "sqrt":
                 case "pow":
                     MathLib.handleMath(response, commandSubstitutedArray);
                     break;
                 case "check":
-                    CheckCommand.handleCheck(response, StringUtils.getArgs(commandSubstitutedArray));
+                    return new CheckCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "define":
-                    DefineCommand.handleDefine(butt, response, cmd[1]);
+                    return new DefineCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "invite":
-                    InviteCommand.handleInvite(butt, StringUtils.getArgs(cmd).split(" "));
+                    return new InviteCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "more":
                     butt.getMoreCommand().handleMore(response);
@@ -158,41 +165,52 @@ public class CommandHandler {
                     KarmaCommand.getKarma(butt, response, user, StringUtils.getArgs(cmd));
                     break;
                 case "coin":
-                    CoinCommand.handleCoin(response);
+                    return new CoinCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "gi":
                     GoogleImageSearchCommand.handleGoogleImageSearch(response, StringUtils.getArgs(cmd));
                     break;
                 case "8":
                 case "8ball":
-                    MagicEightBallCommand.handleMagicEightBall(response);
+                    return new MagicEightBallCommand().executeCommand(butt, event, commandSubstitutedArray);
                     break;
                 case "butt":
                 case "buttify":
+                    //TODO needs its own class implementation
                     String buttified = butt.getButtReplaceHandler().buttFormat(StringUtils.getArgs(commandSubstitutedArray));
-                    response.chat(buttified);
+                    return new BotResponse(BotIntention.CHAT, null, buttified);
                     break;
                 default:
                     break;
             }
+            /* handle this logic elsewhere
             if (response.getIntention() == null) {
                 response.noResponse();
-            }
+            }*/
         } else {
             butt.getFactCommand().handleKnowledge(response, cmd, user, nick);
         }
     }
 
-    private static String parseCommandSubstitutionAndVariables(IRCbutt butt, BotResponse response, String input, String nick) {
+    /**
+     * This function performs command substitution before actually executing a command.  Any commands
+     * with the variable $USER is replaced with the nick of the person giving the command.  Any commands
+     * surrounded by $() are expanded to what their value would be if the command was executed, by this
+     * function.
+     * @param butt The IRCbutt singleton.
+     * @param event The event from PircBotX.
+     * @param input The input from the user.
+     * @return a string with all commands expanded to their values.
+     */
+    private static String parseCommandSubstitutionAndVariables(final IRCbutt butt, final GenericMessageEvent event, String input) {
         Pattern p = Pattern.compile("\\$\\([^)]*\\)");
         Matcher m = p.matcher(input);
         while (m.find()) {
             String command = m.group().substring(2, m.group().length() - 1);
-            BotResponse botResponse = new BotResponse(response.getEvent());
-            butt.getCommandHandler().handleCommand(response.getEvent(), command.split(" "), botResponse);
-            input = input.replaceFirst(Pattern.quote(m.group()), botResponse.toString());
+            BotResponse response = butt.getCommandHandler().handleCommand(event, command.split(" "));
+            input = input.replaceFirst(Pattern.quote(m.group()), response.toString());
         }
-        return input.replaceAll("\\$USER", nick);
+        return input.replaceAll("\\$USER", event.getUser().getNick());
     }
 
 }

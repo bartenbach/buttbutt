@@ -12,6 +12,8 @@ import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -33,13 +35,7 @@ public final class DiceCommand implements Command {
      */
     private static final int DICE_MATH_MID = 50;
 
-    /**
-     * Executes the !dice command and returns the result.
-     * @param butt The instance of IRCbutt
-     * @param event The event from PircBotX
-     * @param cmd The command from the user
-     * @return the bot's response in a BotResponse object.
-     */
+    @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
         if (event instanceof MessageEvent) {
             Channel channel = ((MessageEvent) event).getChannel();
@@ -59,7 +55,7 @@ public final class DiceCommand implements Command {
             }
 
             String message;
-            if (MathUtils.getRandom(DICE_MATH_MAX) < DICE_MATH_MID) {
+            if (MathUtils.getRandom(0, DICE_MATH_MAX) < DICE_MATH_MID) {
                 message = Colors.WHITE + "rolls a huge " + totalUsers + " sided die and it flattens "
                         + Colors.YELLOW + victimName + Colors.WHITE + " before coming to a halt on "
                         + Colors.RED + "YOU LOSE" + Colors.NORMAL;
@@ -73,6 +69,11 @@ public final class DiceCommand implements Command {
             return new BotResponse(BotIntention.PRIVATE_MESSAGE, event.getUser(),
                     butt.getYamlConfigurationFile().getBotName() + " can't roll no dice here");
         }
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return (ArrayList<String>) Arrays.asList("dice");
     }
 
 }

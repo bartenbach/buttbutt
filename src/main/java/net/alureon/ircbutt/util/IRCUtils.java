@@ -1,8 +1,10 @@
 package net.alureon.ircbutt.util;
 
+import com.google.common.collect.ImmutableSortedSet;
 import net.alureon.ircbutt.IRCbutt;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
+import org.pircbotx.hooks.events.MessageEvent;
 
 /**
  * Contains static helper functions for working with IRC.
@@ -34,6 +36,36 @@ public final class IRCUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * Returns whether or not the specified user is in the channel (based on nick).
+     * @param event The MessageEvent from PircBotX.
+     * @param nickname The nickname of the user.
+     * @return True if the user is currently in the channel, else false.
+     */
+    public static boolean userIsInChannel(final MessageEvent event, final String nickname) {
+        ImmutableSortedSet<User> users = event.getChannel().getUsers();
+        for (User x : users) {
+            if (x.getNick().equals(nickname))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns a User currently in the channel.  If the user is not in the channel, returns null.
+     * @param event The MessageEvent from PircBotX.
+     * @param nickname The nickname of the user.
+     * @return The PircBotX User object for the user.
+     */
+    public static User getUserInChannel(final MessageEvent event, final String nickname) {
+        ImmutableSortedSet<User> users = event.getChannel().getUsers();
+        for (User x : users) {
+            if (x.getNick().equals(nickname))
+                return x;
+        }
+        return null;
     }
 
     /**

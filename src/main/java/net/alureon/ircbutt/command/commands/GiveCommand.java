@@ -1,35 +1,38 @@
 package net.alureon.ircbutt.command.commands;
 
-import com.google.common.collect.ImmutableSortedSet;
+import net.alureon.ircbutt.IRCbutt;
+import net.alureon.ircbutt.command.Command;
+import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
+import net.alureon.ircbutt.util.IRCUtils;
 import net.alureon.ircbutt.util.StringUtils;
-import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-public class GiveCommand {
+import java.util.ArrayList;
+import java.util.Arrays;
 
-    public static String handleGive(BotResponse response, GenericMessageEvent event, User user, String[] args) {
-        if (event instanceof MessageEvent) {
-            MessageEvent event2 = (MessageEvent) event;
-            if (args.length > 2) {
-                if (recipientExists(event2, args[1])) {
-                    response.chat(args[1] + ": " + StringUtils.getArgsOverOne(args));
-                    return args[1] + ": " + StringUtils.getArgsOverOne(args);
+/**
+ * Command to !give a user something.
+ */
+public final class GiveCommand implements Command {
+
+    @Override
+    public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
+         if (event instanceof MessageEvent) {
+            MessageEvent messageEvent = (MessageEvent) event;
+            if (cmd.length > 2) {
+                if (IRCUtils.userIsInChannel(messageEvent, cmd[1])) {
+                    return new BotResponse(BotIntention.CHAT, IRCUtils.getUserInChannel(messageEvent, cmd[1]),
+                            StringUtils.getArgsOverOne(cmd));
                 }
-            } else {
-                return "!give <user> <text|command>";
             }
         }
-        return null;
+        return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "!give <user> <text|command>");
     }
 
-    private static boolean recipientExists(MessageEvent event, String recipient) {
-        ImmutableSortedSet<User> users = event.getChannel().getUsers();
-        for (User x : users) {
-            if (x.getNick().equals(recipient))
-                return true;
-        }
-        return false;
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return (ArrayList<String>) Arrays.asList("give");
     }
 }

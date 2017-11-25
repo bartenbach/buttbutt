@@ -26,12 +26,25 @@ public class BotResponse {
      */
     private BotIntention intention;
 
+    /**
+     * Constructor for a BotResponse object.
+     * @param intention The intention of the bot.
+     * @param recipient The intended recipient (may be null).
+     * @param message The message the bot intends to relay.
+     */
     public BotResponse(final BotIntention intention, final User recipient, final String message) {
         this.intention = intention;
         this.recipient = recipient;
         this.message = message;
     }
 
+    /**
+     * Constructor for a BotResponse object.
+     * @param intention The intention of the bot.
+     * @param recipient The intended recipient (may be null).
+     * @param message The message the bot intends to relay.
+     * @param additionalMessage The additional message the bot intends to relay.
+     */
     public BotResponse(final BotIntention intention, final User recipient, final String message,
                        final String additionalMessage) {
         this.message = message;

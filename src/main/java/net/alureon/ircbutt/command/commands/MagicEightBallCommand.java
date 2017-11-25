@@ -1,18 +1,28 @@
 package net.alureon.ircbutt.command.commands;
 
+import net.alureon.ircbutt.IRCbutt;
+import net.alureon.ircbutt.command.Command;
+import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
+import net.alureon.ircbutt.util.MathUtils;
+import org.pircbotx.hooks.types.GenericMessageEvent;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class MagicEightBallCommand {
+/**
+ * Allows a user to ask a question to the Magic 8 Ball.
+ */
+public final class MagicEightBallCommand implements Command {
 
-    public static void handleMagicEightBall(BotResponse response) {
-        Random random = new Random();
-        int rand = random.nextInt(20);
-        response.chat(getMagic8BallResponse(rand));
-    }
 
-    private static String getMagic8BallResponse(int number) {
+    /**
+     * Gets the Magic 8 Ball's response based on a number from 0 - 19.
+     * All actual responses from the Magic 8 Ball are implemented.
+     * @param number The number of the response to return (probably generated randomly)
+     * @return returns the Magic 8 Ball's response.
+     */
+    private static String getMagic8BallResponse(final int number) {
         switch (number) {
             case 0:
                 return "(8) It is certain";
@@ -57,5 +67,16 @@ public class MagicEightBallCommand {
             default:
                 return "this should never happen - invalid switch value";
         }
+    }
+
+    @Override
+    public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
+        int random = MathUtils.getRandom(0, 19);
+        return new BotResponse(BotIntention.CHAT, null, getMagic8BallResponse(random));
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return (ArrayList<String>) Arrays.asList("8", "8ball");
     }
 }

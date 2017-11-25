@@ -1,25 +1,24 @@
 package net.alureon.ircbutt.command.commands;
 
+import net.alureon.ircbutt.IRCbutt;
+import net.alureon.ircbutt.command.Command;
+import net.alureon.ircbutt.response.BotIntention;
+import net.alureon.ircbutt.response.BotResponse;
+import net.alureon.ircbutt.util.StringUtils;
+import org.pircbotx.hooks.types.GenericMessageEvent;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Handles functions pertaining to Rot13.
  */
-public final class Rot13Command {
+public final class Rot13Command implements Command {
 
-    /**
-     * Prevent instantiation.
-     */
-    private Rot13Command() {
-
-    }
-
-    /**
-     * This function takes a String and performs a Rot13 encryption.
-     * @param in The input string to encrypt or decrypt.
-     * @return The Rot13 encrypted String.
-     */
-    public static String handleRot13(final String in) {
+    @Override
+    public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
         StringBuilder sb = new StringBuilder();
-        for (char c : in.toCharArray()) {
+        for (char c : StringUtils.getArgs(cmd).toCharArray()) {
             if (c >= 'A' && c <= 'Z') {
                 char b = (char) (c + (byte) 13);
                 if (b > 'Z') {
@@ -36,6 +35,11 @@ public final class Rot13Command {
                 sb.append(c);
             }
         }
-        return sb.toString();
+        return new BotResponse(BotIntention.CHAT, null, sb.toString());
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return (ArrayList<String>) Arrays.asList("rot", "rot13");
     }
 }
