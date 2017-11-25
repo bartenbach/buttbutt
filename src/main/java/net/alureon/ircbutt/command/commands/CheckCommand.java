@@ -1,12 +1,20 @@
 package net.alureon.ircbutt.command.commands;
 
+import net.alureon.ircbutt.IRCbutt;
+import net.alureon.ircbutt.command.Command;
+import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
 import org.pircbotx.Colors;
+import org.pircbotx.hooks.types.GenericMessageEvent;
 
-public class CheckCommand {
+/**
+ * Checks if something passes, fails, or rarely...panics.
+ */
+public final class CheckCommand implements Command {
 
-    public static void handleCheck(BotResponse response, String checking) {
-        StringBuilder sb = new StringBuilder("Testing ");
+    @Override
+    public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
+         StringBuilder sb = new StringBuilder("Testing ");
         sb.append(checking).append(": ");
 
         double random = Math.random() * 100;
@@ -19,7 +27,6 @@ public class CheckCommand {
             result = Colors.WHITE + "[" + Colors.GREEN + "PASS" + Colors.WHITE + "]";
         }
         sb.append(result);
-        response.chat(sb.toString());
+        return new BotResponse(BotIntention.CHAT, event.getUser(), sb.toString());
     }
-
 }
