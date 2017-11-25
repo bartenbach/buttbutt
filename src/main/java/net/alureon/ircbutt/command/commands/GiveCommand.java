@@ -33,6 +33,6 @@ public final class GiveCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Collections.singletonList("give");
+        return new ArrayList<>(Collections.singletonList("give"));
     }
 }

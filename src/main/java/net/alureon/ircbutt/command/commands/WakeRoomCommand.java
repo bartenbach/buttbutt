@@ -10,6 +10,8 @@ import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * This command wakes an IRC channel by pinging every user in the room.
@@ -38,6 +40,6 @@ public final class WakeRoomCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return null;
+        return new ArrayList<>(Collections.singletonList("wr"));
     }
 }

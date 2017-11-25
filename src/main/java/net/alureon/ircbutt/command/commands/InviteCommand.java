@@ -38,6 +38,6 @@ public final class InviteCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Collections.singletonList("invite");
+        return new ArrayList<>(Collections.singletonList("invite"));
     }
 }

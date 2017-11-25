@@ -10,6 +10,8 @@ import org.apache.logging.log4j.Logger;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Provides Karma functionality to the bot, where users can check an item's karma, decrease it, or increase it.
@@ -89,6 +91,6 @@ public final class KarmaCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return null;
+        return new ArrayList<>(Collections.singletonList("karma"));
     }
 }

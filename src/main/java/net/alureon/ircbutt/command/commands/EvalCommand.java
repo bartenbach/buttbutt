@@ -59,6 +59,6 @@ public final class EvalCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Collections.singletonList("eval");
+        return new ArrayList<>(Collections.singletonList("eval"));
     }
 }

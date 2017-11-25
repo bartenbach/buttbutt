@@ -67,7 +67,7 @@ public final class MoreCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Collections.singletonList("more");
+        return new ArrayList<>(Collections.singletonList("more"));
     }
 
 }

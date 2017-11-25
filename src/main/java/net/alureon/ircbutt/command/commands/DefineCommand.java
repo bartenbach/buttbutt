@@ -59,6 +59,6 @@ public final class DefineCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Collections.singletonList("define");
+        return new ArrayList<>(Collections.singletonList("define"));
     }
 }

@@ -23,6 +23,6 @@ public class CommandHandlerTest {
 
     @Test
     public void testReflection() {
-        CommandHandler.getCommandClasses();
+        CommandHandler.registerCommandClasses();
     }
 }

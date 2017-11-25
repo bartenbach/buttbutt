@@ -184,7 +184,7 @@ public final class QuoteGrabCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Arrays.asList("qfind", "qsearch", "qf", "rq", "qsay", "qinfo", "qi", "q", "rqn",
-                "rqnouser", "grab");
+        return new ArrayList<>(Arrays.asList("qfind", "qsearch", "qf", "rq", "qsay", "qinfo", "qi", "q", "rqn",
+                "rqnouser", "grab"));
     }
 }

@@ -66,6 +66,6 @@ public final class UrbanDictionaryCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Collections.singletonList("ud");
+        return new ArrayList<>(Collections.singletonList("ud"));
     }
 }

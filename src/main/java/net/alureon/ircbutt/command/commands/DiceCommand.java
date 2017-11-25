@@ -73,7 +73,7 @@ public final class DiceCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Collections.singletonList("dice");
+        return new ArrayList<>(Collections.singletonList("dice"));
     }
 
 }

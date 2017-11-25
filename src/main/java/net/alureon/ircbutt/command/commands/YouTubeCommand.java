@@ -80,6 +80,6 @@ public final class YouTubeCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Collections.singletonList("yt");
+        return new ArrayList<>(Collections.singletonList("yt"));
     }
 }

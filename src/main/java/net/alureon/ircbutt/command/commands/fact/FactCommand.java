@@ -205,7 +205,7 @@ public final class FactCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Arrays.asList("ff", "fs", "fact", "forget", "factinfo", "finfo", "fi", "factfind",
-                "factsearch", "fsearch", "ffind", "learn", "append");
+        return new ArrayList<>(Arrays.asList("ff", "fs", "fact", "forget", "factinfo", "finfo", "fi", "factfind",
+                "factsearch", "fsearch", "ffind", "learn", "append"));
     }
 }

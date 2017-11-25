@@ -51,15 +51,15 @@ public final class IRCbutt {
      */
     private ButtReplaceHandler buttReplaceHandler = new ButtReplaceHandler(this);
     /**
-     * Instantiate the ComamandHandler object.
+     * Field for the CommandHandler object.
      */
-    private CommandHandler commandHandler = new CommandHandler(this);
+    private CommandHandler commandHandler;
     /**
      * Instantiate the YAMLConfigurationFile object.
      */
     private YAMLConfigurationFile yamlConfigurationFile = new YAMLConfigurationFile();
     /**
-     * Instantiate the SqlManager object.
+     * Field for the SqlManager object.
      */
     private SqlManager sqlManager;
     /**
@@ -105,6 +105,10 @@ public final class IRCbutt {
         /* Create / parse yaml configuration file */
         yamlConfigurationFile.createConfigIfNotExists();
         yamlConfigurationFile.parseConfig();
+
+        /* Register commands */
+        commandHandler = new CommandHandler(this);
+        commandHandler.registerCommandClasses();
 
         /* Connect to SQL database */
         sqlManager = new SqlManager(this);
