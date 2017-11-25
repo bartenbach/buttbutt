@@ -47,8 +47,9 @@ public final class IRCUtils {
     public static boolean userIsInChannel(final MessageEvent event, final String nickname) {
         ImmutableSortedSet<User> users = event.getChannel().getUsers();
         for (User x : users) {
-            if (x.getNick().equals(nickname))
+            if (x.getNick().equals(nickname)) {
                 return true;
+            }
         }
         return false;
     }
@@ -62,8 +63,9 @@ public final class IRCUtils {
     public static User getUserInChannel(final MessageEvent event, final String nickname) {
         ImmutableSortedSet<User> users = event.getChannel().getUsers();
         for (User x : users) {
-            if (x.getNick().equals(nickname))
+            if (x.getNick().equals(nickname)) {
                 return x;
+            }
         }
         return null;
     }
@@ -75,15 +77,6 @@ public final class IRCUtils {
      */
     public static void sendChannelMessage(final Channel channel, final String message) {
         channel.send().message(message);
-    }
-
-    /**
-     * Send the supplied String message as a private message to a User.
-     * @param user The user to send the message to.
-     * @param message The message to send the user.
-     */
-    public static void sendPrivateMessage(final User user, final String message) {
-        user.send().message(message);
     }
 
 }

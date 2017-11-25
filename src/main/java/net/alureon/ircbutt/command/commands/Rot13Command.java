@@ -40,6 +40,6 @@ public final class Rot13Command implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return (ArrayList<String>) Arrays.asList("rot", "rot13");
+        return new ArrayList<>(Arrays.asList("rot", "rot13"));
     }
 }

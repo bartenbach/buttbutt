@@ -1,27 +1,25 @@
 package net.alureon.ircbutt.handler;
 
 import net.alureon.ircbutt.command.CommandHandler;
-import net.alureon.ircbutt.util.StringUtils;
+import net.alureon.ircbutt.response.BotResponse;
 import org.junit.Assert;
 import org.junit.Test;
+import org.pircbotx.User;
+import org.pircbotx.hooks.types.GenericMessageEvent;
+import static org.mockito.Mockito.*;
 
 public class CommandHandlerTest {
-/* This method is private
-    @Test
-    public void testCommandSubstitution() {
-        String input = "Hello $USER!";
-        String translated = CommandHandler.parseCommandSubstitutionAndVariables(null, null, input, "alureon");
-        Assert.assertEquals(translated, "Hello alureon!");
-    }
 
     @Test
-    public void testEcho() {
+    public void testEchoCommand() {
+        GenericMessageEvent event = mock(GenericMessageEvent.class);
+        User user = mock(User.class);
+        when(event.getUser()).thenReturn(user);
+        when(event.getUser().getNick()).thenReturn("test");
         String input = "echo this is a $USER";
-        String translated = CommandHandler.parseCommandSubstitutionAndVariables(null, null, input, "test");
-        String result = StringUtils.getArgs(translated.split(" "));
-        Assert.assertEquals("this is a test", result);
+        BotResponse response = new CommandHandler(null).handleCommand(event, input);
+        Assert.assertEquals("this is a test", response.getMessage());
     }
-*/
 
     @Test
     public void testReflection() {

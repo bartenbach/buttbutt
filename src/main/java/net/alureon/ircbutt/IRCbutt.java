@@ -1,5 +1,5 @@
 package net.alureon.ircbutt;
-/**
+/*
  * Copyright Blake Bartenbach 2014-2017
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +18,7 @@ package net.alureon.ircbutt;
 import net.alureon.ircbutt.file.YAMLConfigurationFile;
 import net.alureon.ircbutt.handler.*;
 import net.alureon.ircbutt.command.CommandHandler;
-import net.alureon.ircbutt.command.commands.fact.FactCommand;
 import net.alureon.ircbutt.command.commands.MoreCommand;
-import net.alureon.ircbutt.command.commands.quotegrabs.QuoteGrabCommand;
 import net.alureon.ircbutt.command.commands.karma.KarmaTable;
 import net.alureon.ircbutt.listener.ChatListener;
 import net.alureon.ircbutt.listener.PrivateMessageListener;
@@ -63,7 +61,7 @@ public final class IRCbutt {
     /**
      * Instantiate the SqlManager object.
      */
-    private SqlManager sqlManager = new SqlManager(this);
+    private SqlManager sqlManager;
     /**
      * Instantiate the FactTable object.
      */
@@ -72,10 +70,6 @@ public final class IRCbutt {
      * Instantiate the QuoteGrabTable object.
      */
     private QuoteGrabTable quoteGrabTable = new QuoteGrabTable(this);
-    /**
-     * Instantiate the FactCommand object.
-     */
-    private FactCommand factCommand = new FactCommand(this);
     /**
      * Instantiates a ListenerManager object.
      */
@@ -88,10 +82,6 @@ public final class IRCbutt {
      * Instantiates a ChatStorage object for logging the chat.
      */
     private ChatStorage chatStorage = new ChatStorage();
-    /**
-     * Instantiates a QuoteGrabCommand object for managing quotegrabs.
-     */
-    private QuoteGrabCommand quoteGrabCommand = new QuoteGrabCommand(this);
     /**
      * Instantiates a KarmaTable object for handling SQL-related Karma operations.
      */
@@ -117,6 +107,7 @@ public final class IRCbutt {
         yamlConfigurationFile.parseConfig();
 
         /* Connect to SQL database */
+        sqlManager = new SqlManager(this);
         sqlManager.connectToDatabase();
         sqlManager.createDatabaseIfNotExists();
         sqlManager.createTablesIfNotExists();
@@ -197,14 +188,6 @@ public final class IRCbutt {
     }
 
     /**
-     * Returns the FactCommand object.
-     * @return FactCommand
-     */
-    public FactCommand getFactCommand() {
-        return this.factCommand;
-    }
-
-    /**
      * Returns the ListenerManager object.
      * @return ListenerManager
      */
@@ -234,14 +217,6 @@ public final class IRCbutt {
      */
     public QuoteGrabTable getQuoteGrabTable() {
         return this.quoteGrabTable;
-    }
-
-    /**
-     * Returns the QuoteGrabCommand object.
-     * @return QuoteGrabCommand
-     */
-    public QuoteGrabCommand getQuoteGrabCommand() {
-        return this.quoteGrabCommand;
     }
 
     /**

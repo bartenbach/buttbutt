@@ -123,6 +123,7 @@ public final class FactCommand implements Command {
 
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
+        log.trace("FactCommand received the following command: " + StringUtils.arrayToString(cmd));
         if (cmd[0].equals("learn")) {
             if (butt.getYamlConfigurationFile().getBotNoVerify() || event.getUser().isVerified()) {
                 return addKnowledge(butt, event.getUser(), cmd);
@@ -182,8 +183,9 @@ public final class FactCommand implements Command {
             return getBotResponseForQuery(butt, cmd);
             //todo: factfind ^ should just accept either string or integer input instead of having separate commands
         }
-        return new BotResponse(BotIntention.CHAT, null, "this should never happen.  fact command"
-                + " didn't hit any branch in code.");
+        log.error("Fell through the entire switch at FactCommand without hitting a branch.");
+        log.error("Received: " + StringUtils.arrayToString(cmd));
+        return new BotResponse(BotIntention.NO_REPLY, null, null);
     }
 
     /**

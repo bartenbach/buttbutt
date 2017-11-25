@@ -25,6 +25,7 @@ configurations {
 
 dependencies {
     testCompile 'junit:junit:4.12-beta-3' // for junit tests
+    testCompile "org.mockito:mockito-core:+" // for mocking objects when testing
     //yes, we need 3 jars for logging.  don't ask me about it.  I don't want to talk about it.
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.10.0'
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.10.0'
@@ -38,7 +39,7 @@ dependencies {
 }
 
 sourceCompatibility = 1.8
-version = '0.4.6-indev'
+version = '0.5-indev'
 
 jar {
     dependsOn configurations.runtime

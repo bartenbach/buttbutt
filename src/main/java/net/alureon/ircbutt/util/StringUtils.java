@@ -20,24 +20,34 @@ public final class StringUtils {
         return String.join(" ", args).trim();
     }
 
-    public static String getArgs(final String[] args) {
+    /**
+     * Takes an array and returns everything except the first element - the arguments, as a String object.
+     * @param command The entire command array, split by whitespace.
+     * @return String of just the arguments.
+     */
+    public static String getArgs(final String[] command) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < args.length; i++) {
-            String x = args[i];
+        for (int i = 1; i < command.length; i++) {
+            String x = command[i];
             sb.append(x);
-            if (i + 1 != args.length) {
+            if (i + 1 != command.length) {
                 sb.append(" ");
             }
         }
         return sb.toString().trim();
     }
 
-    public static String getArgsOverOne(final String[] args) {
+    /**
+     * Takes an array and returns everything except the first and second elements, as a String object.
+     * @param command The entire command array, split by whitespace.
+     * @return String of just the arguments, minus the first one.
+     */
+    public static String getArgsOverOne(final String[] command) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 2; i < args.length; i++) {
-            String x = args[i];
+        for (int i = 2; i < command.length; i++) {
+            String x = command[i];
             sb.append(x);
-            if (i + 1 != args.length) {
+            if (i + 1 != command.length) {
                 sb.append(" ");
             }
         }

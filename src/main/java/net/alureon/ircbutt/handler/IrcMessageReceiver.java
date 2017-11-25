@@ -3,10 +3,8 @@ package net.alureon.ircbutt.handler;
 import com.google.common.base.Preconditions;
 import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
-import net.alureon.ircbutt.command.commands.karma.KarmaCommand;
 import net.alureon.ircbutt.util.IRCUtils;
 import net.alureon.ircbutt.util.MathUtils;
-import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
 
@@ -40,12 +38,12 @@ public class IrcMessageReceiver {
         /* Handle a command */
         if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
             BotResponse response = butt.getCommandHandler().handleCommand(event, event.getMessage());
-            ResponseHandler.handleResponse(response);
+            ResponseHandler.handleResponse(response, event);
 
         /* Handle karma */
-        } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")
-                || event.getMessage().endsWith("--;")) {
-            KarmaCommand.handleKarma(butt, response, event.getUser(), event.getMessage());
+        } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;")
+                || event.getMessage().endsWith("--") || event.getMessage().endsWith("--;")) {
+            //KarmaCommand.handleKarma(butt, response, event.getUser(), event.getMessage());
 
         } else {
             /* Check for URL or troll them */
@@ -72,37 +70,18 @@ public class IrcMessageReceiver {
      * @param event The PrivateMessageEvent from the PircBotX listener.
      */
     public void handlePrivateMessage(final PrivateMessageEvent event) {
-        BotResponse response = new BotResponse(event);
         Preconditions.checkArgument(event.getUser() != null, "User was null");
         if (butt.getYamlConfigurationFile().getBotNoVerify() || event.getUser().isVerified()) {
             if (event.getMessage().startsWith("!") || event.getMessage().startsWith("~")) {
-                butt.getCommandHandler().handleCommand(event, event.getMessage().split(" "), response);
-                response.setPrivateMessageNoOverride();
-                ResponseHandler.handleResponse(response);
-            } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;") || event.getMessage().endsWith("--")
-                    || event.getMessage().endsWith("--;")) {
-                KarmaCommand.handleKarma(butt, response, event.getUser(), event.getMessage());
-                response.setPrivateMessageNoOverride();
-                ResponseHandler.handleResponse(response);
+                butt.getCommandHandler().handleCommand(event, event.getMessage());
+                //ResponseHandler.handleResponse(response);
+            } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;")
+                    || event.getMessage().endsWith("--") || event.getMessage().endsWith("--;")) {
+                // TODO how to implement a listener?
+                //KarmaCommand.handleKarma(butt, response, event.getUser(), event.getMessage());
+                //ResponseHandler.handleResponse(response);
             }
         }
     }
 
-    /**
-     * This function provides a way to quickly handle an invalid command.
-     * // TODO shouldn't this functionality belong in the BotResponse object?
-     * @param user The user that gave the command.
-     */
-    public void handleInvalidCommand(final User user) {
-        IRCUtils.sendPrivateMessage(user, "butt dont kno nothin bout that");
-    }
-
-    /**
-     * The function provides a way to handle an invalid command with a custom string.
-     * @param user The user that gave the command.
-     * @param message The custom error message to deliver to the user.
-     */
-    public void handleInvalidCommand(final User user, final String message) {
-        IRCUtils.sendPrivateMessage(user, message);
-    }
 }

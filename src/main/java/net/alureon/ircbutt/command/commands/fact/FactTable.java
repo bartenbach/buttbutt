@@ -11,10 +11,16 @@ import java.sql.SQLException;
 /**
  * This class contains functions for working with the bot's Fact table in SQL.
  */
-public class FactTable {
+public final class FactTable {
 
 
+    /**
+     * The IRCbutt instance for accessing the database.
+     */
     private IRCbutt butt;
+    /**
+     * The logger for this class.
+     */
     private static final Logger log = LogManager.getLogger();
 
     /**
@@ -25,20 +31,33 @@ public class FactTable {
         this.butt = butt;
     }
 
-    public void insertKnowledge(String item, String data, String grabber) {
-        String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` (item,data,added_by) VALUES(?,?,?)";
+    /**
+     * Inserts new knowledge into the database.
+     * @param item The KEY we are adding to the fact database.
+     * @param data The corresponding VALUE we are adding to the fact database.
+     * @param creator The user's nickname who is creating the fact.
+     */
+    void insertKnowledge(final String item, final String data, final String creator) {
+        String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_knowledge` (item,data,added_by) VALUES(?,?,?)";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
             ps.setString(1, item);
             ps.setString(2, data);
-            ps.setString(3, grabber);
+            ps.setString(3, creator);
             ps.executeUpdate();
         } catch (SQLException ex) {
             log.error("Unable to insert knowledge into SQL database.  Stacktrace: ", ex);
         }
     }
 
-    public String queryKnowledge(String item) {
-        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE item=?";
+    /**
+     * Retrieves a fact from the database.
+     * @param item The KEY we are searching the database for.
+     * @return The VALUE the database holds for said key.
+     */
+    String queryKnowledge(final String item) {
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_knowledge` WHERE item=?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             Object[] objects = {item};
             butt.getSqlManager().prepareStatement(ps, objects);
@@ -53,9 +72,15 @@ public class FactTable {
         return null;
     }
 
-    public boolean deleteKnowledge(String item) {
+    /**
+     * Deletes the specified KEY and associated VALUE from the database.
+     * @param item The item to delete.
+     * @return A boolean indicating TRUE if the fact was deleted.
+     */
+    boolean deleteKnowledge(final String item) {
         log.debug(item);
-        String update = "DELETE FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE item=?";
+        String update = "DELETE FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_knowledge` WHERE item=?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
             ps.setString(1, item);
             int rows = ps.executeUpdate();
@@ -66,8 +91,13 @@ public class FactTable {
         return false;
     }
 
-    public String getRandomData() {
-        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` ORDER BY RAND() LIMIT 1";
+    /**
+     * Retrieves a completely random fact's VALUE from the database.
+     * @return the VALUE of a random fact.
+     */
+    String getRandomData() {
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_knowledge` ORDER BY RAND() LIMIT 1";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
              ResultSet rs = butt.getSqlManager().getResultSet(ps)) {
             assert rs != null;
@@ -81,7 +111,8 @@ public class FactTable {
     }
 
     public String getFactInfo(String name) {
-        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE item=?";
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_knowledge` WHERE item=?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
@@ -102,7 +133,8 @@ public class FactTable {
     public String findFact(String search) {
         butt.getMoreCommand().clearMore();
         String firstResult = null;
-        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE data LIKE ? LIMIT 24";
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_knowledge` WHERE data LIKE ? LIMIT 24";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             ps.setString(1, "%" + search + "%");
             ResultSet rs = ps.executeQuery();
@@ -125,7 +157,8 @@ public class FactTable {
     }
 
     public String findFactById(int fid) {
-        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` WHERE id = ?";
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_knowledge` WHERE id = ?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             ps.setInt(1, fid);
             ResultSet rs = ps.executeQuery();

@@ -21,14 +21,41 @@ import java.sql.*;
 public class SqlManager {
 
 
+    /**
+     * The Connection object representing a connection to our database.
+     */
     private Connection connection;
+    /**
+     * The IRCbutt instance, for getting configuration file values.
+     */
     private IRCbutt butt;
+    /**
+     * The IP address of the MySQL server.
+     */
     private String ip;
+    /**
+     * The username we connect to the MySQL server with.
+     */
     private String username;
+    /**
+     * The password we connect to the MySQL server with.
+     */
     private String password;
+    /**
+     * The port we connect to the MySQL server with.
+     */
     private int port;
+    /**
+     * The database we will be using in MySQL.
+     */
     private String database;
+    /**
+     * The logger for this class.
+     */
     private static final Logger log = LogManager.getLogger();
+    /**
+     * The SQL timeout value, in seconds, in which, if exceeded a connection is no longer considered valid.
+     */
     private static final int SQL_WAIT_TIME = 10;
 
     /**
@@ -54,7 +81,7 @@ public class SqlManager {
         try {
             connection = DriverManager.getConnection(url, this.username, this.password);
         } catch (SQLException ex) {
-            log.error("Failed to establish SQL connection: ", ex);
+            log.error("Failed to establish SQL connection: ", ex.getMessage());
             return;
         }
         log.info("[SQL backend connected]");
@@ -65,7 +92,11 @@ public class SqlManager {
      */
     public void createDatabaseIfNotExists() {
         boolean result = sqlUpdate("CREATE DATABASE IF NOT EXISTS ircbutt CHARACTER SET utf8;");
-        log.debug("Create database returned {}", result);
+        log.debug("Create database if not exists returned: {}", result);
+        if (!result) {
+            log.fatal("Failed to create database! Shutting down...");
+            System.exit(1);
+        }
     }
 
     /**
@@ -73,17 +104,24 @@ public class SqlManager {
      * IRCbutt object to get custom table prefixes.
      */
     public void createTablesIfNotExists() {
-        sqlUpdate("CREATE TABLE IF NOT EXISTS `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` "
+        boolean table1Status = sqlUpdate("CREATE TABLE IF NOT EXISTS `"
+                + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` "
                 + "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `user` VARCHAR(16) NOT NULL,"
                 + "`quote` VARCHAR(300) NOT NULL, `grabbed_by` VARCHAR(16) NOT NULL,"
                 + "`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=MyISAM");
-        sqlUpdate("CREATE TABLE IF NOT EXISTS `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` "
+        boolean table2Status = sqlUpdate("CREATE TABLE IF NOT EXISTS `"
+                + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` "
                 + "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `item` VARCHAR(32) NOT NULL UNIQUE,"
                 + "`data` VARCHAR(300) NOT NULL, `added_by` VARCHAR(16) NOT NULL,"
                 + "`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=MyISAM");
-        sqlUpdate("CREATE TABLE IF NOT EXISTS `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` "
+        boolean table3Status = sqlUpdate("CREATE TABLE IF NOT EXISTS `"
+                + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` "
                 + "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `item` VARCHAR(32) NOT NULL,"
                 + "`karma` SMALLINT NOT NULL) ENGINE=MyISAM");
+        if (!table1Status || !table2Status || !table3Status) {
+            log.fatal("Failed to create table in database! Shutting down...");
+            System.exit(1);
+        }
     }
 
     /**
@@ -99,7 +137,7 @@ public class SqlManager {
             ps.executeUpdate();
             return true;
         } catch (SQLException ex) {
-            log.error("Unable to update SQL database. Stacktrace: ", ex);
+            log.error("Unable to update SQL database: ", ex.getMessage());
         }
         return false;
     }
@@ -122,7 +160,7 @@ public class SqlManager {
         try {
             return connection.prepareStatement(query);
         } catch (SQLException | NullPointerException ex) {
-            log.error("Unable to prepare SQL statement. Stacktrace: ", ex);
+            log.error("Unable to prepare SQL statement: ", ex.getMessage());
             return null;
         }
     }
@@ -146,7 +184,7 @@ public class SqlManager {
                 }
             }
         } catch (SQLException ex) {
-            log.error("Failed to set parameter in PreparedStatement. StackTrace: ", ex);
+            log.error("Failed to set parameter in PreparedStatement: ", ex.getMessage());
         }
     }
 
@@ -161,7 +199,7 @@ public class SqlManager {
         try {
             return ps.executeQuery();
         } catch (SQLException ex) {
-            log.error("Failed to execute query from PreparedStatement. StackTrace: ", ex);
+            log.error("Failed to execute query from PreparedStatement: ", ex.getMessage());
             return null;
         }
     }
@@ -174,7 +212,7 @@ public class SqlManager {
         try {
             return this.connection.isValid(SQL_WAIT_TIME);
         } catch (SQLException ex) {
-            log.warn("Exception checking connection validity, ", ex);
+            log.warn("Exception checking connection validity: ", ex.getMessage());
             return false;
         }
     }

@@ -27,7 +27,8 @@ public final class QuoteGrabCommand implements Command {
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
         //TODO this class shouldn't be handling SQL exceptions.  That makes no sense.
-        //TODO this needs more refactoring than I have left in me right now.
+        //TODO this needs more refactoring than I have left in me right now
+        log.trace("QuoteGrabCommand received the following: " + StringUtils.arrayToString(cmd));
         switch (cmd[0]) {
             case "grab":
                 if (cmd.length == 2) {
@@ -140,8 +141,9 @@ public final class QuoteGrabCommand implements Command {
             default:
                 break;
         }
-        return new BotResponse(BotIntention.CHAT, null, "this shouldn't happen. fell through entire"
-                + " quotegrabcommand without hitting a branch");
+        log.error("Fell through entire switch of QuoteGrabCommand without hitting a branch.");
+        log.error("Received: " + StringUtils.arrayToString(cmd));
+        return new BotResponse(BotIntention.NO_REPLY, null, null);
     }
 
     /**

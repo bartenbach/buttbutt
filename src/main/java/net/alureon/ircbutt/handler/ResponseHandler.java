@@ -1,6 +1,10 @@
 package net.alureon.ircbutt.handler;
 
 import net.alureon.ircbutt.response.BotResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.types.GenericMessageEvent;
 
 
 /**
@@ -9,6 +13,10 @@ import net.alureon.ircbutt.response.BotResponse;
  */
 final class ResponseHandler {
 
+    /**
+     * The logger for this class.
+     */
+    private static final Logger log = LogManager.getLogger();
     /**
      * Private constructor to prevent instantiation.
      */
@@ -20,49 +28,70 @@ final class ResponseHandler {
      * Handles the BotResponse object, and routes it to the correct method
      * based upon the bot's intention.
      * @param response The BotResponse object to handle.
+     * @param event The GenericMessageEvent associated with the response.
      */
-    static void handleResponse(final BotResponse response) {
+    static void handleResponse(final BotResponse response, final GenericMessageEvent event) {
         switch (response.getIntention()) {
-            case PRIVATE_MESSAGE_NO_OVERRIDE:
+            case PRIVATE_MESSAGE_NO_OVERRIDE: // TODO use cases for this?
                 handlePrivateMessage(response);
                 break;
             case PRIVATE_MESSAGE:
                 handlePrivateMessage(response);
                 break;
             case HIGHLIGHT:
-                handleHighlight(response);
+                handleHighlight(response, event);
                 break;
             case ME:
-                handleMe(response);
+                handleMe(response, event);
                 break;
             case NO_REPLY:
                 break;
             case CHAT:
-                handleChat(response);
+                handleChat(response, event);
                 break;
             default:
                 break;
         }
     }
 
-    private static void handleChat(final BotResponse response) {
-        response.getChannel().send().message(response.getMessage());
-        if (response.hasAdditionalMessage()) {
-            response.getChannel().send().message(response.getAdditionalMessage());
+    /**
+     * Handles a BotResponse object's CHAT intention.
+     * @param response The BotResponse object to handle.
+     * @param event The GenericMessageEvent associated with the response.
+     */
+    private static void handleChat(final BotResponse response, final GenericMessageEvent event) {
+        if (event instanceof MessageEvent) {
+            MessageEvent messageEvent = (MessageEvent) event;
+            messageEvent.getChannel().send().message(response.getMessage());
+            if (response.getAdditionalMessage() != null) {
+                messageEvent.getChannel().send().message(response.getAdditionalMessage());
+            }
+        } else {
+            log.error("BotIntention was Chat but message was not instance of MessageEvent:");
+            log.error(response.getMessage());
         }
     }
 
-    private static void handleHighlight(final BotResponse response) {
-        response.getEvent().respond(response.getMessage());
-        if (response.hasAdditionalMessage()) {
-            response.getEvent().respond(response.getAdditionalMessage());
+    /**
+     * Handles a BotResponse object's HIGHLIGHT intention.
+     * @param response The BotResponse object to handle.
+     * @param event The GenericMessageEvent associated with the response.
+     */
+    private static void handleHighlight(final BotResponse response, final GenericMessageEvent event) {
+        event.respond(response.getMessage());
+        if (response.getAdditionalMessage() != null) {
+            event.respond(response.getAdditionalMessage());
         }
     }
 
+    /**
+     * Handles a BotResponse object's PRIVATE_MESSAGE intention.
+     * @param response The BotResponse object to handle.
+     */
     private static void handlePrivateMessage(final BotResponse response) {
         if (response.getMessage() != null) {
             response.getRecipient().send().message(response.getMessage());
-            if (response.hasAdditionalMessage()) {
+            if (response.getAdditionalMessage() != null) {
                 response.getRecipient().send().message(response.getMessage());
             }
         } else {
@@ -73,14 +102,22 @@ final class ResponseHandler {
     }
 
     /**
-     * Handles the bot's /me command.  Chats the supplied message to the channel
-     * using /me, and any additionally supplied messages.
-     * @param response The response.
+     * Handles a BotResponse object's ME intention.
+     * @param response The BotResponse object to handle.
+     * @param event The GenericMessageEvent associated with the response.
      */
-    private static void handleMe(final BotResponse response) {
-        response.getChannel().send().action(response.getMessage());
-        if (response.hasAdditionalMessage()) {
-            response.getChannel().send().action(response.getAdditionalMessage());
+    private static void handleMe(final BotResponse response, final GenericMessageEvent event) {
+        if (event instanceof MessageEvent) {
+            MessageEvent messageEvent = (MessageEvent) event;
+            messageEvent.getChannel().send().action(response.getMessage());
+            if (response.getAdditionalMessage() != null) {
+                messageEvent.getChannel().send().action(response.getAdditionalMessage());
+            }
+        } else {
+            event.respondPrivateMessage(response.getMessage());
+            if (response.getAdditionalMessage() != null) {
+                event.respondPrivateMessage(response.getAdditionalMessage());
+            }
         }
     }
 
