@@ -1,5 +1,8 @@
 package net.alureon.ircbutt.handler;
 
+import net.alureon.ircbutt.command.CommandHandler;
+import org.junit.Test;
+
 /**
  * A class to hold tests for the CommandHandler.
  */
@@ -17,5 +20,10 @@ public class CommandHandlerTest {
         Assert.assertEquals("this is a test", response.getMessage());
     }
     */
+
+    @Test
+    public void testRegisteringCommands() {
+        new CommandHandler(null).registerCommandClasses();
+    }
 
 }

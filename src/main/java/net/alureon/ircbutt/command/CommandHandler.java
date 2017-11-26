@@ -51,25 +51,22 @@ public final class CommandHandler {
      * command aliases into the command map.
      */
     public void registerCommandClasses() {
-        log.info("Registering Commands");
-        Reflections reflections = new Reflections("net.alureon.ircbutt");
+        log.info("Registering Commands...");
+        Reflections reflections = new Reflections("net.alureon.ircbutt.command");
         Set<Class<? extends Command>> classes = reflections.getSubTypesOf(Command.class);
         for (Class<? extends Command> c : classes) {
             try {
-                Class<?> commandClass = Class.forName(c.getName());
-                Class<? extends Command> implementation = commandClass.asSubclass(Command.class);
-                Constructor<? extends Command> constructor = implementation.getConstructor();
+                Class<? extends Command> commandClass = Class.forName(c.getName()).asSubclass(Command.class);
+                Constructor<? extends Command> constructor = commandClass.getConstructor();
                 Command command = constructor.newInstance();
-                for (String x : command.getCommandAliases()) {
-                    commandMap.put(x, command);
+                for (String alias : command.getCommandAliases()) {
+                    commandMap.put(alias, command);
+                    log.info("Registered command '" + alias + "' to " + command.getClass().getSimpleName());
                 }
             } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException
                     | InstantiationException | InvocationTargetException e) {
                 log.error("Failed to register command class: " + e.getMessage());
             }
-        }
-        for (Map.Entry<String, Command> pair : commandMap.entrySet()) {
-            log.info("Registered command '" + pair.getKey() + "' to class " + pair.getValue().getClass().getName());
         }
     }
 
