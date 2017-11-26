@@ -1,13 +1,8 @@
 package net.alureon.ircbutt.handler;
 
-import net.alureon.ircbutt.command.CommandHandler;
-import net.alureon.ircbutt.response.BotResponse;
-import org.junit.Assert;
-import org.junit.Test;
-import org.pircbotx.User;
-import org.pircbotx.hooks.types.GenericMessageEvent;
-import static org.mockito.Mockito.*;
-
+/**
+ * A class to hold tests for the CommandHandler.
+ */
 public class CommandHandlerTest {
 
     /*

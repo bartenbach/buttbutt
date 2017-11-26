@@ -8,11 +8,17 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-public class Rot13CommandTest {
+/**
+ * Tests for the Rot13 command.
+ */
+public final class Rot13CommandTest {
 
+    /**
+     * Tests the rot13 command.
+     */
     @Test
     public void testRot13() {
-        String[] command = { "rot", "green" };
+        String[] command = {"rot", "green"};
         BotResponse response = new Rot13Command().executeCommand(null, null, command);
         Assert.assertEquals(null, response.getRecipient());
         Assert.assertEquals(null, response.getAdditionalMessage());
@@ -20,6 +26,9 @@ public class Rot13CommandTest {
         Assert.assertEquals("terra", response.getMessage());
     }
 
+    /**
+     * Tests that the command aliases are set correctly for the rot13 command.
+     */
     @Test
     public void testRot13CommandAliases() {
         ArrayList<String> commandAliases = new Rot13Command().getCommandAliases();

@@ -60,7 +60,7 @@ public final class FactCommand implements Command {
                 return new BotResponse(BotIntention.HIGHLIGHT, user, "butt already know about " + item);
             }
         }
-        return new BotResponse(BotIntention.CHAT, user, "!learn key: value");
+        return new BotResponse(BotIntention.HIGHLIGHT, user, "!learn key: value");
     }
 
     /**
@@ -172,16 +172,17 @@ public final class FactCommand implements Command {
                 return new BotResponse(BotIntention.CHAT, null, info);
             } else {
                 // the only way this should happen is if the bot doesn't know any facts
-                return new BotResponse(BotIntention.CHAT, null, "butt dont know any facts yet!");
+                return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "butt dont know any facts yet!");
             }
         } else if (cmd[0].equals("factinfo") || cmd[0].equals("finfo") || cmd[0].equals("fi")) {
-            return getBotResponseForQuery(butt, cmd);
+            String info = butt.getFactTable().getFactInfo(StringUtils.getArgs(cmd));
+            return getBotResponseForQuery(info);
         } else if (cmd[0].equalsIgnoreCase("factfind") || cmd[0].equalsIgnoreCase("factsearch")
                 || cmd[0].equalsIgnoreCase("fsearch") || cmd[0].equalsIgnoreCase("ffind")
                 || cmd[0].equals("ff") || cmd[0].equals("fs")) {
             butt.getMoreCommand().clearMore();
-            return getBotResponseForQuery(butt, cmd);
-            //todo: factfind ^ should just accept either string or integer input instead of having separate commands
+            String info = butt.getFactTable().findFact(StringUtils.getArgs(cmd));
+            return getBotResponseForQuery(info);
         }
         log.error("Fell through the entire switch at FactCommand without hitting a branch.");
         log.error("Received: " + StringUtils.arrayToString(cmd));
@@ -190,12 +191,10 @@ public final class FactCommand implements Command {
 
     /**
      * A helper method from retrieving fact data from the database.
-     * @param butt The IRCbutt instance for accessing the database.
-     * @param cmd The item the user is searching for.
+     * @param info The potentially null info from the database.
      * @return the bot's response to the query.
      */
-    private BotResponse getBotResponseForQuery(final IRCbutt butt, final String[] cmd) {
-        String info = butt.getFactTable().findFact(StringUtils.getArgs(cmd));
+    private BotResponse getBotResponseForQuery(final String info) {
         if (info != null) {
             return new BotResponse(BotIntention.CHAT, null, info);
         } else {

@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import org.pircbotx.User;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -42,7 +41,6 @@ public final class QuoteGrabCommand implements Command {
                         if (butt.getChatStorage().hasQuoteFrom(cmd[1])) {
                             String quote = butt.getChatStorage().getLastQuoteFrom(cmd[1]);
                             log.trace("Quote grabbed: " + quote);
-                            try {
                                 if (!butt.getQuoteGrabTable().quoteAlreadyExists(cmd[1], quote)) {
                                     butt.getQuoteGrabTable().addQuote(cmd[1], quote, event.getUser().getNick());
                                     return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "Tada!");
@@ -50,9 +48,6 @@ public final class QuoteGrabCommand implements Command {
                                     log.debug("User tried to add duplicate quote - not adding duplicate.");
                                     return new BotResponse(BotIntention.NO_REPLY, null, null);
                                 }
-                            } catch (SQLException ex) {
-                                log.error("Exception accessing database: ", ex);
-                            }
                         } else {
                             return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(),
                                     "who's " + cmd[1] + "?");
@@ -61,22 +56,16 @@ public final class QuoteGrabCommand implements Command {
                 } else {
                     return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "!grab <nick>");
                 }
-                break;
             case "rq":
                 if (cmd.length == 1) {
                     String quote = butt.getQuoteGrabTable().getRandomQuoteAndUser();
                     return getQuoteResponse(quote, "butt don't have any quotes yet!", event.getUser(),
                             "Database returned no quote - got null");
                 } else {
-                    try {
                         String quote = butt.getQuoteGrabTable().getRandomQuoteAndUserFromUser(cmd[1]);
                         return getQuoteResponse(quote, "butt don't have any quotes for " + cmd[1],
                                 event.getUser(), "Didn't find any quotes from user: " + cmd[1]);
-                    } catch (SQLException ex) {
-                        log.error("Exception accessing database: ", ex);
-                    }
                 }
-                break;
             case "rqn":
             case "rqnouser":
                 if (cmd.length == 1) {
@@ -84,42 +73,27 @@ public final class QuoteGrabCommand implements Command {
                     return getQuoteResponse(quote, "butt don't have any quotes yet!", event.getUser(),
                             "Database returned no quote - got null");
                 } else {
-                    try {
                         String quote = butt.getQuoteGrabTable().getRandomQuoteFromUser(cmd[1]);
                         return getQuoteResponse(quote, "butt don't have any quotes from " + cmd[1], event.getUser(),
                                 "Database returned no quotes for user: " + cmd[1]);
-                    } catch (SQLException ex) {
-                        log.error("Exception accessing database: ", ex.getMessage());
-                    }
                 }
-                break;
             case "q":
                 if (cmd.length == 1) {
                     return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "!q <nick>");
                 } else {
-                    try {
-                        String quote = butt.getQuoteGrabTable().getLastQuoteFromPlayer(cmd[1]);
+                        String quote = butt.getQuoteGrabTable().getLastQuoteFromUser(cmd[1]);
                         return getQuoteResponse(quote, "butt dont' have any quotes from " + cmd[1], event.getUser(),
                                 "Database returned no quotes for user: " + cmd[1]);
-                    } catch (SQLException ex) {
-                        log.error("Exception accessing database: ", ex);
-                    }
                 }
-                break;
             case "qinfo":
             case "qi":
                 if (cmd.length == 1) {
                     return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "!qinfo <id>");
                 } else {
-                    try {
                         String[] quote = butt.getQuoteGrabTable().getQuoteInfo(Integer.parseInt(cmd[1]));
                         return getQuoteResponse(quote, "butt found no quote with id " + cmd[1], event.getUser(),
                                 "Found no quote with id of " + cmd[1] + " in the database.");
-                    } catch (SQLException ex) {
-                        log.error("Exception accessing database: ", ex);
-                    }
                 }
-                break;
             case "qsay":
                 if (cmd.length == 1) {
                     return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "!qsay <id>");

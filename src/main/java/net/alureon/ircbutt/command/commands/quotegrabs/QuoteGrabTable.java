@@ -14,38 +14,71 @@ import java.sql.SQLException;
 public final class QuoteGrabTable {
 
 
+    /**
+     * The IRCbutt instance field for getting values from the YAML configuration file.
+     */
     private IRCbutt butt;
-    private final static Logger log = LogManager.getLogger();
+    /**
+     * The logger for this class.
+     */
+    private static final Logger log = LogManager.getLogger();
 
-
-    public QuoteGrabTable(IRCbutt butt) {
+    /**
+     * The class constructor.
+     * @param butt The IRCbutt instance needed to access the YAML configuration file.
+     */
+    public QuoteGrabTable(final IRCbutt butt) {
         this.butt = butt;
     }
 
-    public void addQuote(String nick, String quote, String grabber) {
-        String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` (user,quote,grabbed_by) VALUES(?,?,?)";
+    /**
+     * Adds a quote to the bot's quotegrab table.
+     * @param nick The nickname of the person who said the quote.
+     * @param quote The quote the person said.
+     * @param grabber The person who grabbed the quote.
+     */
+    void addQuote(final String nick, final String quote, final String grabber) {
+        String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_quotes` (user,quote,grabbed_by) VALUES(?,?,?)";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
             log.trace(nick + quote + grabber);
             Object[] objects = {nick, quote, grabber};
             butt.getSqlManager().prepareStatement(ps, objects);
-            ps.executeUpdate();
+            if (ps != null) {
+                ps.executeUpdate();
+            } else {
+                log.error("Received null PreparedStatement in QuoteGrabTable.  Unable to add quote.");
+            }
         } catch (SQLException ex) {
-            log.error("SQL Exception has occurred. StackTrace:", ex);
+            log.error("SQL Exception has occurred in QuoteGrabTable: ", ex.getMessage());
         }
-        // null PreparedStatement is handled by getPreparedStatement();
     }
 
-    public boolean quoteAlreadyExists(String playerName, String quote) throws SQLException {
-        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? AND quote=?";
-        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
-        ps.setString(1, playerName);
-        ps.setString(2, quote);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            rs.close();
-            return true;
+    /**
+     * Checks to see if the quote already exists in the database to prevent double grabs.
+     * @param nickname The nickname of the person who said the quote.
+     * @param quote The quote that they said.
+     * @return True if the quote is already in the database, otherwise false.
+     */
+    boolean quoteAlreadyExists(final String nickname, final String quote) {
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_quotes` WHERE user=? AND quote=?";
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
+            if (ps != null) {
+                ps.setString(1, nickname);
+                ps.setString(2, quote);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    rs.close();
+                    return true;
+                }
+                rs.close();
+            } else {
+                log.error("Received null PreparedStatement in QuoteGrabTable. Unable to check to see if quote exists.");
+            }
+        } catch (SQLException ex) {
+            log.error("Encountered SQL Exception in QuoteGrabTable: " + ex.getMessage());
         }
-        rs.close();
         return false;
     }
 
@@ -54,20 +87,23 @@ public final class QuoteGrabTable {
      * in the format "name: quote".
      * @return The user and the quote that was captured.
      */
-    public String getRandomQuoteAndUser() {
+    String getRandomQuoteAndUser() {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
                 + "_quotes` ORDER BY RAND() LIMIT 1";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ResultSet rs = butt.getSqlManager().getResultSet(ps);
         try {
-            assert rs != null;
-            if (rs.next()) {
-                String user = rs.getString("user");
-                String quote = rs.getString("quote");
-                return restructureQuote(user, quote);
+            if (rs != null) {
+                if (rs.next()) {
+                    String user = rs.getString("user");
+                    String quote = rs.getString("quote");
+                    return restructureQuote(user, quote);
+                }
+            } else {
+                log.error("Received null ResultSet in QuoteGrabTable. Unable to retrieve quote from the database.");
             }
         } catch (SQLException ex) {
-            log.error("SQL Exception has occurred. StackTrace:", ex);
+            log.error("Encountered SQL Exception in QuoteGrabTable: ", ex.getMessage());
         }
         return null;
     }
@@ -77,15 +113,18 @@ public final class QuoteGrabTable {
      * said the quote.
      * @return A random quote from the database.
      */
-    public String getRandomQuote() {
+    String getRandomQuote() {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
                 + "_quotes` ORDER BY RAND() LIMIT 1";
         PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
         ResultSet rs = butt.getSqlManager().getResultSet(ps);
         try {
-            assert rs != null;
-            if (rs.next()) {
-                return rs.getString("quote");
+            if (rs != null) {
+                if (rs.next()) {
+                    return rs.getString("quote");
+                }
+            } else {
+                log.error("Received null ResultSet in QuoteGrabTable.  Cannot retrieve quote from the database.");
             }
         } catch (SQLException ex) {
             log.error("SQL Exception has occurred. StackTrace:", ex);
@@ -99,18 +138,22 @@ public final class QuoteGrabTable {
      * @param id The id of the quote to retrieve.
      * @return The quote from the database with the specified ID.
      */
-    public String getQuoteById(final int id) {
+    String getQuoteById(final int id) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE id=?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                String user = rs.getString("user");
-                String quote = rs.getString("quote");
+            if (ps != null) {
+                ps.setInt(1, id);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    String user = rs.getString("user");
+                    String quote = rs.getString("quote");
+                    rs.close();
+                    return restructureQuote(id, user, quote);
+                }
                 rs.close();
-                return restructureQuote(id, user, quote);
+            } else {
+                log.error("Received null PreparedStatement in QuoteGrabTable.  Cannot retrieve quote from database.");
             }
-            rs.close();
         } catch (SQLException ex) {
             log.error("Unable to retrieve quote from database by id.\n{}", ex.getMessage());
         }
@@ -122,95 +165,166 @@ public final class QuoteGrabTable {
      * @param search The string to search the database for.
      * @return Any quote found matching the search.
      */
-    public String findQuote(final String search) {
-        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE quote LIKE ?";
+    String findQuote(final String search) {
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_quotes` WHERE quote LIKE ?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
-            ps.setString(1, "%" + search + "%");
-            ResultSet rs = ps.executeQuery();
-            //TODO this could certainly return more than one item
-            if (rs.next()) {
-                int id = rs.getInt("id");
-                String user = rs.getString("user");
-                String quote = rs.getString("quote");
+            if (ps != null) {
+                ps.setString(1, "%" + search + "%");
+                ResultSet rs = ps.executeQuery();
+                //TODO this could certainly return more than one item
+                if (rs.next()) {
+                    int id = rs.getInt("id");
+                    String user = rs.getString("user");
+                    String quote = rs.getString("quote");
+                    rs.close();
+                    return restructureQuote(id, user, quote);
+                }
                 rs.close();
-                return restructureQuote(id, user, quote);
+            } else {
+                log.error("Received null PreparedStatement in QuoteGrabTable. Cannot retrieve quote from database.");
             }
-            rs.close();
         } catch (SQLException ex) {
-            log.error("Unable to retrieve quote from the database\n{}", ex.getMessage());
+            log.error("Encountered SQL Exception in QuoteGrabTable: " + ex.getMessage());
         }
         return null;
     }
 
-    public String getRandomQuoteAndUserFromUser(final String username) throws SQLException {
-        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY RAND() LIMIT 1";
-        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
-        ps.setString(1, username);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            String quote = rs.getString("quote");
-            rs.close();
-            return restructureQuote(username, quote);
+    /**
+     * Retrieves a random quote and the user who said it, from a specific user, from the database.
+     * @param username The name of the user we want a quote from.
+     * @return The name of the user and quote in a String (structured through restructureQuote method).
+     */
+    String getRandomQuoteAndUserFromUser(final String username) {
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_quotes` WHERE user=? ORDER BY RAND() LIMIT 1";
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
+            if (ps != null) {
+                ps.setString(1, username);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    String quote = rs.getString("quote");
+                    rs.close();
+                    return restructureQuote(username, quote);
+                }
+                rs.close();
+            } else {
+                log.error("Received null PreparedStatement in QuoteGrabTable. Cannot retrieve quote from database.");
+            }
+        } catch (SQLException ex) {
+            log.error("Encountered SQL Exception in QuoteGrabTable: " + ex.getMessage());
         }
-        rs.close();
         return null;
     }
 
-    public String getRandomQuoteFromUser(String username) throws SQLException {
-        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY RAND() LIMIT 1";
-        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
-        ps.setString(1, username);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            String value = rs.getString("quote");
-            rs.close();
-            return value;
+    /**
+     * Gets a random quote from a specified user, without their username attached to it.
+     * @param username The username to get a random quote from.
+     * @return A String containing a random quote from the user, or null if none exists.
+     */
+    String getRandomQuoteFromUser(final String username) {
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_quotes` WHERE user=? ORDER BY RAND() LIMIT 1";
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
+            if (ps != null) {
+                ps.setString(1, username);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    String value = rs.getString("quote");
+                    rs.close();
+                    return value;
+                }
+                rs.close();
+            } else {
+                log.error("Received null PreparedStatement in QuoteGrabTable. Unable to retrieve quote from database.");
+            }
+        } catch (SQLException ex) {
+            log.error("Encountered SQL Exception in QuoteGrabTable: " + ex.getMessage());
         }
-        rs.close();
         return null;
     }
 
-    public String[] getQuoteInfo(int id) throws SQLException {
+    /**
+     * Retrieve the info for a quote from the database.  This includes the user who said the quote, the quote
+     * that they said, who grabbed the quote, and when it was grabbed.
+     * @param id The id of the quote to find.
+     * @return A String array, with element 0 containing the quote, and element 1 containing the quote info. If no
+     * quote can be found, this will return null.
+     */
+    String[] getQuoteInfo(final int id) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE id=?";
-        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
-        ps.setInt(1, id);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            String user = rs.getString("user");
-            String quote = rs.getString("quote");
-            String grabber = rs.getString("grabbed_by");
-            String time = rs.getString("timestamp");
-            String formattedQuote = restructureQuote(id, user, quote);
-            String quoteInfo = "Grabbed by: " + grabber + " on " + time;
-            String[] quotes = new String[2];
-            quotes[0] = formattedQuote;
-            quotes[1] = quoteInfo;
-            rs.close();
-            return quotes;
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
+            if (ps != null) {
+                ps.setInt(1, id);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    String user = rs.getString("user");
+                    String quote = rs.getString("quote");
+                    String grabber = rs.getString("grabbed_by");
+                    String time = rs.getString("timestamp");
+                    String formattedQuote = restructureQuote(id, user, quote);
+                    String quoteInfo = "Grabbed by: " + grabber + " on " + time;
+                    String[] quotes = new String[2];
+                    quotes[0] = formattedQuote;
+                    quotes[1] = quoteInfo;
+                    rs.close();
+                    return quotes;
+                }
+                rs.close();
+            } else {
+                log.error("Received null PreparedStatement in QuoteGrabTable. Cannot retrieve quote info.");
+            }
+        } catch (SQLException ex) {
+            log.error("Encountered SQL Exception in QuoteGrabTable: " + ex.getMessage());
         }
-        rs.close();
         return null;
     }
 
-    public String getLastQuoteFromPlayer(String username) throws SQLException {
-        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` WHERE user=? ORDER BY id DESC LIMIT 1";
-        PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
-        ps.setString(1, username);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            String quote = rs.getString("quote");
-            rs.close();
-            return restructureQuote(username, quote);
+    /**
+     * Retrieves the last quote that was grabbed from the user.
+     * @param username The username to get the last quote for.
+     * @return A String containing either the last quote grabbed from the user, or null if none exists.
+     */
+    String getLastQuoteFromUser(final String username) {
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_quotes` WHERE user=? ORDER BY id DESC LIMIT 1";
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
+            if (ps != null) {
+                ps.setString(1, username);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    String quote = rs.getString("quote");
+                    rs.close();
+                    return restructureQuote(username, quote);
+                }
+                rs.close();
+            } else {
+                log.error("Received null PreparedStatement in QuoteGrabTable. Cannot get last quote from user.");
+            }
+        } catch (SQLException ex) {
+            log.error("Encountered SQL Exception in QuoteGrabTable: " + ex.getMessage());
         }
-        rs.close();
         return null;
     }
 
-    private String restructureQuote(int id, String username, String quote) {
+    /**
+     * Restructures a quote in a human-readable format.
+     * @param id The ID of the quote.
+     * @param username The user who said the quote.
+     * @param quote The quote the user said.
+     * @return The human-readable, restructured quote.
+     */
+    private String restructureQuote(final int id, final String username, final String quote) {
         return "(" + id + ") " + username + ": " + quote;
     }
 
-    private String restructureQuote(String username, String quote) {
+    /**
+     * Restructures a quote in a human-readable format.
+     * @param username The user who said the quote.
+     * @param quote The quote the user said.
+     * @return The human-readable, restructured quote.
+     */
+    private String restructureQuote(final String username, final String quote) {
         return username + ": " + quote;
     }
 

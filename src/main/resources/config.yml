@@ -5,6 +5,7 @@ Bot:
     Password:
     Message-Delay: 0
     No-Verify: false
+    Random-Response-Frequency: 100
 Channels:
     - '#afterlunch'
     - '##anotherchannel'

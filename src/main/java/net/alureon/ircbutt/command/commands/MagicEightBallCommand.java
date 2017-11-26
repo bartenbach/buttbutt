@@ -15,65 +15,20 @@ import java.util.Arrays;
  */
 public final class MagicEightBallCommand implements Command {
 
-
     /**
-     * Gets the Magic 8 Ball's response based on a number from 0 - 19.
-     * All actual responses from the Magic 8 Ball are implemented.
-     * @param number The number of the response to return (probably generated randomly)
-     * @return returns the Magic 8 Ball's response.
-     * //TODO riddled with magic numbers
+     * An ArrayList of every possible response the magic eight ball can have.  Yes, these are the actual responses
+     * that a real magic 8 ball toy would give you.  All of them.
      */
-    private static String getMagic8BallResponse(final int number) {
-        switch (number) {
-            case 0:
-                return "(8) It is certain";
-            case 1:
-                return "(8) It is decidedly so";
-            case 2:
-                return "(8) Without a doubt";
-            case 3:
-                return "(8) Yes, definitely";
-            case 4:
-                return "(8) You may rely on it";
-            case 5:
-                return "(8) As I see it, yes";
-            case 6:
-                return "(8) Outlook good";
-            case 7:
-                return "(8) Yes";
-            case 8:
-                return "(8) Signs point to yes";
-            case 9:
-                return "(8) Reply hazy, try again";
-            case 10:
-                return "(8) Ask again later";
-            case 11:
-                return "(8) Better not tell you now";
-            case 12:
-                return "(8) Cannot predict now";
-            case 13:
-                return "(8) Concentrate and ask again";
-            case 14:
-                return "(8) Don't count on it";
-            case 15:
-                return "(8) My reply is no";
-            case 16:
-                return "(8) My sources say no";
-            case 17:
-                return "(8) Outlook not so good";
-            case 18:
-                return "(8) Very doubtful";
-            case 19:
-                return "(8) Most likely";
-            default:
-                return "this should never happen - invalid switch value";
-        }
-    }
+    private static final ArrayList<String> MAGIC_EIGHT_BALL_RESPONSES = new ArrayList<>(Arrays.asList("It is certain",
+            "It is decidedly so", "Without a doubt", "Yes, definitely", "You may rely on it", "As I see it, yes",
+            "Outlook good", "Yes", "Signs point to yes", "Reply hazy, try again", "Ask again later",
+            "Better not tell you now", "Cannot predict now", "Concentrate and ask again", "Don't count on it",
+            "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful", "Most likely"));
 
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
-        int random = MathUtils.getRandom(0, 19);
-        return new BotResponse(BotIntention.CHAT, null, getMagic8BallResponse(random));
+        int random = MathUtils.getRandom(0, MAGIC_EIGHT_BALL_RESPONSES.size());
+        return new BotResponse(BotIntention.CHAT, null, MAGIC_EIGHT_BALL_RESPONSES.get(random));
     }
 
     @Override

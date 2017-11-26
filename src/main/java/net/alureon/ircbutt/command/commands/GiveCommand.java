@@ -21,11 +21,9 @@ public final class GiveCommand implements Command {
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
          if (event instanceof MessageEvent) {
             MessageEvent messageEvent = (MessageEvent) event;
-            if (cmd.length > 2) {
-                if (IRCUtils.userIsInChannel(messageEvent, cmd[1])) {
+            if (cmd.length > 2 && IRCUtils.userIsInChannel(messageEvent, cmd[1])) {
                     return new BotResponse(BotIntention.CHAT, IRCUtils.getUserInChannel(messageEvent, cmd[1]),
                             StringUtils.getArgsOverOne(cmd));
-                }
             }
         }
         return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "!give <user> <text|command>");

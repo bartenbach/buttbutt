@@ -1,10 +1,10 @@
 package net.alureon.ircbutt.handler;
 
 import com.google.common.base.Preconditions;
-import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.IRCbutt;
+import net.alureon.ircbutt.command.commands.karma.KarmaCommand;
+import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.util.IRCUtils;
-import net.alureon.ircbutt.util.MathUtils;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
 
@@ -23,6 +23,7 @@ public final class IrcMessageReceiver {
 
     /**
      * Constructor sets the private instance of the IRCbutt class.
+     *
      * @param butt The IRCbutt instance.
      */
     public IrcMessageReceiver(final IRCbutt butt) {
@@ -32,6 +33,7 @@ public final class IrcMessageReceiver {
     /**
      * This function handles all incoming messages from IRC channels.  It decides what
      * to do with the message based on it's prefix, or suffix.
+     *
      * @param event The MessageEvent object coming from PircBotX listener.
      */
     public void handleMessage(final MessageEvent event) {
@@ -43,8 +45,7 @@ public final class IrcMessageReceiver {
         /* Handle karma */
         } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;")
                 || event.getMessage().endsWith("--") || event.getMessage().endsWith("--;")) {
-            //KarmaCommand.handleKarma(butt, response, event.getUser(), event.getMessage());
-
+            new KarmaCommand().karmaListener(butt, event.getMessage());
         } else {
             /* Check for URL or troll them */
             Preconditions.checkNotNull(event.getUser(), "Attempted to store message of null user.");
@@ -56,17 +57,16 @@ public final class IrcMessageReceiver {
             }
 
             // buttify sentence
-            if (MathUtils.isRandomResponseTime()) {
-                final String buttFormat = butt.getButtReplaceHandler().buttFormat(event.getMessage()).trim();
-                if (!buttFormat.equals(event.getMessage()) && buttFormat.contains(" ")) {
-                    IRCUtils.sendChannelMessage(event.getChannel(), buttFormat);
-                }
+            final String buttFormat = butt.getButtReplaceHandler().buttFormat(event.getMessage()).trim();
+            if (!buttFormat.equals(event.getMessage()) && buttFormat.contains(" ")) {
+                IRCUtils.sendChannelMessage(event.getChannel(), buttFormat);
             }
         }
     }
 
     /**
      * This is the handler for private messages with the bot.
+     *
      * @param event The PrivateMessageEvent from the PircBotX listener.
      */
     public void handlePrivateMessage(final PrivateMessageEvent event) {
@@ -77,9 +77,7 @@ public final class IrcMessageReceiver {
                 //ResponseHandler.handleResponse(response);
             } else if (event.getMessage().endsWith("++") || event.getMessage().endsWith("++;")
                     || event.getMessage().endsWith("--") || event.getMessage().endsWith("--;")) {
-                // TODO how to implement a listener?
-                //KarmaCommand.handleKarma(butt, response, event.getUser(), event.getMessage());
-                //ResponseHandler.handleResponse(response);
+                new KarmaCommand().karmaListener(butt, event.getMessage());
             }
         }
     }

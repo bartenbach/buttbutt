@@ -1,17 +1,31 @@
 package net.alureon.ircbutt.handler;
 
 import net.alureon.ircbutt.IRCbutt;
+import net.alureon.ircbutt.util.MathUtils;
 
 /**
  * Provides the functionality for randomly 'buttifying' sentences in the IRC channel.
  */
-public class ButtReplaceHandler {
+public final class ButtReplaceHandler {
 
 
     /**
      * The instance of IRCbutt for getting configuration file values.
      */
     private IRCbutt butt;
+    /**
+     * When doing random number generation, this is the maximum number that can be generated.
+     */
+    private static final int BUTT_MATH_MAX = 100;
+    /**
+     * If the randomly generated number is less than this, 'butt' will be returned.  If greater, 'butts' will
+     * be returned.
+     */
+    private static final int BUTT_MATH_TRIGGER = 80;
+    /**
+     * I have no idea what this does anymore.
+     */
+    private static final double BUTT_FORMAT_MAGIC_NUMBER = 8.0;
 
 
     /**
@@ -27,10 +41,10 @@ public class ButtReplaceHandler {
      * @param message The message to buttify.
      * @return The buttified message.
      */
-    public String buttFormat(final String message) {
+    String buttFormat(final String message) {
         String[] split = message.split(" ");
         replaceButt(split);
-        int x = (int) Math.ceil(split.length / 8.0);
+        int x = (int) Math.ceil(split.length / BUTT_FORMAT_MAGIC_NUMBER);
         for (int i = 1; i < x; i++) {
             attemptReplace(split);
         }
@@ -47,7 +61,7 @@ public class ButtReplaceHandler {
      * Attemps to randomly replace a word in the array with 'butt' or 'butts'.
      * @param split The message from the user split on whitespace.
      */
-    private void attemptReplace(String[] split) {
+    private void attemptReplace(final String[] split) {
         boolean success = replaceButt(split);
         if (!success) {
             buttRetry(split);
@@ -59,7 +73,7 @@ public class ButtReplaceHandler {
      * @param split The message from the user split on whitespace.
      * @return True if it was able to make a replacement, otherwise false.
      */
-    private boolean replaceButt(String[] split) {
+    private boolean replaceButt(final String[] split) {
         int replace = (int) (Math.random() * split.length);
         if (!isAWordWeDontReplace(split[replace])) {
             if (split[replace].equalsIgnoreCase(butt.getYamlConfigurationFile().getBotName())) {
@@ -174,8 +188,8 @@ public class ButtReplaceHandler {
      * @return A String containing either 'butt' or 'butts' depending on random number generation.
      */
     private String randomize() {
-        double ran = Math.random() * 100;
-        if (ran < 80) {
+        int random = MathUtils.getRandom(0, BUTT_MATH_MAX);
+        if (random < BUTT_MATH_TRIGGER) {
             return "butt";
         }
         return "butts";
@@ -205,11 +219,21 @@ public class ButtReplaceHandler {
      * A god awful method that attempts to use the same terrible code again.
      * @param split The original message split on whitespace.
      */
-    private void buttRetry(String[] split) {
+    private void buttRetry(final String[] split) {
         boolean success = replaceButt(split);
         if (!success) {
             replaceButt(split);
         }
+    }
+
+    /**
+     * Returns whether or not the bot should randomly buttify a user's message in chat or not, based on a number
+     * defined in the bot's configuration file.
+     * @return True if it is time for the bot to randomly buttify a message in the IRC channel.
+     */
+    public boolean isRandomResponseTime() {
+        int random = MathUtils.getRandom(0, butt.getYamlConfigurationFile().getRandomResponseFrequency());
+        return random == 0;
     }
 
 }

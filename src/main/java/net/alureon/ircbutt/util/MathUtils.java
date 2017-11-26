@@ -14,16 +14,7 @@ public final class MathUtils {
 
     }
 
-    /**
-     * Returns whether or not the bot should randomly buttify a user's message in chat or not, based on a number
-     * defined in the bot's configuration file.
-     * @return True if it is time for the bot to randomly buttify a message in the IRC channel.
-     */
-    public static boolean isRandomResponseTime() {
-        Random random = new Random();
-        int test = random.nextInt(151);
-        return test == 0;
-    }
+
 
     /**
      * Returns a random number between min and max (inclusive).

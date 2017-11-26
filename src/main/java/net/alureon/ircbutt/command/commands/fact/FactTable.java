@@ -41,10 +41,14 @@ public final class FactTable {
         String update = "INSERT INTO `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
                 + "_knowledge` (item,data,added_by) VALUES(?,?,?)";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
-            ps.setString(1, item);
-            ps.setString(2, data);
-            ps.setString(3, creator);
-            ps.executeUpdate();
+            if (ps != null) {
+                ps.setString(1, item);
+                ps.setString(2, data);
+                ps.setString(3, creator);
+                ps.executeUpdate();
+            } else {
+                log.error("Received null PreparedStatement in FactTable.  Cannot insert knowledge into database.");
+            }
         } catch (SQLException ex) {
             log.error("Unable to insert knowledge into SQL database.  Stacktrace: ", ex);
         }
@@ -82,9 +86,13 @@ public final class FactTable {
         String update = "DELETE FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
                 + "_knowledge` WHERE item=?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
-            ps.setString(1, item);
-            int rows = ps.executeUpdate();
-            return rows > 0; // if no rows have been updated then we haven't actually deleted anything
+            if (ps != null) {
+                ps.setString(1, item);
+                int rows = ps.executeUpdate();
+                return rows > 0; // if no rows have been updated then we haven't actually deleted anything
+            } else {
+                log.error("Received null PreparedStatement in FactTable.  Cannot delete knowledge.");
+            }
         } catch (SQLException ex) {
             log.error("Failed to delete knowledge from database. StackTrace:", ex);
         }
@@ -100,9 +108,12 @@ public final class FactTable {
                 + "_knowledge` ORDER BY RAND() LIMIT 1";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
              ResultSet rs = butt.getSqlManager().getResultSet(ps)) {
-            assert rs != null;
-            if (rs.next()) {
-                return rs.getString("data");
+            if (rs != null) {
+                if (rs.next()) {
+                    return rs.getString("data");
+                }
+            } else {
+                log.error("Received null ResultSet in FactTable.  Cannot retrieve random fact.");
             }
         } catch (SQLException ex) {
             log.error("SQL Exception has occurred. StackTrace:", ex);
@@ -110,26 +121,43 @@ public final class FactTable {
         return null;
     }
 
-    /* TODO why is this no longer used?
-    public String getFactInfo(String name) {
+    /**
+     * Retrieves the info for a fact from the database.  This information consists of the fact's ID number,
+     * the name of the fact, the person who added the fact, and the date it was added on.
+     * @param name The name of the fact to get information for (can be an integer).
+     * @return A String containing the fact's information.
+     */
+    String getFactInfo(final String name) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
                 + "_knowledge` WHERE item=?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
-            ps.setString(1, name);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                int id = rs.getInt("id");
-                String user = rs.getString("added_by");
-                String time = rs.getString("timestamp");
+            if (ps != null) {
+                ps.setString(1, name);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    int id = rs.getInt("id");
+                    String user = rs.getString("added_by");
+                    String time = rs.getString("timestamp");
+                    rs.close();
+                    return "(" + id + ") " + name + ": added by " + user + " on " + time;
+                } else {
+                    try {
+                        int idNumber = Integer.parseInt(name);
+                        return findFactById(idNumber);
+                    } catch (NumberFormatException ex) {
+                        // we don't really care.  this might not be a number.
+                        log.warn("Tried to parse '" + name + "' as an integer.  I guess it's not.  Who knew?");
+                    }
+                }
                 rs.close();
-                return "(" + id + ") " + name + ": added by " + user + " on " + time;
+            } else {
+                log.error("Received null PreparedStatement in FactTable.  Cannot query for fact info.");
             }
-            rs.close();
         } catch (SQLException ex) {
             log.error("SQL Exception.  StackTrace:", ex);
         }
         return null;
-    }*/
+    }
 
     /**
      * Search the fact database for facts.  This search looks for fact DATA that is like the search term,
@@ -143,15 +171,19 @@ public final class FactTable {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
                 + "_knowledge` WHERE data LIKE ? LIMIT 24";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
-            ps.setString(1, "%" + search + "%");
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                firstResult = getFormattedFact(rs);
-                while (rs.next()) {
-                    butt.getMoreCommand().addMore(getFormattedFact(rs));
+            if (ps != null) {
+                ps.setString(1, "%" + search + "%");
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    firstResult = getFormattedFact(rs);
+                    while (rs.next()) {
+                        butt.getMoreCommand().addMore(getFormattedFact(rs));
+                    }
                 }
+                rs.close();
+            } else {
+                log.error("Received null PreparedStatement in FactTable.  Unable to search for fact.");
             }
-            rs.close();
         } catch (SQLException ex) {
             log.error("SQL Exception, ", ex);
         }
@@ -169,26 +201,34 @@ public final class FactTable {
         return "(" + rs.getInt("id") + ") " + rs.getString("item") + ": " + rs.getString("data");
     }
 
-    /* TODO fix this functionality
-    public String findFactById(int fid) {
+    /**
+     * Looks up a fact by the fact's ID number, or returns null if none exists.
+     * @param fid The fact ID to search the database for.
+     * @return The fact with the corresponding ID from the database.
+     */
+    private String findFactById(final int fid) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
                 + "_knowledge` WHERE id = ?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
-            ps.setInt(1, fid);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                int id = rs.getInt("id");
-                String item = rs.getString("item");
-                String data = rs.getString("data");
+            if (ps != null) {
+                ps.setInt(1, fid);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    String name = rs.getString("item");
+                    String user = rs.getString("added_by");
+                    String time = rs.getString("timestamp");
+                    rs.close();
+                    return "(" + fid + ") " + name + ": added by " + user + " on " + time;
+                }
                 rs.close();
-                return "(" + id + ") " + item + ": " + data;
+            } else {
+                log.error("Received null PreparedStatement in FactTable.  Cannot lookup fact.");
             }
-            rs.close();
         } catch (SQLException ex) {
-            log.error("SQL Exception, ", ex);
+            log.error("Encountered SQL Exception in findFactById ", ex.getMessage());
         }
         return null;
-    }*/
+    }
 
     /**
      * Appends knowledge to an existing fact in the database.
@@ -199,9 +239,13 @@ public final class FactTable {
         String update = "UPDATE `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
                 + "_knowledge` SET data = CONCAT(data, ?) WHERE item = ?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
-            ps.setString(1, data);
-            ps.setString(2, item);
-            ps.executeUpdate();
+            if (ps != null) {
+                ps.setString(1, data);
+                ps.setString(2, item);
+                ps.executeUpdate();
+            } else {
+                log.error("Received null PreparedStatement in FactTable.  Knowledge not appended.");
+            }
         } catch (SQLException ex) {
             log.error("Unable to insert knowledge into SQL database.  Stacktrace: ", ex);
         }

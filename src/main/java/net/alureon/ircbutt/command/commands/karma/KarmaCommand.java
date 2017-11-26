@@ -62,10 +62,9 @@ public final class KarmaCommand implements Command {
     /**
      * TODO this functionality is not a command!  It is a listener.
      * @param butt The IRCbutt instance used for accessing the database.
-     * @param cmd The String we are checking for a Karma operation.
+     * @param message The String we are checking for a Karma operation.
      */
-    public void karmaListener(final IRCbutt butt, final String[] cmd) {
-        String message = StringUtils.arrayToString(cmd);
+    public void karmaListener(final IRCbutt butt, final String message) {
         if (message.contains(" ")) {
              return;
         }

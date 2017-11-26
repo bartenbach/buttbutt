@@ -15,20 +15,29 @@ import java.util.Arrays;
  */
 public final class Rot13Command implements Command {
 
+    /**
+     * A constant holding the number of letters in the English alphabet.
+     */
+    private static final int LETTERS_IN_ALPHABET = 26;
+    /**
+     * A constant holding the number of positions to move for Rot13 encryption.
+     */
+    private static final int ROT13_SHIFT = 13;
+
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
         StringBuilder sb = new StringBuilder();
         for (char c : StringUtils.getArgs(cmd).toCharArray()) {
             if (c >= 'A' && c <= 'Z') {
-                char b = (char) (c + (byte) 13);
+                char b = (char) (c + (byte) ROT13_SHIFT);
                 if (b > 'Z') {
-                    b -= 26;
+                    b -= LETTERS_IN_ALPHABET;
                 }
                 sb.append(b);
             } else if (c >= 'a' && c <= 'z') {
-                char b = (char) (c + (byte) 13);
+                char b = (char) (c + (byte) ROT13_SHIFT);
                 if (b > 'z') {
-                    b -= 26;
+                    b -= LETTERS_IN_ALPHABET;
                 }
                 sb.append(b);
             } else {

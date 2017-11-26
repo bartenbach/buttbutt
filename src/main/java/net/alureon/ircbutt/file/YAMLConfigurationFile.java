@@ -95,6 +95,10 @@ public final class YAMLConfigurationFile {
      * If the bot should connect to the IRC server using a secure connection.
      */
     private boolean sslEnabled;
+    /**
+     * The random response frequency of the bot.  1 in this many chances of buttifying a sentence.
+     */
+    private int randomResponseFrequency;
 
 
     /**
@@ -127,6 +131,8 @@ public final class YAMLConfigurationFile {
             this.botPassword = (String) botSettings.get("Password");
             this.botMessageDelay = Long.parseLong(String.valueOf(botSettings.get("Message-Delay")));
             this.noVerify = Boolean.parseBoolean(String.valueOf(botSettings.get("No-Verify")));
+            this.randomResponseFrequency =
+                    Integer.parseInt(String.valueOf(botSettings.get("Random-Response-Frequency")));
             this.serverHostname = (String) serverSettings.get("Hostname");
             this.serverPort = Integer.parseInt(String.valueOf(serverSettings.get("Port")));
             this.serverAutoReconnect = Boolean.parseBoolean(String.valueOf(serverSettings.get("Auto-Reconnect")));
@@ -312,4 +318,12 @@ public final class YAMLConfigurationFile {
         return this.sslEnabled;
     }
 
+    /**
+     * Returns the random response frequency of the bot. The bot will have a 1 in this-many chance of responding
+     * with a buttified sentence.
+     * @return The max number to use for random number generation for random response frequency.
+     */
+    public int getRandomResponseFrequency() {
+        return randomResponseFrequency;
+    }
 }
