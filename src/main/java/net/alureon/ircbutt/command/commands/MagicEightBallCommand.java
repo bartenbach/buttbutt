@@ -35,4 +35,9 @@ public final class MagicEightBallCommand implements Command {
     public ArrayList<String> getCommandAliases() {
         return new ArrayList<>(Arrays.asList("8", "8ball"));
     }
+
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return true;
+    }
 }

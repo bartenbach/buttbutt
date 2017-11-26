@@ -43,5 +43,10 @@ public final class MathCommand implements Command {
     public ArrayList<String> getCommandAliases() {
         return new ArrayList<>(Arrays.asList("pow", "sqrt"));
     }
+
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return true;
+    }
 }
 

@@ -29,4 +29,10 @@ public interface Command {
      */
     ArrayList<String> getCommandAliases();
 
+    /**
+     * Returns whether or not the command will allow command substitution.
+     * @return True if the command will expand command substitution, false if not.
+     */
+    boolean allowsCommandSubstitution();
+
 }

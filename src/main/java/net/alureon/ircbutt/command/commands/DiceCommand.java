@@ -76,4 +76,9 @@ public final class DiceCommand implements Command {
         return new ArrayList<>(Collections.singletonList("dice"));
     }
 
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return false;
+    }
+
 }

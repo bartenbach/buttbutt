@@ -161,4 +161,9 @@ public final class QuoteGrabCommand implements Command {
         return new ArrayList<>(Arrays.asList("qfind", "qsearch", "qf", "rq", "qsay", "qinfo", "qi", "q", "rqn",
                 "rqnouser", "grab"));
     }
+
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return true;
+    }
 }

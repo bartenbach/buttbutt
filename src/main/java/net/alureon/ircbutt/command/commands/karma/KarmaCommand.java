@@ -91,4 +91,9 @@ public final class KarmaCommand implements Command {
     public ArrayList<String> getCommandAliases() {
         return new ArrayList<>(Collections.singletonList("karma"));
     }
+
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return false;
+    }
 }

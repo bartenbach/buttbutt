@@ -72,4 +72,9 @@ public final class GoogleSearchCommand implements Command {
     public ArrayList<String> getCommandAliases() {
         return new ArrayList<>(Collections.singletonList("g"));
     }
+
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return true;
+    }
 }

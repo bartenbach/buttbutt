@@ -207,4 +207,9 @@ public final class FactCommand implements Command {
         return new ArrayList<>(Arrays.asList("ff", "fs", "fact", "forget", "factinfo", "finfo", "fi", "factfind",
                 "factsearch", "fsearch", "ffind", "learn", "append"));
     }
+
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return false;
+    }
 }

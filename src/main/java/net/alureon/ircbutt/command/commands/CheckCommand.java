@@ -53,4 +53,9 @@ public final class CheckCommand implements Command {
     public ArrayList<String> getCommandAliases() {
         return new ArrayList<>(Collections.singletonList("check"));
     }
+
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return true;
+    }
 }

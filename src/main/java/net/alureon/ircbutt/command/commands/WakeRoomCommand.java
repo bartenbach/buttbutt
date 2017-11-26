@@ -41,4 +41,9 @@ public final class WakeRoomCommand implements Command {
     public ArrayList<String> getCommandAliases() {
         return new ArrayList<>(Collections.singletonList("wr"));
     }
+
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return false;
+    }
 }

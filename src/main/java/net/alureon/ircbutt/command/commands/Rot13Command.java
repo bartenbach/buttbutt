@@ -51,4 +51,9 @@ public final class Rot13Command implements Command {
     public ArrayList<String> getCommandAliases() {
         return new ArrayList<>(Arrays.asList("rot", "rot13"));
     }
+
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return true;
+    }
 }

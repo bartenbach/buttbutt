@@ -13,14 +13,12 @@ import org.reflections.Reflections;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The main CommandHandler for the program.  Any and all commands are routed here, then
- * further routed once the command's type is deduced.
+ * The main CommandHandler for the program.  Any and all commands are routed here, then executed.
  */
 public final class CommandHandler {
 
@@ -89,15 +87,16 @@ public final class CommandHandler {
         /* remove the '!' from the command */
         cmd[0] = cmd[0].replaceFirst("!", "");
 
-        /* Perform command substitution */
-        String commandSubstituted = parseCommandSubstitutionAndVariables(event, StringUtils.arrayToString(cmd));
-        String[] commandSubstitutedArray = commandSubstituted.split(" ");
-        log.debug("CommandSubstitutedArray: " + StringUtils.arrayToString(commandSubstitutedArray));
-
         /* Check command map and execute command */
         if (commandMap.containsKey(cmd[0])) {
             Command command = commandMap.get(cmd[0]);
-            return command.executeCommand(butt, event, commandSubstitutedArray);
+            if (command.allowsCommandSubstitution()) {
+                /* Perform command substitution */
+                String commandSubstituted = parseCommandSubstitutionAndVariables(event, StringUtils.arrayToString(cmd));
+                cmd = commandSubstituted.split(" ");
+                log.debug("CommandSubstitutedArray: " + StringUtils.arrayToString(cmd));
+            }
+            return command.executeCommand(butt, event, cmd);
         } else {
             log.error("Ended up in command handler but command not registered! " + StringUtils.arrayToString(cmd));
             return new BotResponse(BotIntention.NO_REPLY, null, null);
@@ -116,12 +115,12 @@ public final class CommandHandler {
      */
     private String parseCommandSubstitutionAndVariables(final GenericMessageEvent event, final String input) {
         String result = input;
-        Pattern p = Pattern.compile("\\$\\([^)]*\\)");
+        Pattern p = Pattern.compile("\\$\\([^)].*\\)");
         Matcher m = p.matcher(input);
         while (m.find()) {
             String command = m.group().substring(2, m.group().length() - 1);
             BotResponse response = handleCommand(event, command);
-            result = input.replaceFirst(Pattern.quote(m.group()), response.toString());
+            result = input.replaceFirst(Pattern.quote(m.group()), response.getMessage());
         }
         log.debug("Parsed Command Substitution result: " + result);
         return result.replaceAll("\\$USER", event.getUser().getNick());

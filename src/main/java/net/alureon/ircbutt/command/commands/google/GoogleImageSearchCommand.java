@@ -40,4 +40,9 @@ public final class GoogleImageSearchCommand implements Command {
     public ArrayList<String> getCommandAliases() {
         return new ArrayList<>(Collections.singletonList("gi"));
     }
+
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return true;
+    }
 }
