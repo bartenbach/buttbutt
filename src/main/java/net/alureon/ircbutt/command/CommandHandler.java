@@ -1,15 +1,9 @@
 package net.alureon.ircbutt.command;
 
 import net.alureon.ircbutt.IRCbutt;
-import net.alureon.ircbutt.command.commands.*;
 import net.alureon.ircbutt.command.commands.fact.FactCommand;
-import net.alureon.ircbutt.command.commands.google.GoogleImageSearchCommand;
-import net.alureon.ircbutt.command.commands.google.GoogleSearchCommand;
-import net.alureon.ircbutt.command.commands.karma.KarmaCommand;
-import net.alureon.ircbutt.command.commands.quotegrabs.QuoteGrabCommand;
 import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
-import net.alureon.ircbutt.util.MathUtils;
 import net.alureon.ircbutt.util.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +22,7 @@ import java.util.regex.Pattern;
  * The main CommandHandler for the program.  Any and all commands are routed here, then
  * further routed once the command's type is deduced.
  */
-public class CommandHandler {
+public final class CommandHandler {
 
     /**
      * The instance of the IRCbutt object.
@@ -53,11 +47,10 @@ public class CommandHandler {
     }
 
     /**
-     * Gets all classes that implement the Command interface.
-     *
-     * @return Set of all classes implementing Command.
+     * Gets all classes that implement the Command interface and loads them, and their associated
+     * command aliases into the command map.
      */
-    public HashMap<String, Command> registerCommandClasses() {
+    public void registerCommandClasses() {
         log.info("Registering Commands");
         Reflections reflections = new Reflections("net.alureon.ircbutt");
         Set<Class<? extends Command>> classes = reflections.getSubTypesOf(Command.class);
@@ -78,7 +71,6 @@ public class CommandHandler {
         for (Map.Entry<String, Command> pair : commandMap.entrySet()) {
             log.info("Registered command '" + pair.getKey() + "' to class " + pair.getValue().getClass().getName());
         }
-        return commandMap;
     }
 
     /**
@@ -107,11 +99,10 @@ public class CommandHandler {
 
         /* Check command map and execute command */
         if (commandMap.containsKey(cmd[0])) {
-            log.debug("Command Map contains key: " + cmd[0]);
             Command command = commandMap.get(cmd[0]);
             return command.executeCommand(butt, event, commandSubstitutedArray);
         } else {
-            log.error("Ended up in command handler but command not registered: " + StringUtils.arrayToString(cmd));
+            log.error("Ended up in command handler but command not registered! " + StringUtils.arrayToString(cmd));
             return new BotResponse(BotIntention.NO_REPLY, null, null);
         }
     }
@@ -126,7 +117,7 @@ public class CommandHandler {
      * @param input The input from the user.
      * @return a string with all commands expanded to their values.
      */
-    public String parseCommandSubstitutionAndVariables(final GenericMessageEvent event, final String input) {
+    private String parseCommandSubstitutionAndVariables(final GenericMessageEvent event, final String input) {
         String result = input;
         Pattern p = Pattern.compile("\\$\\([^)]*\\)");
         Matcher m = p.matcher(input);

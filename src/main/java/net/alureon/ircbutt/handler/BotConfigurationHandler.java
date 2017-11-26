@@ -8,7 +8,7 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * Class that represents the Bot's configuration, and instantiates a Configuration object for PircBotX.
  */
-public class BotConfigurationHandler {
+public final class BotConfigurationHandler {
 
     /**
      * The instance of IRCbutt for retrieving YAML configuration file values.
@@ -40,11 +40,12 @@ public class BotConfigurationHandler {
                         butt.getYamlConfigurationFile().getServerPort())
                 .setVersion(butt.getProgramVersion());
         if (butt.getYamlConfigurationFile().getSSLEnabled()) {
+            // TODO this doesn't work at all
             configBuilder.setSocketFactory(SSLSocketFactory.getDefault());
         }
         for (String x : butt.getYamlConfigurationFile().getChannelList()) {
             configBuilder.addAutoJoinChannel(x);
-        }  // TODO this doesn't authenticate before joining channels
+        }  // TODO this doesn't authenticate before joining channels.  Anything we can do?
         return configBuilder.buildConfiguration();
     }
 }

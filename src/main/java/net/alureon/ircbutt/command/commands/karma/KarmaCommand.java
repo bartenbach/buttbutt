@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 /**

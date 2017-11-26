@@ -7,9 +7,12 @@ import java.util.HashMap;
  * in an IRC client.  The reason for this copy, is so that we can reference
  * what a user said earlier.
  */
-public class ChatStorage {
+public final class ChatStorage {
 
 // TODO how big could this get?  This needs to purge old messages!
+    /**
+     * A HashMap mapping a user to their recent chat messages.
+     */
     private HashMap<String, String> messageStore = new HashMap<>();
 
 
@@ -23,11 +26,21 @@ public class ChatStorage {
         messageStore.put(nick, message);
     }
 
-    public boolean hasQuoteFrom(String nick) {
+    /**
+     * Returns true if the ChatStorage map contains a quote from the supplied nick.
+     * @param nick The nickname to query the message store for.
+     * @return True if the message store has a quote from the supplied nickname.
+     */
+    public boolean hasQuoteFrom(final String nick) {
         return messageStore.containsKey(nick);
     }
 
-    public String getLastQuoteFrom(String nick) {
+    /**
+     * Retrieves the last quote from the user with the passed nickname.
+     * @param nick The nickname to get a quote from.
+     * @return The last message the user chatted in the channel.
+     */
+    public String getLastQuoteFrom(final String nick) {
         return messageStore.get(nick);
     }
 

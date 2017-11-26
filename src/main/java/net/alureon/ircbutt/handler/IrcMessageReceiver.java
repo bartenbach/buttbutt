@@ -13,7 +13,7 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
  * defined in ChatListener and PrivateMessageListener.  It then decides what to do with
  * the message based on whether it is a fact request, a command, or just chatter.
  */
-public class IrcMessageReceiver {
+public final class IrcMessageReceiver {
 
     /**
      * The private instance of the IRCbutt class.

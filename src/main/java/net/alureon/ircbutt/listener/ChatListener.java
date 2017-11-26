@@ -9,7 +9,7 @@ import org.pircbotx.hooks.events.MessageEvent;
  * listen for chat messages in the IRC channel.  When any message is passed from
  * the listener, we pass it to the IrcMessageReceiver.
  */
-public class ChatListener extends ListenerAdapter {
+public final class ChatListener extends ListenerAdapter {
 
     /**
      * The private instance of the IRCbutt object.
@@ -24,6 +24,10 @@ public class ChatListener extends ListenerAdapter {
         this.butt = butt;
     }
 
+    /**
+     * The listener method fired from PircBotX when a user chats in a channel the bot resides within.
+     * @param event The MessageEvent fired from PircBotX.
+     */
     @Override
     public void onMessage(final MessageEvent event) {
         butt.getIrcMessageReceiver().handleMessage(event);

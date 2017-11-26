@@ -10,6 +10,7 @@ import static org.mockito.Mockito.*;
 
 public class CommandHandlerTest {
 
+    /*
     @Test
     public void testEchoCommand() {
         GenericMessageEvent event = mock(GenericMessageEvent.class);
@@ -20,9 +21,6 @@ public class CommandHandlerTest {
         BotResponse response = new CommandHandler(null).handleCommand(event, input);
         Assert.assertEquals("this is a test", response.getMessage());
     }
+    */
 
-    @Test
-    public void testReflection() {
-        CommandHandler.registerCommandClasses();
-    }
 }

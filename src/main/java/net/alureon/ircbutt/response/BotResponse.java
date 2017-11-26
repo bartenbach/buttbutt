@@ -6,7 +6,7 @@ import org.pircbotx.User;
  * This class encompasses a bot's response.  The message, the intention,
  * the user the message is directed to, and the event object.
  */
-public class BotResponse {
+public final class BotResponse {
 
     /**
      * The message the bot wishes to send.

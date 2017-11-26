@@ -18,7 +18,7 @@ import java.sql.*;
  * static!  PreparedStatement objects REQUIRE a database connection to be made,
  * therefore these methods cannot be static.
  */
-public class SqlManager {
+public final class SqlManager {
 
 
     /**
