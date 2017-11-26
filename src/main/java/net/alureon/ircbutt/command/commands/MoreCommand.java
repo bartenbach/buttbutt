@@ -70,4 +70,9 @@ public final class MoreCommand implements Command {
         return new ArrayList<>(Collections.singletonList("more"));
     }
 
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return false;
+    }
+
 }

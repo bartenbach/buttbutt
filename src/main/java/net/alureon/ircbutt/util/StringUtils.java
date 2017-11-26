@@ -37,6 +37,16 @@ public final class StringUtils {
         return sb.toString().trim();
     }
 
+     /**
+     * Takes an array and returns everything except the first element - the arguments, as a String object.
+     * @param command The entire command array, split by whitespace.
+     * @return String of just the arguments.
+     */
+    public static String[] getArgsArray(final String[] command) {
+        String args = getArgs(command);
+        return args.split("\\s");
+    }
+
     /**
      * Takes an array and returns everything except the first and second elements, as a String object.
      * @param command The entire command array, split by whitespace.

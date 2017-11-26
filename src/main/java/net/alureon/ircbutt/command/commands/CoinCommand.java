@@ -49,4 +49,9 @@ public final class CoinCommand implements Command {
     public ArrayList<String> getCommandAliases() {
         return new ArrayList<>(Collections.singletonList("coin"));
     }
+
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return false;
+    }
 }

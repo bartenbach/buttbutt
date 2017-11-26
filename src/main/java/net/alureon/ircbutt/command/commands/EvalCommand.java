@@ -52,7 +52,7 @@ public final class EvalCommand implements Command {
             response = new BotResponse(BotIntention.CHAT, null, evaluator.evaluate(y));
         } catch (EvaluationException e) {
             response = new BotResponse(BotIntention.CHAT, null, "error evaluating expression: " + e.getMessage());
-            log.error("Evaluation Exception ", e);
+            log.warn("Error evaluating expression '" + y + "' -> ", e.getMessage());
         }
         return response;
     }
@@ -60,5 +60,10 @@ public final class EvalCommand implements Command {
     @Override
     public ArrayList<String> getCommandAliases() {
         return new ArrayList<>(Collections.singletonList("eval"));
+    }
+
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return false;
     }
 }

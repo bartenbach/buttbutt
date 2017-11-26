@@ -40,4 +40,9 @@ public final class InviteCommand implements Command {
     public ArrayList<String> getCommandAliases() {
         return new ArrayList<>(Collections.singletonList("invite"));
     }
+
+    @Override
+    public boolean allowsCommandSubstitution() {
+        return false;
+    }
 }
