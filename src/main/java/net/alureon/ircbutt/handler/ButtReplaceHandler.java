@@ -231,7 +231,7 @@ public final class ButtReplaceHandler {
      * defined in the bot's configuration file.
      * @return True if it is time for the bot to randomly buttify a message in the IRC channel.
      */
-    public boolean isRandomResponseTime() {
+    boolean isRandomResponseTime() {
         int random = MathUtils.getRandom(0, butt.getYamlConfigurationFile().getRandomResponseFrequency());
         return random == 0;
     }

@@ -57,9 +57,11 @@ public final class IrcMessageReceiver {
             }
 
             // buttify sentence
-            final String buttFormat = butt.getButtReplaceHandler().buttFormat(event.getMessage()).trim();
-            if (!buttFormat.equals(event.getMessage()) && buttFormat.contains(" ")) {
-                IRCUtils.sendChannelMessage(event.getChannel(), buttFormat);
+            if (butt.getButtReplaceHandler().isRandomResponseTime()) {
+                final String buttFormat = butt.getButtReplaceHandler().buttFormat(event.getMessage()).trim();
+                if (!buttFormat.equals(event.getMessage()) && buttFormat.contains(" ")) {
+                    IRCUtils.sendChannelMessage(event.getChannel(), buttFormat);
+                }
             }
         }
     }
