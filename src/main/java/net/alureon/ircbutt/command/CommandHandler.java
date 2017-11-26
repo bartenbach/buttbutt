@@ -13,14 +13,12 @@ import org.reflections.Reflections;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The main CommandHandler for the program.  Any and all commands are routed here, then
- * further routed once the command's type is deduced.
+ * The main CommandHandler for the program.  Any and all commands are routed here and executed.
  */
 public final class CommandHandler {
 
