@@ -183,6 +183,18 @@ public final class FactCommand implements Command {
             butt.getMoreCommand().clearMore();
             String info = butt.getFactTable().findFact(StringUtils.getArgs(cmd));
             return getBotResponseForQuery(info);
+        } else {
+                String info = getFact(butt, StringUtils.arrayToString(cmd));
+            if (info != null) {
+                info = info.replaceAll("\\$USER", event.getUser().getNick());
+                if (info.startsWith("$ME")) {
+                    info = info.replaceFirst("\\$ME", "");
+                    return new BotResponse(BotIntention.ME, null, info);
+                }
+                return new BotResponse(BotIntention.CHAT, null, info);
+            } else {
+                return new BotResponse(BotIntention.NO_REPLY, null, null);
+            }
         }
         log.error("Fell through the entire switch at FactCommand without hitting a branch.");
         log.error("Received: " + StringUtils.arrayToString(cmd));

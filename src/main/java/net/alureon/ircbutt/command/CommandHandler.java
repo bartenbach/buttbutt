@@ -2,7 +2,6 @@ package net.alureon.ircbutt.command;
 
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.command.commands.fact.FactCommand;
-import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.util.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -80,9 +79,8 @@ public final class CommandHandler {
         String[] cmd = commandString.split("\\s");
 
         /* if it's prefixed with a tilde it's a fact request */
-        if (cmd[0].startsWith("~")) {
-            return new FactCommand().executeCommand(butt, event, cmd);
-        }
+        //if (cmd[0].startsWith("~")) {
+        //}
 
         /* remove the '!' from the command */
         cmd[0] = cmd[0].replaceFirst("!", "");
@@ -98,8 +96,9 @@ public final class CommandHandler {
             }
             return command.executeCommand(butt, event, cmd);
         } else {
-            log.error("Ended up in command handler but command not registered! " + StringUtils.arrayToString(cmd));
-            return new BotResponse(BotIntention.NO_REPLY, null, null);
+            return new FactCommand().executeCommand(butt, event, cmd);
+            //log.info("Received unregistered command: " + StringUtils.arrayToString(cmd));
+            //return new BotResponse(BotIntention.NO_REPLY, null, null);
         }
     }
 
