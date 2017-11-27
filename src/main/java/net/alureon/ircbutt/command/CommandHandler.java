@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The main CommandHandler for the program.  Any and all commands are routed here, then executed.
+ * The main CommandHandler for the program.  Any and all commands are routed here and executed.
  */
 public final class CommandHandler {
 
