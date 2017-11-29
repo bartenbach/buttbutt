@@ -29,7 +29,7 @@ public final class DefineCommand implements Command {
 
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
-        butt.getMoreCommand().clearMore();
+        butt.getCommandHandler().clearMore();
         BotResponse response = new BotResponse(BotIntention.CHAT, null, "this should never happen");
         String userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0";
         try {
@@ -44,10 +44,10 @@ public final class DefineCommand implements Command {
                     if (i == 0) {
                         response = new BotResponse(BotIntention.CHAT, null, text);
                     } else {
-                        butt.getMoreCommand().addMore(text);
+                        butt.getCommandHandler().addMore(text);
                     }
                 }
-                butt.getMoreCommand().addMore(link);
+                butt.getCommandHandler().addMore(link);
             } else {
                 response = new BotResponse(BotIntention.CHAT, null, "butt didnt find nothin for that");
             }

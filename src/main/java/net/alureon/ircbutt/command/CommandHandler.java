@@ -11,6 +11,7 @@ import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -33,6 +34,12 @@ public final class CommandHandler {
      * A mapping of what command maps to what class.
      */
     private HashMap<String, Command> commandMap = new HashMap<>();
+    /**
+     * This holds all the extra items that will populate More.  This cannot go into the MoreCommand
+     * class because it's re-instantiated every time the command executes.
+     */
+    private final ArrayList<String> more = new ArrayList<>();
+
 
     /**
      * Constructor sets the field of the IRCbutt instance.
@@ -123,6 +130,32 @@ public final class CommandHandler {
         }
         log.debug("Parsed Command Substitution result: " + result);
         return result.replaceAll("\\$USER", event.getUser().getNick());
+    }
+
+    /**
+     * Returns the list of more, which is a list that contains all overflow items that won't fit
+     * in a single bot message.  For example, a Google search may have more results.  The user can
+     * then execute !more to get another result.  The results are stored in this list.
+     * @return the list loaded with extra results for any command
+     */
+    public ArrayList<String> getMoreList() {
+        return this.more;
+    }
+
+    /**
+     * Adds a String object to the More list.
+     * @param moreItem The string to add to the More list.
+     */
+    public void addMore(final String moreItem) {
+        this.more.add(moreItem);
+    }
+
+    /**
+     * Clear the more list.  This is important to do before populating More, otherwise you will
+     * have elements from a different query in your list.
+     */
+    public void clearMore() {
+        this.more.clear();
     }
 
 }

@@ -31,7 +31,7 @@ public final class UrbanDictionaryCommand implements Command {
 
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
-        butt.getMoreCommand().clearMore();
+        butt.getCommandHandler().clearMore();
         BotResponse response = new BotResponse(BotIntention.CHAT, null, "this should never happen");
         try {
             String link = "http://www.urbandictionary.com/define.php?term="
@@ -47,10 +47,10 @@ public final class UrbanDictionaryCommand implements Command {
                         if (i == 0) {
                             response = new BotResponse(BotIntention.CHAT, null, meaning.text());
                         } else {
-                            butt.getMoreCommand().addMore(meaning.text());
+                            butt.getCommandHandler().addMore(meaning.text());
                         }
                     }
-                    butt.getMoreCommand().setNoMoreMessage(link);
+                    butt.getCommandHandler().addMore(link);
                 } catch (NullPointerException ex) {
                     log.info("No more definitions to get");
                 }

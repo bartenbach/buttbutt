@@ -166,7 +166,7 @@ public final class FactTable {
      * @return returns the first result that matches the query.
      */
     String findFact(final String search) {
-        butt.getMoreCommand().clearMore();
+        butt.getCommandHandler().clearMore();
         String firstResult = null;
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
                 + "_knowledge` WHERE data LIKE ? LIMIT 24";
@@ -177,7 +177,7 @@ public final class FactTable {
                 if (rs.next()) {
                     firstResult = getFormattedFact(rs);
                     while (rs.next()) {
-                        butt.getMoreCommand().addMore(getFormattedFact(rs));
+                        butt.getCommandHandler().addMore(getFormattedFact(rs));
                     }
                 }
                 rs.close();

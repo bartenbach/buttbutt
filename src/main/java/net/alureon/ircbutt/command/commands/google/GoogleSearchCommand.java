@@ -32,7 +32,7 @@ public final class GoogleSearchCommand implements Command {
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
         // clear !more list
-        butt.getMoreCommand().clearMore();
+        butt.getCommandHandler().clearMore();
         BotResponse response = new BotResponse(BotIntention.CHAT, null, "butt didnt find nothing");
 
         String google = "http://www.google.com/search?q=";
@@ -57,7 +57,7 @@ public final class GoogleSearchCommand implements Command {
                 if (i == 0) {
                     response = new BotResponse(BotIntention.CHAT, null, "Title: " + title, url);
                 } else {
-                    butt.getMoreCommand().addMore("Title: " + title + " " + url);
+                    butt.getCommandHandler().addMore("Title: " + title + " " + url);
                 }
             }
         } catch (UnsupportedEncodingException ex) {

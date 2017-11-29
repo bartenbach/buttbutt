@@ -38,7 +38,7 @@ public final class YouTubeCommand implements Command {
 
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
-         butt.getMoreCommand().clearMore();
+        butt.getCommandHandler().clearMore();
          BotResponse response = new BotResponse(BotIntention.CHAT, null, "found no videos bout that");
         try {
             String link = "http://www.youtube.com/results?search_query="
@@ -64,11 +64,10 @@ public final class YouTubeCommand implements Command {
                         String urlText = URLDecoder.decode(video.text(), "utf8") + " http://youtube.com" + url;
                         response = new BotResponse(BotIntention.CHAT, null, urlText);
                     } else {
-                        butt.getMoreCommand().addMore(URLDecoder.decode(video.text(), "utf-8")
+                        butt.getCommandHandler().addMore(URLDecoder.decode(video.text(), "utf-8")
                                 + " http://youtube.com" + url);
                     }
                 }
-                butt.getMoreCommand().setNoMoreMessage("how about you refine your search terms instead?");
             } catch (IOException | NullPointerException ex) {
                 log.error("Found no video", ex);
             }

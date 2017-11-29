@@ -156,16 +156,7 @@ public final class FactCommand implements Command {
         } else if (cmd[0].startsWith("~")) {
             cmd[0] = cmd[0].replaceFirst("~", "");
             String info = getFact(butt, StringUtils.arrayToString(cmd));
-            if (info != null) {
-                info = info.replaceAll("\\$USER", event.getUser().getNick());
-                if (info.startsWith("$ME")) {
-                    info = info.replaceFirst("\\$ME", "");
-                    return new BotResponse(BotIntention.ME, null, info);
-                }
-                return new BotResponse(BotIntention.CHAT, null, info);
-            } else {
-                return new BotResponse(BotIntention.NO_REPLY, null, null);
-            }
+            return getFactResponse(info, event);
         } else if (cmd[0].equals("fact")) {
             String info = butt.getFactTable().getRandomData();
             if (info != null) {
@@ -180,21 +171,11 @@ public final class FactCommand implements Command {
         } else if (cmd[0].equalsIgnoreCase("factfind") || cmd[0].equalsIgnoreCase("factsearch")
                 || cmd[0].equalsIgnoreCase("fsearch") || cmd[0].equalsIgnoreCase("ffind")
                 || cmd[0].equals("ff") || cmd[0].equals("fs")) {
-            butt.getMoreCommand().clearMore();
             String info = butt.getFactTable().findFact(StringUtils.getArgs(cmd));
             return getBotResponseForQuery(info);
         } else {
-                String info = getFact(butt, StringUtils.arrayToString(cmd));
-            if (info != null) {
-                info = info.replaceAll("\\$USER", event.getUser().getNick());
-                if (info.startsWith("$ME")) {
-                    info = info.replaceFirst("\\$ME", "");
-                    return new BotResponse(BotIntention.ME, null, info);
-                }
-                return new BotResponse(BotIntention.CHAT, null, info);
-            } else {
-                return new BotResponse(BotIntention.NO_REPLY, null, null);
-            }
+            String info = getFact(butt, StringUtils.arrayToString(cmd));
+            return getFactResponse(info, event);
         }
         log.error("Fell through the entire switch at FactCommand without hitting a branch.");
         log.error("Received: " + StringUtils.arrayToString(cmd));
@@ -202,7 +183,28 @@ public final class FactCommand implements Command {
     }
 
     /**
+     * A helper method for getting a response from a fact query operation.
+     * @param info The potentially null string that contains fact information.
+     * @param event The GenericMessageEvent, for access to the user's nickname.
+     * @return The bot's response to the fact request event.
+     */
+    private BotResponse getFactResponse(final String info, final GenericMessageEvent event) {
+        String result = info;
+        if (info != null) {
+            result = info.replaceAll("\\$USER", event.getUser().getNick());
+            if (info.startsWith("$ME")) {
+                result = info.replaceFirst("\\$ME", "");
+                return new BotResponse(BotIntention.ME, null, result);
+            }
+            return new BotResponse(BotIntention.CHAT, null, result);
+        } else {
+            return new BotResponse(BotIntention.NO_REPLY, null, null);
+        }
+    }
+
+    /**
      * A helper method from retrieving fact data from the database.
+     *
      * @param info The potentially null info from the database.
      * @return the bot's response to the query.
      */
