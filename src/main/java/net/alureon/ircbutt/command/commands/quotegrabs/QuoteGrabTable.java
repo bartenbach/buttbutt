@@ -166,6 +166,8 @@ public final class QuoteGrabTable {
      * @return Any quote found matching the search.
      */
     String findQuote(final String search) {
+        butt.getCommandHandler().getMoreList().clear();
+        String firstResult = null;
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
                 + "_quotes` WHERE quote LIKE ?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
@@ -177,8 +179,14 @@ public final class QuoteGrabTable {
                     int id = rs.getInt("id");
                     String user = rs.getString("user");
                     String quote = rs.getString("quote");
+                    firstResult = restructureQuote(id, user, quote);
+                    while (rs.next()) {
+                        id = rs.getInt("id");
+                        user = rs.getString("user");
+                        quote = rs.getString("quote");
+                        butt.getCommandHandler().addMore(restructureQuote(id, user, quote));
+                    }
                     rs.close();
-                    return restructureQuote(id, user, quote);
                 }
                 rs.close();
             } else {
@@ -187,7 +195,7 @@ public final class QuoteGrabTable {
         } catch (SQLException ex) {
             log.error("Encountered SQL Exception in QuoteGrabTable: " + ex.getMessage());
         }
-        return null;
+        return firstResult;
     }
 
     /**
