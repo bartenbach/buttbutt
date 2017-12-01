@@ -33,13 +33,13 @@ public final class GoogleSearchCommand implements Command {
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
         // clear !more list
         butt.getCommandHandler().clearMore();
-        BotResponse response = new BotResponse(BotIntention.CHAT, null, "butt didnt find nothing");
 
         String google = "http://www.google.com/search?q=";
         String search = StringUtils.getArgs(cmd);
         String charset = "UTF-8";
         String userAgent = "IRCButt (+https://github.com/proxa/IRCbutt)";
-
+        String response = "";
+        String additionalResponse = "";
         try {
             Elements links = Jsoup.connect(google
                     + URLEncoder.encode(search, charset)).userAgent(userAgent).get().select(".g>.r>a");
@@ -55,9 +55,18 @@ public final class GoogleSearchCommand implements Command {
                 }
 
                 if (i == 0) {
-                    response = new BotResponse(BotIntention.CHAT, null, "Title: " + title, url);
+                    response = "Title: " + title;
+                    additionalResponse = url;
                 } else {
                     butt.getCommandHandler().addMore("Title: " + title + " " + url);
+                }
+            }
+            if (!response.isEmpty() && !additionalResponse.isEmpty()) {
+                if (butt.getCommandHandler().getMoreList().size() > 0) {
+                    return new BotResponse(BotIntention.CHAT, null, response + " [+"
+                            + butt.getCommandHandler().getMoreList().size() + " more]", additionalResponse);
+                } else {
+                    return new BotResponse(BotIntention.CHAT, null, response, additionalResponse);
                 }
             }
         } catch (UnsupportedEncodingException ex) {
@@ -65,7 +74,7 @@ public final class GoogleSearchCommand implements Command {
         } catch (IOException ex) {
             log.error("IOException encountered ", ex.getMessage());
         }
-        return response;
+        return new BotResponse(BotIntention.CHAT, null, "butt didnt find nothing");
     }
 
     @Override

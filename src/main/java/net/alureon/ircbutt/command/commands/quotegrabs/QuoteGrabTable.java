@@ -174,7 +174,6 @@ public final class QuoteGrabTable {
             if (ps != null) {
                 ps.setString(1, "%" + search + "%");
                 ResultSet rs = ps.executeQuery();
-                //TODO this could certainly return more than one item
                 if (rs.next()) {
                     int id = rs.getInt("id");
                     String user = rs.getString("user");
@@ -194,6 +193,9 @@ public final class QuoteGrabTable {
             }
         } catch (SQLException ex) {
             log.error("Encountered SQL Exception in QuoteGrabTable: " + ex.getMessage());
+        }
+        if (butt.getCommandHandler().getMoreList().size() > 0) {
+            return firstResult + " [+" + butt.getCommandHandler().getMoreList().size() + " more]";
         }
         return firstResult;
     }

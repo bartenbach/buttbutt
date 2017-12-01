@@ -22,7 +22,12 @@ public final class MoreCommand implements Command {
         if (!butt.getCommandHandler().getMoreList().isEmpty()) {
             String moreItem = butt.getCommandHandler().getMoreList().get(0);
             butt.getCommandHandler().getMoreList().remove(0);
-            return new BotResponse(BotIntention.CHAT, null, moreItem);
+            if (butt.getCommandHandler().getMoreList().size() == 0) {
+                return new BotResponse(BotIntention.CHAT, null, moreItem);
+            } else {
+                return new BotResponse(BotIntention.CHAT, null, moreItem
+                        + " [+" + butt.getCommandHandler().getMoreList().size() + " more]");
+            }
         } else {
             return new BotResponse(BotIntention.CHAT, null, butt.getYamlConfigurationFile().getBotName()
                     + " don't have any more");

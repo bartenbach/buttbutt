@@ -170,7 +170,6 @@ public final class FactTable {
         String firstResult = null;
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
                 + "_knowledge` WHERE (data REGEXP ?) LIMIT 24";
-        // SELECT * from ircbutt_knowledge WHERE (data REGEXP 'http');
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             if (ps != null) {
                 ps.setString(1, search);
@@ -187,6 +186,9 @@ public final class FactTable {
             }
         } catch (SQLException ex) {
             log.error("SQL Exception, ", ex);
+        }
+        if (butt.getCommandHandler().getMoreList().size() > 0) {
+            return firstResult + " [+" + butt.getCommandHandler().getMoreList().size() + " more]";
         }
         return firstResult;
     }
