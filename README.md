@@ -21,51 +21,60 @@ Download builds here: http://alureon.net/ircbutt
 
 Run with `java -jar IRCbutt*.jar`
 
-~~You can specify a log level as an argument.  Supported levels are TRACE, DEBUG, INFO, WARNING, ERROR, or INFO.  The default log level is INFO.~~
-
-~~`java -jar IRCbutt*.jar DEBUG`~~
-
-As of version 0.4.4, this project has switched to log4j.  This is no longer supported.
-
 ## Usage:
+#### Basic Usage:
 Most commands start with `!` followed by the command name, then arguments.
 
-Fact requests start with a `~` followed immediately by the fact name.
+Fact requests start with either a `~` or `!` followed immediately by the fact name.
 
 You don't include the brackets `<>`
 
+#### Command Substitution:
+
+Most commands support command substitution.  An example of this would be `!echo $(rot $(fact))`
+
+The result of this would be a rot13 encrypted, random fact.
+
+For extra mature fun, try `!butt $(fact)`
+
+#### Variables:
+
+The variable `$USER` will be replaced with the user making the request. 
+
+Try `!echo $USER`
+
 ### Basic Functionality
 `!8 <question>`         -  Ask the Magic 8 Ball a question
+
+`!butt <query`          -  Replace random words in the text with 'butt' (for mature audiences only)
+
+`!check <query>`        -  Get a random response on whether or not something passes or fails (or rarely, something else)
+
+`!coin <query>`         -  Get a random heads or tails response (or rarely, another surprise)
+
+`!define <query>`       -  Get the definition of a word from Merriam Webster
+
+`!dice`                 -  Roll a dice to land on a random user in the room that will either WIN or LOSE.
+
+`!echo <query>`         -  Echo something (commands can be echoed with $(command))
 
 `!g <query>`            -  Google something
 
 `!gi <query>`           -  Google Image Search
 
-`!buttify <query`       -  Replace random words in the text with 'butt' (for mature audiences only)
-
-`!check <query>`        -  Get a random response on whether or not something passes or fails
-
-`!coin <query>`         -  Get a random heads or tails response
-
-`!echo <query>`         -  Echo something (commands can be echoed with $(command))
-
-`!ud <query>`           -  Search Urban Dictionary
-
-`!dice`                 -  Roll a dice to land on a random user in the room
+`!give <user> <thing>`  -  Give something to someone else
 
 `!more`                 -  Get more results for facts, quotes, or search results
 
-`!define <query>`       -  Get the definition of a word from Merriam Webster
+`!rot <query>`          -  Get the rot13 equivalent of `<query>`.  Alias: !rot
 
-`!rot13 <query>`        -  Get the rot13 equivalent of `<query>`.  Alias: !rot
+`!uptime`               -  Print the current uptime of the bot
+
+`!version`              -  Get the current bot version
 
 `!wr`                   -  Wake the room!  Ping everbody in the room.
 
 `!yt <query>`           -  Search YouTube for `<query>`
-
-`!give <user> <thing>`  -  Give something to someone else
-
-`!version`              -  Get the current bot version
 
 ### Math Functionality
 `!sqrt <number>`      -  Get the square root of `<number>`
@@ -77,11 +86,13 @@ You don't include the brackets `<>`
 ### Fact Functionality
 `~<string>`                   -  Any string prefixed with a tilde finds the corresponding fact
 
+`!<string>`                   -  Any string prefixed with an exclamation mark (that has a fact) finds the corresponding fact.
+
 `!fact`                       -  Retrieve a random factoid from the database
 
 `!learn <factname> <value>`   -  Write a factoid to the database
 
-`!ff <query>`                 -  Search for a fact by string
+`!ff <query>`                 -  Search for a fact (supports regular expressions)
 
 `!fi <factnumber>`            -  Get information about a factoid
 
@@ -96,7 +107,7 @@ You don't include the brackets `<>`
 
 `!q <username>`        -  Retrieve the last grabbed quote from `<user>`
 
-`!qf <query>`          -  Search for a quote by string query
+`!qf <query>`          -  Search for a quote (supports regular expressions)
 
 `!qi <query>`          -  Get information about a quote
 
@@ -134,7 +145,42 @@ You don't include the brackets `<>`
        Port: 3306
        Database: irc
        Table-Prefix: ircbutt
-   ```
+```
+
+### Extensibility
+On startup, the bot registers any command within the command package.
+
+You can make your own commands, simply by implementing the Command interface.
+
+An example of this is the following:
+
+```java
+/**
+ * Handles the !echo functionality of the bot.
+ */
+public final class EchoCommand implements Command {
+
+    @Override
+    public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
+        // A BotResponse requires the bot's intention, user (if applicable), and message.
+        // In this case, we are simply echoing out the arguments the user passed in.
+        return new BotResponse(BotIntention.CHAT, null, StringUtils.getArgs(cmd));
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        // These are the command aliases that call the command.  You can have as many as you'd like.
+        return new ArrayList<>(Collections.singletonList("echo"));
+    }
+
+    @Override
+    public boolean allowsCommandSubstitution() {
+        // true if command substitution is performed.  for echo, this makes sense.
+        // for something like a math expression, it wouldn't.
+        return true;
+    }
+}
+```
 
 ## Special Thanks:
 - *BullShark* - for ideas, showing me buttbot, and the name 'buttbutt'
