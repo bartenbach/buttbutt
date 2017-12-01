@@ -120,7 +120,7 @@ Try `!echo $USER`
 
 `!karma <randomstring>` -  Retrieve the current karma of `<whatever>`
 
-### Configuration File
+## Configuration File
 ```
    Bot:
        Name: buttbutt  // the bot's IRC nickname
@@ -147,7 +147,7 @@ Try `!echo $USER`
        Table-Prefix: ircbutt
 ```
 
-### Extensibility
+## Extensibility
 On startup, the bot registers any command within the command package.
 
 You can make your own commands, simply by implementing the Command interface.
