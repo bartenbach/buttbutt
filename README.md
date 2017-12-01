@@ -109,6 +109,33 @@ You don't include the brackets `<>`
 
 `!karma <randomstring>` -  Retrieve the current karma of `<whatever>`
 
+### Configuration File
+```
+   Bot:
+       Name: buttbutt  // the bot's IRC nickname
+       Login: buttbutt // the bot's IRC "login" value
+       Realname: butt  // the bot's IRC "realname" value
+       Password:       // the bot's IRC "password" value
+       Message-Delay: 0 // the delay, if any, before sending a message
+       No-Verify: false // false if the bot shouldn't learn from unverified users
+       Random-Response-Frequency: 100 // chance of butting a message is 1 in this number
+   Channels: // a list of channels the bot should join
+       - '#afterlunch'
+       - '##anotherchannel'
+   Server: // standard settings for connecting to IRC servers
+       Hostname: 'chat.freenode.net'
+       SSL: false // this doesn't work.  don't use it right now.
+       Port: 6667
+       Auto-Reconnect: true
+   SQL: // standard settings for connecting to an SQL database.
+       Username: root
+       Password: secret
+       IP: 127.0.0.1
+       Port: 3306
+       Database: irc
+       Table-Prefix: ircbutt
+   ```
+
 ## Special Thanks:
 - *BullShark* - for ideas, showing me buttbot, and the name 'buttbutt'
 - *Klong* - for tons of contributions and several commits
