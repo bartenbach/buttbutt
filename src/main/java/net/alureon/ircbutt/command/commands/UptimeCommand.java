@@ -31,21 +31,41 @@ public final class UptimeCommand implements Command {
      * @return The human readable string of the current uptime.
      */
     private String getTimeString(final long uptime) {
-        String timeString;
+        String timeString = "";
         long time;
         time = TimeUnit.MILLISECONDS.toDays(uptime);
-        timeString = String.valueOf(time) + " days";
+        if (time == 1) {
+            timeString = String.valueOf(time) + " day";
+        } else if (time > 1) {
+            timeString = String.valueOf(time) + " days";
+        }
         if (time <= 0) {
             time = TimeUnit.MILLISECONDS.toHours(uptime);
-            timeString = String.valueOf(time) + " hours";
+            if (time == 1) {
+                timeString = String.valueOf(time) + " hour";
+            } else {
+                timeString = String.valueOf(time) + " hours";
+            }
             if (time <= 0) {
                 time = TimeUnit.MILLISECONDS.toMinutes(uptime);
-                timeString = String.valueOf(time) + " minutes";
+                if (time == 1) {
+                    timeString = String.valueOf(time) + " minute";
+                } else {
+                    timeString = String.valueOf(time) + " minutes";
+                }
                 if (time <= 0) {
                     time = TimeUnit.MILLISECONDS.toSeconds(uptime);
-                    timeString = String.valueOf(time) + " seconds";
+                    if (time == 1) {
+                        timeString = String.valueOf(time) + " second";
+                    } else {
+                        timeString = String.valueOf(time) + " seconds";
+                    }
                     if (time <= 0) {
-                        timeString = String.valueOf(uptime) + " milliseconds";
+                        if (uptime == 1) {
+                            timeString = String.valueOf(uptime) + " millisecond";
+                        } else {
+                            timeString = String.valueOf(uptime) + " milliseconds";
+                        }
                     }
                 }
             }
