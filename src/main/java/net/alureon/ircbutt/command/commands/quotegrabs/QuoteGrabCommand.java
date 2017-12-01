@@ -4,6 +4,7 @@ import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.command.Command;
 import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
+import net.alureon.ircbutt.util.IRCUtils;
 import net.alureon.ircbutt.util.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,11 +39,12 @@ public final class QuoteGrabCommand implements Command {
                         return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(),
                                 "get your hands off me, creep!");
                     } else {
-                        if (butt.getChatStorage().hasQuoteFrom(cmd[1])) {
-                            String quote = butt.getChatStorage().getLastQuoteFrom(cmd[1]);
+                        String nickname = IRCUtils.getActualNickname(cmd[1], event);
+                        if (butt.getChatStorage().hasQuoteFrom(nickname)) {
+                            String quote = butt.getChatStorage().getLastQuoteFrom(nickname);
                             log.trace("Quote grabbed: " + quote);
-                                if (!butt.getQuoteGrabTable().quoteAlreadyExists(cmd[1], quote)) {
-                                    butt.getQuoteGrabTable().addQuote(cmd[1], quote, event.getUser().getNick());
+                                if (!butt.getQuoteGrabTable().quoteAlreadyExists(nickname, quote)) {
+                                    butt.getQuoteGrabTable().addQuote(nickname, quote, event.getUser().getNick());
                                     return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "Tada!");
                                 } else {
                                     log.debug("User tried to add duplicate quote - not adding duplicate.");

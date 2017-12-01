@@ -1,5 +1,8 @@
 package net.alureon.ircbutt.handler;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.HashMap;
 
 /**
@@ -15,6 +18,10 @@ public final class ChatStorage {
      */
     private HashMap<String, String> messageStore = new HashMap<>();
 
+    /**
+     * The logger for this class.
+     */
+    private static final Logger log = LogManager.getLogger();
 
     /**
      * This function stores a message in the ChatStorage's hashmap.
@@ -24,6 +31,7 @@ public final class ChatStorage {
      */
     void storeMessage(final String nick, final String message) {
         messageStore.put(nick, message);
+        log.debug("MessageStore size: " + messageStore.size());
     }
 
     /**

@@ -5,6 +5,7 @@ import net.alureon.ircbutt.IRCbutt;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.types.GenericMessageEvent;
 
 /**
  * Contains static helper functions for working with IRC.
@@ -79,4 +80,22 @@ public final class IRCUtils {
         channel.send().message(message);
     }
 
+    /**
+     * Returns the actual case-sensitive nickname of a user.  This allows users to perform
+     * commands on users without regard to case, because we will correct it for them.
+     * @param typedNickname The nickname the user typed in the channel.
+     * @param event The MessageEvent for getting the actual nickname in the channel.
+     * @return The String that is the real case of the user's nick.
+     */
+    public static String getActualNickname(final String typedNickname, final GenericMessageEvent event) {
+        if (event instanceof MessageEvent) {
+            MessageEvent messageEvent = (MessageEvent) event;
+            for (User x : messageEvent.getChannel().getUsers()) {
+                if (typedNickname.equalsIgnoreCase(x.getNick())) {
+                    return x.getNick();
+                }
+            }
+        }
+        return null;
+    }
 }
