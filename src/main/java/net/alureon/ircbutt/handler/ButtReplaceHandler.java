@@ -2,6 +2,7 @@ package net.alureon.ircbutt.handler;
 
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.MathUtils;
+import net.alureon.ircbutt.util.StringUtils;
 
 /**
  * Provides the functionality for randomly 'buttifying' sentences in the IRC channel.
@@ -23,7 +24,7 @@ public final class ButtReplaceHandler {
      */
     private static final int BUTT_MATH_TRIGGER = 80;
     /**
-     * I have no idea what this does anymore.
+     * How frequently to apply the word "butt" to the message.
      */
     private static final double BUTT_FORMAT_MAGIC_NUMBER = 8.0;
 
@@ -41,146 +42,84 @@ public final class ButtReplaceHandler {
      * @param message The message to buttify.
      * @return The buttified message.
      */
-    String buttFormat(final String message) {
+    String buttifyMessage(final String message) {
+        // split the message on whitespace
         String[] split = message.split(" ");
-        replaceButt(split);
-        int x = (int) Math.ceil(split.length / BUTT_FORMAT_MAGIC_NUMBER);
+        // get the index of the word to replace
+        int replaceIndex = (int) (Math.random() * split.length);
+        split[replaceIndex] = getReplacementWord(split[replaceIndex]);
+        /*int x = (int) Math.ceil(split.length / BUTT_FORMAT_MAGIC_NUMBER);
         for (int i = 1; i < x; i++) {
-            attemptReplace(split);
-        }
-        StringBuilder sb = new StringBuilder();
-        for (String y : split) {
-            if (!y.startsWith(butt.getYamlConfigurationFile().getBotName())) {
-                sb.append(y).append(" ");
-            }
-        }
-        return sb.toString().trim();
-    }
-
-    /**
-     * Attemps to randomly replace a word in the array with 'butt' or 'butts'.
-     * @param split The message from the user split on whitespace.
-     */
-    private void attemptReplace(final String[] split) {
-        boolean success = replaceButt(split);
-        if (!success) {
-            buttRetry(split);
-        }
+            buttify(split);
+        }*/
+        return StringUtils.arrayToString(split);
     }
 
     /**
      * Attempts to randomly replace a word in the array with 'butt' or 'butts'.
-     * @param split The message from the user split on whitespace.
+     * @param word The word that we are attempting to replace.
      * @return True if it was able to make a replacement, otherwise false.
      */
-    private boolean replaceButt(final String[] split) {
-        int replace = (int) (Math.random() * split.length);
-        if (!isAWordWeDontReplace(split[replace])) {
-            if (split[replace].equalsIgnoreCase(butt.getYamlConfigurationFile().getBotName())) {
-                split[replace] = randomize();
-                return true;
-            }
-
+    private String getReplacementWord(final String word) {
+        // check for words we don't want to replace
+        if (!isAWordWeDontReplace(word)) {
+            // randomize the replacement word
             StringBuilder sb = new StringBuilder(randomize());
-            String suffix = "";
-            if (split[replace].endsWith("?")) {
-                suffix = "?";
-            } else if (split[replace].endsWith("ed")) {
-                suffix = "ed";
-            } else if (split[replace].endsWith("ing")) {
-                suffix = "ing";
-            } else if (split[replace].endsWith("ify")) {
-                suffix = "ify";
-            } else if (split[replace].endsWith("ly")) {
-                suffix = "ly";
-            } else if (split[replace].endsWith("er")) {
-                suffix = "er";
-            } else if (split[replace].endsWith("'s")) {
-                suffix = "'s";
-            } else if (split[replace].endsWith("!")) {
-                suffix = "!";
-            } else if (split[replace].endsWith(".")) {
-                suffix = ".";
-            } else if (split[replace].endsWith("()")) {
-                suffix = "()";
-            } else if (split[replace].endsWith(")")) {
-                suffix = ")";
-            } else if (split[replace].endsWith(");")) {
-                suffix = ");";
-            } else if (split[replace].endsWith(":")) {
-                suffix = ":";
-            } else if (split[replace].endsWith(";")) {
-                suffix = ";";
-            } else if (split[replace].endsWith("\"")) {
-                suffix = "\"";
-            } else if (split[replace].endsWith("'")) {
-                suffix = "'";
-            } else if (split[replace].endsWith("*")) {
-                suffix = "*";
-            } else if (split[replace].endsWith("]")) {
-                suffix = "]";
+
+            // see if the word has a weird suffix and mimic that
+            char suffix = word.charAt(word.length() - 1);
+            if (!isAlphaNumeric(suffix)) {
+                sb.append(suffix);
             }
-            sb.append(suffix);
 
-            String prefix = "";
-            if (split[replace].startsWith("#")) {
-                prefix = "#";
-            } else if (split[replace].startsWith("/")) {
-                prefix = "/";
-            } else if (split[replace].startsWith("'")) {
-                prefix = "'";
-            } else if (split[replace].startsWith("\"")) {
-                prefix = "\"";
-            } else if (split[replace].startsWith("$")) {
-                prefix = "$";
-            } else if (split[replace].startsWith("%")) {
-                prefix = "%";
-            } else if (split[replace].startsWith("@")) {
-                prefix = "@";
-            } else if (split[replace].startsWith("^")) {
-                prefix = "^";
-            } else if (split[replace].startsWith("*")) {
-                prefix = "*";
-            } else if (split[replace].startsWith("!")) {
-                prefix = "!";
-            } else if (split[replace].startsWith("&")) {
-                prefix = "&";
-            } else if (split[replace].startsWith("('")) {
-                prefix = "('";
-            } else if (split[replace].startsWith(".(")) {
-                prefix = ".(";
-            } else if (split[replace].startsWith("(")) {
-                prefix = "(";
-            } else if (split[replace].startsWith("+")) {
-                prefix = "+";
-            } else if (split[replace].startsWith("+=")) {
-                prefix = "+=";
-            } else if (split[replace].startsWith("`")) {
-                prefix = "`";
-            } else if (split[replace].startsWith("~")) {
-                prefix = "~";
-            } else if (split[replace].startsWith("|")) {
-                prefix = "|";
-            } else if (split[replace].startsWith("[")) {
-                prefix = "[";
-            } else if (split[replace].startsWith("{")) {
-                prefix = "{";
-            } else if (split[replace].startsWith("<")) {
-                prefix = "<";
-            } else if (split[replace].startsWith(".")) {
-                prefix = ".";
-            } else if (split[replace].startsWith("-")) {
-                prefix = "-";
-            } else if (split[replace].startsWith("_")) {
-                prefix = "_";
+            // get the prefix of the word.
+            char prefix = word.charAt(0);
+            // if it's totally uppercase, uppercase it.
+            if (isUppercase(word)) {
+                return sb.toString().toUpperCase();
+            // if it starts with something weird, mimic that.
+            } else if (!isAlphaNumeric(prefix)) {
+                sb.insert(0, prefix);
+            // if it's capitalized, mimic that.
+            } else if (isCapitalized(word)) {
+                sb.replace(0, 1, "B");
+                //sb.insert(0, Character.toUpperCase(word.charAt(0)));
             }
-            sb.insert(0, prefix);
-
-
-            split[replace] = sb.toString();
-            return true;
+            return sb.toString();
         }
-        return false;
+        return word;
+    }
+
+    /**
+     * Returns true if the word is capitalized.
+     * @param word The word to check.
+     * @return True if the word is capitalized.
+     */
+    private boolean isCapitalized(final String word) {
+        return Character.isUpperCase(word.charAt(0));
+    }
+
+    /**
+     * Returns true if every character in the word is uppercase.
+     * @param word The word to check.
+     * @return True if every character is uppercase.
+     */
+    private boolean isUppercase(final String word) {
+        for (Character c : word.toCharArray()) {
+            if (Character.isLowerCase(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Returns whether or not the character is alphanumeric.
+     * @param c The character to check.
+     * @return True if the character is a digit or letter, otherwise false.
+     */
+    private boolean isAlphaNumeric(final char c) {
+        return Character.isAlphabetic(c) || Character.isDigit(c);
     }
 
     /**
@@ -213,17 +152,6 @@ public final class ButtReplaceHandler {
                 || replace.equalsIgnoreCase("haha") || replace.equalsIgnoreCase("it's")
                 || replace.equalsIgnoreCase("for") || replace.equalsIgnoreCase("has")
                 || replace.equalsIgnoreCase("if") || replace.equalsIgnoreCase("are");
-    }
-
-    /**
-     * A god awful method that attempts to use the same terrible code again.
-     * @param split The original message split on whitespace.
-     */
-    private void buttRetry(final String[] split) {
-        boolean success = replaceButt(split);
-        if (!success) {
-            replaceButt(split);
-        }
     }
 
     /**
