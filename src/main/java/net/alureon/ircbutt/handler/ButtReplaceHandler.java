@@ -23,10 +23,6 @@ public final class ButtReplaceHandler {
      * be returned.
      */
     private static final int BUTT_MATH_TRIGGER = 80;
-    /**
-     * How frequently to apply the word "butt" to the message.
-     */
-    private static final double BUTT_FORMAT_MAGIC_NUMBER = 8.0;
 
 
     /**
@@ -42,16 +38,13 @@ public final class ButtReplaceHandler {
      * @param message The message to buttify.
      * @return The buttified message.
      */
-    String buttifyMessage(final String message) {
+    public String buttifyMessage(final String message) {
         // split the message on whitespace
         String[] split = message.split(" ");
         // get the index of the word to replace
         int replaceIndex = (int) (Math.random() * split.length);
+        // replace the word with the 'butt' equivalent
         split[replaceIndex] = getReplacementWord(split[replaceIndex]);
-        /*int x = (int) Math.ceil(split.length / BUTT_FORMAT_MAGIC_NUMBER);
-        for (int i = 1; i < x; i++) {
-            buttify(split);
-        }*/
         return StringUtils.arrayToString(split);
     }
 
@@ -83,7 +76,6 @@ public final class ButtReplaceHandler {
             // if it's capitalized, mimic that.
             } else if (isCapitalized(word)) {
                 sb.replace(0, 1, "B");
-                //sb.insert(0, Character.toUpperCase(word.charAt(0)));
             }
             return sb.toString();
         }

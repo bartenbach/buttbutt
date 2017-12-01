@@ -169,10 +169,11 @@ public final class FactTable {
         butt.getCommandHandler().clearMore();
         String firstResult = null;
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
-                + "_knowledge` WHERE data LIKE ? LIMIT 24";
+                + "_knowledge` WHERE (data REGEXP ?) LIMIT 24";
+        // SELECT * from ircbutt_knowledge WHERE (data REGEXP 'http');
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             if (ps != null) {
-                ps.setString(1, "%" + search + "%");
+                ps.setString(1, search);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     firstResult = getFormattedFact(rs);
