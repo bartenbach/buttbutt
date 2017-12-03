@@ -147,18 +147,12 @@ public final class FactCommand implements Command {
    private String parseArguments(final String fact, final String arguments) {
         String[] args = arguments.split("\\s");
         log.debug("Received the following arguments: " + arguments);
-        String result;
-        result = fact.replace("$1", args[0]);
-        // although this makes sense, it doesn't work.  the jvm stops executing the code at
-       //  replaceAll.  no error, no exception, execution of this block just stops and the
-       // lines below are never reached.  the debug statement at the bottom is never printed.
-        /*for (int i = 0; i <= MAX_ARG_NUM; i++) {
-            log.debug("Replacing $" + String.valueOf(i + 1) + " with " + args[i]);
-            String pattern = Pattern.quote("$" + String.valueOf(i + 1));
-            if (args[i] != null) {
-                result = fact.replaceAll(pattern, args[i]);
+        String result = fact;
+        for (int i = 0; i <= MAX_ARG_NUM; i++) {
+            if (args.length > i) {
+                result = result.replace("$" + String.valueOf(i + 1), args[i]);
             }
-        }*/
+        }
         log.debug("final result is: " + result);
         return result;
    }
@@ -228,7 +222,6 @@ public final class FactCommand implements Command {
             return getBotResponseForQuery(info);
         } else {
             String info = getFactParseArgs(butt, cmd);
-            log.debug("Returned from parse args: fact is " + info);
             return getFactResponse(info, event);
         }
         log.error("Fell through the entire switch at FactCommand without hitting a branch.");
