@@ -37,10 +37,11 @@ dependencies {
     compile 'mysql:mysql-connector-java:5.1.36' // for mysql connection
     compile 'org.jsoup:jsoup:1.8.3' // for web scraping
     compile 'net.sourceforge.jeval:jeval:0.9.4' // for math operations
+    compile 'com.google.code.gson:gson:2.8.2' // for cryptocurrency package
 }
 
 sourceCompatibility = 1.8
-version = '0.5.5-indev'
+version = '0.5.6-indev'
 
 jar {
     dependsOn configurations.runtime
