@@ -19,7 +19,7 @@ import java.util.Arrays;
 /**
  * Provides a way to get the current spot price of BTC.
  */
-public final class BitcoinCommand implements Command {
+public final class CryptocurrencyCommand implements Command {
 
     /**
      * The logger for this class.
@@ -30,13 +30,13 @@ public final class BitcoinCommand implements Command {
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
         String url = "";
         Class cryptocurrency = null;
-        if (cmd[0].equalsIgnoreCase("btc")) {
+        if (cmd[0].startsWith("btc")) {
             url = "https://api.coinbase.com/v2/prices/BTC-USD/spot";
             cryptocurrency = BTC.class;
-        } else if (cmd[0].equalsIgnoreCase("ltc")) {
+        } else if (cmd[0].startsWith("ltc")) {
             url = "https://api.coinbase.com/v2/prices/LTC-USD/spot";
             cryptocurrency = LTC.class;
-        } else if (cmd[0].equalsIgnoreCase("eth")) {
+        } else if (cmd[0].startsWith("eth")) {
             url = "https://api.coinbase.com/v2/prices/ETH-USD/spot";
             cryptocurrency = ETH.class;
         }
@@ -45,8 +45,12 @@ public final class BitcoinCommand implements Command {
             String jsonText = readAll(bufferedReader);
             Gson gson = new Gson();
             Cryptocurrency currency = gson.fromJson(jsonText, (Type) cryptocurrency);
-            return new BotResponse(BotIntention.CHAT, null, currency.getData().getBase()
-                    + ": " + currency.getData().getAmount() + " " + currency.getData().getCurrency());
+            if (!cmd[0].endsWith("v")) {
+                return new BotResponse(BotIntention.CHAT, null, currency.getData().getBase()
+                        + ": " + currency.getData().getAmount() + " " + currency.getData().getCurrency());
+            } else {
+                return new BotResponse(BotIntention.CHAT, null, currency.getData().getAmount());
+            }
         } catch (IOException e) {
             log.error("Could not get market status! ", e.getMessage());
         }
@@ -71,7 +75,7 @@ public final class BitcoinCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return new ArrayList<>(Arrays.asList("btc", "ltc", "eth"));
+        return new ArrayList<>(Arrays.asList("btc", "ltc", "eth", "btcv", "ltcv", "ethv"));
     }
 
     @Override

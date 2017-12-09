@@ -1,8 +1,5 @@
 package net.alureon.ircbutt.handler;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.HashMap;
 
 /**
@@ -12,16 +9,10 @@ import java.util.HashMap;
  */
 public final class ChatStorage {
 
-// TODO how big could this get?  This needs to purge old messages!
     /**
      * A HashMap mapping a user to their recent chat messages.
      */
     private HashMap<String, String> messageStore = new HashMap<>();
-
-    /**
-     * The logger for this class.
-     */
-    private static final Logger log = LogManager.getLogger();
 
     /**
      * This function stores a message in the ChatStorage's hashmap.
@@ -31,7 +22,6 @@ public final class ChatStorage {
      */
     void storeMessage(final String nick, final String message) {
         messageStore.put(nick, message);
-        log.debug("MessageStore size: " + messageStore.size());
     }
 
     /**

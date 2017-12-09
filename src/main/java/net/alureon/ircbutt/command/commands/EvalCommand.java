@@ -64,6 +64,6 @@ public final class EvalCommand implements Command {
 
     @Override
     public boolean allowsCommandSubstitution() {
-        return false;
+        return true;
     }
 }
