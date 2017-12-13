@@ -19,7 +19,7 @@ public final class CoinCommand implements Command {
      * The maximum number to use in random number generation.  Any number
      * higher than the number defined for COIN_MATH_HEADS will be tails.
      */
-    private static final int COIN_MATH_MAX = 100;
+    private static final int COIN_MATH_MAX = 102;
     /**
      * Any number between COIN_MATH_HEADS (this number) and COIN_MATH_PENIS
      * will result in the coin flip being heads.
