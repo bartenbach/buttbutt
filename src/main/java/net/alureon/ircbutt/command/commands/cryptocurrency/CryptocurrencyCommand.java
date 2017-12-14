@@ -1,6 +1,7 @@
 package net.alureon.ircbutt.command.commands.cryptocurrency;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.command.Command;
 import net.alureon.ircbutt.response.BotIntention;
@@ -15,6 +16,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Provides a way to get the current spot price of BTC.
@@ -39,8 +41,9 @@ public final class CryptocurrencyCommand implements Command {
         } else if (cmd[0].startsWith("eth")) {
             url = "https://api.coinbase.com/v2/prices/ETH-USD/spot";
             cryptocurrency = ETH.class;
-        } else if (cmd[0].startsWith("vtc") || cmd[0].startsWith("xrp")) {
-            return handleCoinMarketRequest(cmd[0], "vertcoin");
+        } else if (cmd[0].startsWith("vtc") || cmd[0].startsWith("xrp") || cmd[0].startsWith("bch")
+                || cmd[0].startsWith("dash") || cmd[0].startsWith("iota")) {
+            return handleCoinMarketRequest(cmd[0]);
         }
         try (InputStream is = new URL(url).openStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -63,29 +66,32 @@ public final class CryptocurrencyCommand implements Command {
      * Handles a request to CoinMarketCap's API as opposed to GDAX.
      * Very few cryptocurrencyies are supported by GDAX/Coinbase currently.
      * @param command The command that was passed (may be a value request).
-     * @param coinName The name of the coin (via API) to retrieve.
      * @return The bot's response (the ticker price)
      */
-    private BotResponse handleCoinMarketRequest(final String command, final String coinName) {
+    @SuppressWarnings("unchecked") // this is from the cast into a CoinMarketCapResponse object.
+    private BotResponse handleCoinMarketRequest(final String command) {
         String url = "";
-        if (coinName.equalsIgnoreCase("vertcoin")) {
+        if (command.startsWith("vtc")) {
             url = "https://api.coinmarketcap.com/v1/ticker/vertcoin/";
-        } else if (coinName.equalsIgnoreCase("ripple")) {
-            url = "";
-        } else if (coinName.equalsIgnoreCase("bch")) {
-            url = "";
+        } else if (command.startsWith("xrp")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/ripple/";
+        } else if (command.startsWith("bch")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/bitcoin-cash/";
+        } else if (command.startsWith("dash")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/dash/";
+        } else if (command.startsWith("iota")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/iota/";
         }
         try (InputStream is = new URL(url).openStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
             String jsonText = readAll(bufferedReader);
-            System.out.println(jsonText);
-            Gson gson = new Gson();
-            CoinMarketCapResponse currency = gson.fromJson(jsonText, CoinMarketCapResponse.class);
+            Type currencyType = new TypeToken<List<CoinMarketCapResponse>>() { }.getType();
+            List<CoinMarketCapResponse> currency = new Gson().fromJson(jsonText, currencyType);
             if (!command.endsWith("v")) {
-                return new BotResponse(BotIntention.CHAT, null, currency.getName()
-                        + ": " + currency.getPriceUsd() + " [" + currency.getPercentChange24h() + "]");
+                return new BotResponse(BotIntention.CHAT, null, currency.get(0).getName()
+                        + ": " + currency.get(0).getPriceUsd() + " [" + currency.get(0).getPercentChange24h() + "]");
             } else {
-                return new BotResponse(BotIntention.CHAT, null, currency.getPriceUsd());
+                return new BotResponse(BotIntention.CHAT, null, currency.get(0).getPriceUsd());
             }
         } catch (IOException ex) {
             log.error("Error handling CoinMarketCap request: " + ex.getMessage());
@@ -111,7 +117,9 @@ public final class CryptocurrencyCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return new ArrayList<>(Arrays.asList("btc", "ltc", "eth", "btcv", "ltcv", "ethv", "vtc", "vtcv"));
+        return new ArrayList<>(Arrays.asList("btc", "ltc", "eth", "btcv", "ltcv", "ethv", "vtc", "vtcv", "xrp", "xrpv",
+                "bch", "bchv", "dash", "dashv", "iota", "iotav"));
+
     }
 
     @Override
