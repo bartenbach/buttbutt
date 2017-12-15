@@ -42,7 +42,7 @@ public final class CryptocurrencyCommand implements Command {
             url = "https://api.coinbase.com/v2/prices/ETH-USD/spot";
             cryptocurrency = ETH.class;
         } else if (cmd[0].startsWith("vtc") || cmd[0].startsWith("xrp") || cmd[0].startsWith("bch")
-                || cmd[0].startsWith("dash") || cmd[0].startsWith("iota")) {
+                || cmd[0].startsWith("dash") || cmd[0].startsWith("iota") || cmd[0].startsWith("trx")) {
             return handleCoinMarketRequest(cmd[0]);
         }
         try (InputStream is = new URL(url).openStream()) {
@@ -81,6 +81,8 @@ public final class CryptocurrencyCommand implements Command {
             url = "https://api.coinmarketcap.com/v1/ticker/dash/";
         } else if (command.startsWith("iota")) {
             url = "https://api.coinmarketcap.com/v1/ticker/iota/";
+        } else if (command.startsWith("trx")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/tron/";
         }
         try (InputStream is = new URL(url).openStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -118,7 +120,7 @@ public final class CryptocurrencyCommand implements Command {
     @Override
     public ArrayList<String> getCommandAliases() {
         return new ArrayList<>(Arrays.asList("btc", "ltc", "eth", "btcv", "ltcv", "ethv", "vtc", "vtcv", "xrp", "xrpv",
-                "bch", "bchv", "dash", "dashv", "iota", "iotav"));
+                "bch", "bchv", "dash", "dashv", "iota", "iotav", "trx", "trxv"));
 
     }
 
