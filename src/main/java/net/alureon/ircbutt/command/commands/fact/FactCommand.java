@@ -240,7 +240,7 @@ public final class FactCommand implements Command {
         if (info != null) {
             result = info.replaceAll("\\$USER", event.getUser().getNick());
             if (info.startsWith("$ME")) {
-                result = info.replaceFirst("\\$ME", "");
+                result = result.replaceFirst("\\$ME", "");
                 return new BotResponse(BotIntention.ME, null, result);
             }
             return new BotResponse(BotIntention.CHAT, null, result);
