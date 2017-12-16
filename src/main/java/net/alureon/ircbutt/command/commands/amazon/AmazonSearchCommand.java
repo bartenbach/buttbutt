@@ -46,20 +46,17 @@ public final class AmazonSearchCommand implements Command {
             cResponse = Jsoup.connect(amazon
                         + URLEncoder.encode(search, "UTF-8")).followRedirects(true).execute();
             Document doc = cResponse.parse();
-            Element atfResult = doc.getElementById("atfResults"); // This is where it breaks
+            Element atfResult = doc.getElementById("atfResults");
             Elements items =
-                    atfResult.getElementsByClass("s-access-title");
-            int size = items.size();
+                    atfResult.getElementsByClass("a-size-medium s-inline  s-access-title  a-text-normal");
+            int size = items.size();         // This is probably around where it breaks
             for (int i = 0; i < size; i++) {
                 Element result = items.get(i);
-                Attributes attributes = result.child(0).attributes();
-                String url = attributes.get("href");
                 if (i == 0) {
-                    String urlText = URLDecoder.decode(result.text(), "utf8") + " http://amazon.com" + url;
+                    String urlText = URLDecoder.decode(result.text(), "utf8");
                     response = new BotResponse(BotIntention.CHAT, null, urlText);
                 } else {
-                    butt.getCommandHandler().addMore(URLDecoder.decode(result.text(), "utf-8")
-                            + " http://amazon.com" + url);
+                    butt.getCommandHandler().addMore(URLDecoder.decode(result.text(), "utf-8");
                 }
             }
         } catch (IOException e) {
