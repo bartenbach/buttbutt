@@ -14,6 +14,7 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -93,10 +94,12 @@ public final class CryptocurrencyCommand implements Command {
             String jsonText = readAll(bufferedReader);
             Type currencyType = new TypeToken<List<CoinMarketCapResponse>>() { }.getType();
             List<CoinMarketCapResponse> currency = new Gson().fromJson(jsonText, currencyType);
+            NumberFormat nf = NumberFormat.getCurrencyInstance();
             if (!cmd[0].endsWith("v")) {
                 return new BotResponse(BotIntention.CHAT, null, currency.get(0).getName()
-                        + ": $" + currency.get(0).getPriceUsd() + " | Rank: " + currency.get(0).getRank(),
-                        "Market Cap: $" + currency.get(0).getMarketCapUsd()
+                        + ": " + nf.format(Double.valueOf(currency.get(0).getPriceUsd()))
+                        + " | Rank: " + currency.get(0).getRank(),
+                        "Market Cap: " + nf.format(Double.valueOf(currency.get(0).getMarketCapUsd()))
                          + " | [" + currency.get(0).getPercentChange24h() + "%] ");
             } else {
                 return new BotResponse(BotIntention.CHAT, null, currency.get(0).getPriceUsd());
