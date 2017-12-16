@@ -95,8 +95,9 @@ public final class CryptocurrencyCommand implements Command {
             List<CoinMarketCapResponse> currency = new Gson().fromJson(jsonText, currencyType);
             if (!cmd[0].endsWith("v")) {
                 return new BotResponse(BotIntention.CHAT, null, currency.get(0).getName()
-                        + ": " + currency.get(0).getPriceUsd() + " [" + currency.get(0).getPercentChange24h() + "%] "
-                        + " Rank: " + currency.get(0).getRank());
+                        + ": $" + currency.get(0).getPriceUsd() + " | Rank: " + currency.get(0).getRank(),
+                        "Market Cap: $" + currency.get(0).getMarketCapUsd()
+                         + " | [" + currency.get(0).getPercentChange24h() + "%] ");
             } else {
                 return new BotResponse(BotIntention.CHAT, null, currency.get(0).getPriceUsd());
             }
