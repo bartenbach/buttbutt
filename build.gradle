@@ -41,11 +41,7 @@ dependencies {
 }
 
 sourceCompatibility = 1.8
-<<<<<<< Updated upstream
-version = '0.6.0-indev'
-=======
 version = '0.6.1-indev'
->>>>>>> Stashed changes
 
 jar {
     dependsOn configurations.runtime
