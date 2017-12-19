@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -46,16 +47,19 @@ public final class AmazonSearchCommand implements Command {
                         + URLEncoder.encode(search, "UTF-8")).followRedirects(true).execute();
             Document doc = cResponse.parse();
             Element atfResult = doc.getElementById("atfResults");
-            Elements items =
-                    atfResult.getElementsByClass("a-size-medium s-inline  s-access-title  a-text-normal");
-            int size = items.size();         // This is probably around where it breaks
+            Elements items = atfResult.getElementsByClass("a-link-normal s-access-detail-page "
+                            + " s-color-twister-title-link a-text-normal");
+            int size = items.size();
             for (int i = 0; i < size; i++) {
                 Element result = items.get(i);
+                Attributes attributes = result.attributes();
+                String url = attributes.get("href");
                 if (i == 0) {
-                    String urlText = URLDecoder.decode(result.text(), "utf8");
+                    String urlText = URLDecoder.decode(result.text(), "UTF-8") +  url;
                     response = new BotResponse(BotIntention.CHAT, null, urlText);
                 } else {
-                    butt.getCommandHandler().addMore(URLDecoder.decode(result.text(), "utf-8"));
+                    butt.getCommandHandler().addMore(URLDecoder.decode(result.text(), "UTF-8")
+                            + url);
                 }
             }
         } catch (IOException e) {
