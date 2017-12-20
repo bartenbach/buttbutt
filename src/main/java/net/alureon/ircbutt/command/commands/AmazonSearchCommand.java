@@ -1,4 +1,4 @@
-package net.alureon.ircbutt.command.commands.amazon;
+package net.alureon.ircbutt.command.commands;
 
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.command.Command;
@@ -9,14 +9,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,28 +35,30 @@ public final class AmazonSearchCommand implements Command {
         butt.getCommandHandler().clearMore();
         BotResponse response = new BotResponse(BotIntention.CHAT, null, "found nothing bout that");
 
-        Connection.Response cResponse = null;
-
         try {
             String amazon = "http://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=";
             String search = StringUtils.getArgs(cmd);
-            cResponse = Jsoup.connect(amazon
-                        + URLEncoder.encode(search, "UTF-8")).followRedirects(true).execute();
+            Connection.Response cResponse = Jsoup.connect(amazon + URLEncoder.encode(search, "UTF-8"))
+                    .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                            + "Chrome/58.0.3029.110 Safari/537.36")
+                    .referrer("http://www.google.com")
+                    .followRedirects(true)
+                    .execute();
             Document doc = cResponse.parse();
-            Element atfResult = doc.getElementById("atfResults");
-            Elements items = atfResult.getElementsByClass("a-link-normal s-access-detail-page "
-                            + " s-color-twister-title-link a-text-normal");
-            int size = items.size();
-            for (int i = 0; i < size; i++) {
-                Element result = items.get(i);
-                Attributes attributes = result.attributes();
-                String url = attributes.get("href");
-                if (i == 0) {
-                    String urlText = URLDecoder.decode(result.text(), "UTF-8") +  url;
-                    response = new BotResponse(BotIntention.CHAT, null, urlText);
-                } else {
-                    butt.getCommandHandler().addMore(URLDecoder.decode(result.text(), "UTF-8")
-                            + url);
+            Elements items = doc.getElementsByClass("s-result-item");
+            Elements ids = doc.getElementsByAttribute("data-asin");
+            int results = items.size();
+            for (int i = 0; i < items.size(); i++) {
+                Elements title = items.get(i).getElementsByClass("s-access-title");
+                if (title.size() > 0) {
+                    if (i == 0) {
+                        response = new BotResponse(BotIntention.CHAT, null, title.get(0).text()
+                                + " [" + results + " more]",
+                                "http://amazon.com/dp/" + ids.get(i).attr("data-asin"));
+                    } else {
+                        butt.getCommandHandler().addMore(title.get(0).text() + " http://amazon.com/dp/"
+                                + ids.get(i).attr("data-asin"));
+                    }
                 }
             }
         } catch (IOException e) {
