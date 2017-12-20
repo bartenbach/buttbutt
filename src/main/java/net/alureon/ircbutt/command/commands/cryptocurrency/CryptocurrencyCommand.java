@@ -88,6 +88,8 @@ public final class CryptocurrencyCommand implements Command {
             url = "https://api.coinmarketcap.com/v1/ticker/waves/";
         } else if (cmd[0].startsWith("trx")) {
             url = "https://api.coinmarketcap.com/v1/ticker/tron/";
+        } else if (cmd[0].startsWith("xvg")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/verge/";
         }
         try (InputStream is = new URL(url).openStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -132,7 +134,7 @@ public final class CryptocurrencyCommand implements Command {
                 "bch", "bchv", "dash", "dashv", "iota", "iotav", "wtc", "wtcv", "ada", "adav", "xem", "xemv", "btg",
                 "btgv", "xmr", "xmrv", "eos", "eosv", "xlm", "xlmv", "zec", "zecv", "usdt", "usdtv", "steem", "steemv",
                 "doge", "dogev", "bnb", "bnbv", "gnt", "gntv", "etc", "etcv", "neo", "neov", "ppt", "pptv", "bcc",
-                "bccv", "qtum", "qtumv", "waves", "wavesv", "trx", "trxv"));
+                "bccv", "qtum", "qtumv", "waves", "wavesv", "trx", "trxv", "xvg", "xvgv"));
     }
 
     @Override
