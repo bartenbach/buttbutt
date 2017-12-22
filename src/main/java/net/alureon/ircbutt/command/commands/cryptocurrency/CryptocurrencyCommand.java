@@ -8,6 +8,7 @@ import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.io.*;
@@ -98,21 +99,31 @@ public final class CryptocurrencyCommand implements Command {
         try (InputStream is = new URL(url).openStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
             String jsonText = readAll(bufferedReader);
-            Type currencyType = new TypeToken<List<CoinMarketCapResponse>>() { }.getType();
+            Type currencyType = new TypeToken<List<CoinMarketCapResponse>>() {
+            }.getType();
             List<CoinMarketCapResponse> currency = new Gson().fromJson(jsonText, currencyType);
             NumberFormat nf = NumberFormat.getCurrencyInstance();
             if (!cmd[0].endsWith("v")) {
-                if (currency.get(0).getMarketCapUsd() != null) {
-                    return new BotResponse(BotIntention.CHAT, null, currency.get(0).getName()
-                            + ": " + nf.format(Double.valueOf(currency.get(0).getPriceUsd()))
-                            + " | Rank: " + currency.get(0).getRank(),
-                            "Market Cap: " + nf.format(Double.valueOf(currency.get(0).getMarketCapUsd()))
-                                    + " | [" + currency.get(0).getPercentChange24h() + "%] ");
+                String change;
+                if (currency.get(0).getPercentChange24h().startsWith("-")) {
+                    change = Colors.RED + currency.get(0).getPercentChange24h() + "%" + Colors.NORMAL + Colors.TEAL;
                 } else {
-                    return new BotResponse(BotIntention.CHAT, null, currency.get(0).getName()
-                            + ": " + nf.format(Double.valueOf(currency.get(0).getPriceUsd()))
+                    change = Colors.GREEN + currency.get(0).getPercentChange24h() + "%" + Colors.NORMAL + Colors.TEAL;
+                }
+                if (currency.get(0).getMarketCapUsd() != null) {
+
+                    return new BotResponse(BotIntention.CHAT, null, Colors.CYAN + Colors.BOLD
+                            + currency.get(0).getName() + Colors.NORMAL + Colors.TEAL + ": "
+                            + nf.format(Double.valueOf(currency.get(0).getPriceUsd())) + " | Rank: "
+                            + currency.get(0).getRank(), Colors.TEAL + "Market Cap: "
+                            + nf.format(Double.valueOf(currency.get(0).getMarketCapUsd()))
+                            + " | [" + change + "] ");
+                } else {
+                    return new BotResponse(BotIntention.CHAT, null, Colors.CYAN + Colors.BOLD
+                            + currency.get(0).getName() + Colors.NORMAL + Colors.TEAL + ": "
+                            + nf.format(Double.valueOf(currency.get(0).getPriceUsd()))
                             + " | Rank: " + currency.get(0).getRank()
-                            + " | [" + currency.get(0).getPercentChange24h() + "%] ",
+                            + " | [" + change + "] ",
                             "Market Cap: N/A");
 
                 }

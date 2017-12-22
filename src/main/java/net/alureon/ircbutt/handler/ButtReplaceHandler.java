@@ -3,6 +3,8 @@ package net.alureon.ircbutt.handler;
 import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.util.MathUtils;
 import net.alureon.ircbutt.util.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Provides the functionality for randomly 'buttifying' sentences in the IRC channel.
@@ -15,6 +17,10 @@ public final class ButtReplaceHandler {
      */
     private IRCbutt butt;
     /**
+     * The logger for this class.
+     */
+    private static final Logger log = LogManager.getLogger();
+    /**
      * When doing random number generation, this is the maximum number that can be generated.
      */
     private static final int BUTT_MATH_MAX = 100;
@@ -23,6 +29,11 @@ public final class ButtReplaceHandler {
      * be returned.
      */
     private static final int BUTT_MATH_TRIGGER = 80;
+    /**
+     * Per every (this) many words, replace one with butt (roughly).
+     * With this at 8, expect two butts for a 16 word sentence.
+     */
+    private static final double WORDS_PER_BUTT = 8.0;
 
 
     /**
@@ -39,12 +50,25 @@ public final class ButtReplaceHandler {
      * @return The buttified message.
      */
     public String buttifyMessage(final String message) {
+        log.debug("Butting sentence: " + message);
         // split the message on whitespace
         String[] split = message.split(" ");
-        // get the index of the word to replace
-        int replaceIndex = (int) (Math.random() * split.length);
-        // replace the word with the 'butt' equivalent
-        split[replaceIndex] = getReplacementWord(split[replaceIndex]);
+
+        // butt several times for longer messages
+        int timesToButt = (int) Math.floor(split.length / WORDS_PER_BUTT);
+        log.debug("Butting " + timesToButt + " times");
+        for (int i = 0; i < timesToButt; i++) {
+            // get the index of the word to replace
+            int replaceIndex = (int) (Math.random() * split.length);
+
+            // check for empty string and try again
+            if (split[replaceIndex].isEmpty()) {
+                replaceIndex = (int) (Math.random() * split.length);
+            }
+            // replace the word with the 'butt' equivalent
+            log.debug("Replacing " + split[replaceIndex] + " with butt.");
+            split[replaceIndex] = getReplacementWord(split[replaceIndex]);
+        }
         return StringUtils.arrayToString(split);
     }
 

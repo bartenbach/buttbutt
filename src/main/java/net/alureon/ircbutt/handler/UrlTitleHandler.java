@@ -63,8 +63,7 @@ final class UrlTitleHandler {
             Elements n = doc.select("title");
             return n.first().text();
         } catch (IOException e) {
-            log.error("Failed to get title for URL: " + url);
-            log.error("Exception thrown: " + e.getMessage());
+            log.warn("Failed to get title for URL: " + url + " this may be expected.\n  Reason: " + e.getMessage());
         }
         return null;
     }

@@ -28,7 +28,7 @@ public final class FactCommand implements Command {
     /**
      * The max possible fact size we will store in the database.
      */
-    private static final int MAX_FACT_SIZE = 300;
+    private static final int MAX_FACT_SIZE = 500;
     /**
      * When doing argument parsing, this is the largest argument that will be parsed.
      * That means a fact could have $1, $2, $3 ... $10.  That seems reasonable.
@@ -54,7 +54,7 @@ public final class FactCommand implements Command {
             if (getFact(butt, item) == null) {
                 String information = StringUtils.getArgsOverOne(data);
                 if (information.length() > MAX_FACT_SIZE) {
-                    return new BotResponse(BotIntention.HIGHLIGHT, user, "fact longer than 300 characters");
+                    return new BotResponse(BotIntention.HIGHLIGHT, user, "fact longer than 500 characters");
                 }
                 log.trace("Item: " + item);
                 log.trace("Data: " + information);
@@ -88,7 +88,7 @@ public final class FactCommand implements Command {
             if (getFact(butt, item) != null) {
                 String information = StringUtils.getArgsOverOne(data);
                 if (information.length() > MAX_FACT_SIZE) {
-                    return new BotResponse(BotIntention.HIGHLIGHT, user, "fact longer than 300 characters");
+                    return new BotResponse(BotIntention.HIGHLIGHT, user, "fact longer than 500 characters");
                 }
                 log.trace("Item: " + item);
                 log.trace("Data: " + information);

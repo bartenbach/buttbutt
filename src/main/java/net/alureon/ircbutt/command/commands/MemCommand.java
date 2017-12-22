@@ -4,6 +4,7 @@ import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.command.Command;
 import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.text.DecimalFormat;
@@ -26,7 +27,7 @@ public final class MemCommand implements Command {
         double memory = (double) Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         double megabytes = memory / KIBIBYTE / KIBIBYTE;
         String responseString = df.format(megabytes) + " MB";
-        return new BotResponse(BotIntention.CHAT, null, responseString);
+        return new BotResponse(BotIntention.CHAT, null, Colors.YELLOW + responseString);
     }
 
     @Override

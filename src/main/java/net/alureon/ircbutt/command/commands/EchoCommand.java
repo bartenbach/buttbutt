@@ -5,6 +5,7 @@ import net.alureon.ircbutt.command.Command;
 import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.util.StringUtils;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public final class EchoCommand implements Command {
 
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
-        return new BotResponse(BotIntention.CHAT, null, StringUtils.getArgs(cmd));
+        return new BotResponse(BotIntention.CHAT, null, Colors.removeFormattingAndColors(StringUtils.getArgs(cmd)));
     }
 
     @Override

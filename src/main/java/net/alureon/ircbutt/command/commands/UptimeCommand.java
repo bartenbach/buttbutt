@@ -4,6 +4,7 @@ import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.command.Command;
 import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
+import org.pircbotx.Colors;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.lang.management.ManagementFactory;
@@ -22,7 +23,7 @@ public final class UptimeCommand implements Command {
         RuntimeMXBean rb = ManagementFactory.getRuntimeMXBean();
         long uptime = rb.getUptime();
         String timeString = getTimeString(uptime);
-        return new BotResponse(BotIntention.CHAT, null, timeString);
+        return new BotResponse(BotIntention.CHAT, null, Colors.TEAL + timeString);
     }
 
     /**

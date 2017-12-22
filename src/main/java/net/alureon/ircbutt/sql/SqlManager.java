@@ -92,7 +92,6 @@ public final class SqlManager {
      */
     public void createDatabaseIfNotExists() {
         boolean result = sqlUpdate("CREATE DATABASE IF NOT EXISTS ircbutt CHARACTER SET utf8;");
-        log.debug("Create database if not exists returned: {}", result);
         if (!result) {
             log.fatal("Failed to create database! Shutting down...");
             System.exit(1);
@@ -107,17 +106,17 @@ public final class SqlManager {
         boolean table1Status = sqlUpdate("CREATE TABLE IF NOT EXISTS `"
                 + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_quotes` "
                 + "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `user` VARCHAR(16) NOT NULL,"
-                + "`quote` VARCHAR(300) NOT NULL, `grabbed_by` VARCHAR(16) NOT NULL,"
-                + "`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=MyISAM");
+                + "`quote` VARCHAR(500) NOT NULL, `grabbed_by` VARCHAR(16) NOT NULL,"
+                + "`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=MyISAM DEFAULT CHARSET=utf8");
         boolean table2Status = sqlUpdate("CREATE TABLE IF NOT EXISTS `"
                 + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_knowledge` "
                 + "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `item` VARCHAR(32) NOT NULL UNIQUE,"
-                + "`data` VARCHAR(300) NOT NULL, `added_by` VARCHAR(16) NOT NULL,"
-                + "`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=MyISAM");
+                + "`data` VARCHAR(500) NOT NULL, `added_by` VARCHAR(16) NOT NULL,"
+                + "`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=MyISAM DEFAULT CHARSET=utf8");
         boolean table3Status = sqlUpdate("CREATE TABLE IF NOT EXISTS `"
                 + butt.getYamlConfigurationFile().getSqlTablePrefix() + "_karma` "
                 + "(`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `item` VARCHAR(32) NOT NULL,"
-                + "`karma` SMALLINT NOT NULL) ENGINE=MyISAM");
+                + "`karma` SMALLINT NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8");
         if (!table1Status || !table2Status || !table3Status) {
             log.fatal("Failed to create table in database! Shutting down...");
             System.exit(1);
