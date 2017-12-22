@@ -26,8 +26,6 @@ public final class QuoteGrabCommand implements Command {
 
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
-        //TODO this class shouldn't be handling SQL exceptions.  That makes no sense.
-        //TODO this needs more refactoring than I have left in me right now
         log.trace("QuoteGrabCommand received the following: " + StringUtils.arrayToString(cmd));
         switch (cmd[0]) {
             case "grab":
@@ -61,22 +59,26 @@ public final class QuoteGrabCommand implements Command {
             case "rq":
                 if (cmd.length == 1) {
                     String quote = butt.getQuoteGrabTable().getRandomQuoteAndUser();
-                    return getQuoteResponse(quote, "butt don't have any quotes yet!", event.getUser(),
+                    return getQuoteResponse(quote, butt.getYamlConfigurationFile().getBotNickName()
+                                    + " don't have any quotes yet!", event.getUser(),
                             "Database returned no quote - got null");
                 } else {
                         String quote = butt.getQuoteGrabTable().getRandomQuoteAndUserFromUser(cmd[1]);
-                        return getQuoteResponse(quote, "butt don't have any quotes for " + cmd[1],
+                        return getQuoteResponse(quote, butt.getYamlConfigurationFile().getBotNickName()
+                                        + " don't have any quotes for " + cmd[1],
                                 event.getUser(), "Didn't find any quotes from user: " + cmd[1]);
                 }
             case "rqn":
             case "rqnouser":
                 if (cmd.length == 1) {
                     String quote = butt.getQuoteGrabTable().getRandomQuote();
-                    return getQuoteResponse(quote, "butt don't have any quotes yet!", event.getUser(),
+                    return getQuoteResponse(quote, butt.getYamlConfigurationFile().getBotNickName()
+                                    + " don't have any quotes yet!", event.getUser(),
                             "Database returned no quote - got null");
                 } else {
                         String quote = butt.getQuoteGrabTable().getRandomQuoteFromUser(cmd[1]);
-                        return getQuoteResponse(quote, "butt don't have any quotes from " + cmd[1], event.getUser(),
+                        return getQuoteResponse(quote, butt.getYamlConfigurationFile().getBotNickName()
+                                        + " don't have any quotes from " + cmd[1], event.getUser(),
                                 "Database returned no quotes for user: " + cmd[1]);
                 }
             case "q":
@@ -84,7 +86,8 @@ public final class QuoteGrabCommand implements Command {
                     return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "!q <nick>");
                 } else {
                         String quote = butt.getQuoteGrabTable().getLastQuoteFromUser(cmd[1]);
-                        return getQuoteResponse(quote, "butt dont' have any quotes from " + cmd[1], event.getUser(),
+                        return getQuoteResponse(quote, butt.getYamlConfigurationFile().getBotNickName()
+                                        + " dont' have any quotes from " + cmd[1], event.getUser(),
                                 "Database returned no quotes for user: " + cmd[1]);
                 }
             case "qinfo":
@@ -93,7 +96,8 @@ public final class QuoteGrabCommand implements Command {
                     return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "!qinfo <id>");
                 } else {
                         String[] quote = butt.getQuoteGrabTable().getQuoteInfo(Integer.parseInt(cmd[1]));
-                        return getQuoteResponse(quote, "butt found no quote with id " + cmd[1], event.getUser(),
+                        return getQuoteResponse(quote, butt.getYamlConfigurationFile().getBotNickName()
+                                        + " found no quote with id " + cmd[1], event.getUser(),
                                 "Found no quote with id of " + cmd[1] + " in the database.");
                 }
             case "qsay":
@@ -101,7 +105,8 @@ public final class QuoteGrabCommand implements Command {
                     return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "!qsay <id>");
                 } else {
                     String quote = butt.getQuoteGrabTable().getQuoteById(Integer.parseInt(cmd[1]));
-                    return getQuoteResponse(quote, "butt don't find no quote with id " + cmd[1], event.getUser(),
+                    return getQuoteResponse(quote, butt.getYamlConfigurationFile().getBotNickName()
+                                    + " don't find no quote with id " + cmd[1], event.getUser(),
                             "Found no quote in the database with id: " + cmd[1]);
                 }
             case "qfind":
@@ -111,7 +116,8 @@ public final class QuoteGrabCommand implements Command {
                     return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "!qfind <string>");
                 } else {
                     String quote = butt.getQuoteGrabTable().findQuote(StringUtils.getArgs(cmd));
-                    return getQuoteResponse(quote, "butt didnt find nothin", event.getUser(),
+                    return getQuoteResponse(quote, butt.getYamlConfigurationFile().getBotNickName()
+                                    + " didnt find nothin", event.getUser(),
                             "Found no quotes matching the search string: " + StringUtils.arrayToString(cmd));
                 }
             default:

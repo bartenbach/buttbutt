@@ -56,7 +56,8 @@ public final class UrbanDictionaryCommand implements Command {
                 }
             } catch (IOException ex) {
                 log.error("Exception encountered", ex);
-                response = new BotResponse(BotIntention.CHAT, null, "butt don't see that word nowhere");
+                response = new BotResponse(BotIntention.CHAT, null,
+                        butt.getYamlConfigurationFile().getBotNickName() + " don't see that word nowhere");
             }
         } catch (UnsupportedEncodingException ex) {
             log.error("Failed to encode URL", ex);

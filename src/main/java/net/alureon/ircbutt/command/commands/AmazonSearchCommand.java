@@ -33,7 +33,8 @@ public final class AmazonSearchCommand implements Command {
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
         butt.getCommandHandler().clearMore();
-        BotResponse response = new BotResponse(BotIntention.CHAT, null, "found nothing bout that");
+        BotResponse response = new BotResponse(BotIntention.CHAT, null,
+                butt.getYamlConfigurationFile().getBotNickName() + " found nothing bout that");
 
         try {
             String amazon = "http://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=";
@@ -60,14 +61,15 @@ public final class AmazonSearchCommand implements Command {
                     //log.info(title + " " + url);
                     if (title.size() > 0) {
                         if (first) {
-                            response = new BotResponse(BotIntention.CHAT, null, titleString.replace("[Sponsored", "")
+                            response = new BotResponse(BotIntention.CHAT, null, titleString.replace("[Sponsored]", "")
                                     + " [+" + results + " more]", url);
                             first = false;
                         } else {
                             butt.getCommandHandler().addMore(titleString.replace("[Sponsored]", "") + " " + url);
                         }
                     } else {
-                        return new BotResponse(BotIntention.CHAT, null, "No results found");
+                        return new BotResponse(BotIntention.CHAT, null,
+                                butt.getYamlConfigurationFile().getBotNickName() + " didn't find nothin");
                     }
                 } catch (IndexOutOfBoundsException ex) {
                     log.warn("Index was out of bounds in AmazonSearchCommand.  Skipping...");

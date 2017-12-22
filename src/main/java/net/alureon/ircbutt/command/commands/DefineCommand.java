@@ -49,7 +49,8 @@ public final class DefineCommand implements Command {
                 }
                 butt.getCommandHandler().addMore(link);
             } else {
-                response = new BotResponse(BotIntention.CHAT, null, "butt didnt find nothin for that");
+                response = new BotResponse(BotIntention.CHAT, null,
+                        butt.getYamlConfigurationFile().getBotNickName() + " didnt find nothin for that");
             }
         } catch (IOException | NullPointerException ex) {
             log.error("DefineCommand Exception: " + ex.getMessage());

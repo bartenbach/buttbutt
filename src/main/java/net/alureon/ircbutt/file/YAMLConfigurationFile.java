@@ -32,6 +32,10 @@ public final class YAMLConfigurationFile {
      */
     private String botName;
     /**
+     * The bot's IRC nickname (not a real IRC value, but the bot will refer to itself as this).
+     */
+    private String botNickName;
+    /**
      * The bot's IRC 'login' value.
      */
     private String botLogin;
@@ -127,6 +131,7 @@ public final class YAMLConfigurationFile {
             this.channelList = (List<String>) map.get("Channels");
             this.botName = (String) botSettings.get("Name");
             this.botLogin = (String) botSettings.get("Login");
+            this.botNickName = (String) botSettings.get("Nickname");
             this.botRealName = (String) botSettings.get("Realname");
             this.botPassword = (String) botSettings.get("Password");
             this.botMessageDelay = Long.parseLong(String.valueOf(botSettings.get("Message-Delay")));
@@ -188,6 +193,15 @@ public final class YAMLConfigurationFile {
      */
     public String getBotName() {
         return botName;
+    }
+
+    /**
+     * Returns the bot's nickname.  This is not the name the bot chats with, this is
+     * the nickname of the bot, that it will use to refer to itself with.
+     * @return The name the bot refers to itself with.
+     */
+    public String getBotNickName() {
+        return botNickName;
     }
 
     /**

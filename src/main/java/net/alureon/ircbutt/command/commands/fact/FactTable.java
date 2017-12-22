@@ -50,7 +50,7 @@ public final class FactTable {
                 log.error("Received null PreparedStatement in FactTable.  Cannot insert knowledge into database.");
             }
         } catch (SQLException ex) {
-            log.error("Unable to insert knowledge into SQL database.  Stacktrace: ", ex);
+            log.error("Unable to insert knowledge into SQL database. ", ex.getMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public final class FactTable {
                 return rs.getString("data");
             }
         } catch (SQLException ex) {
-            log.error("Failed to query knowledge database. StackTrace:", ex);
+            log.error("Failed to query knowledge database. ", ex.getMessage());
         }
         return null;
     }
@@ -94,7 +94,7 @@ public final class FactTable {
                 log.error("Received null PreparedStatement in FactTable.  Cannot delete knowledge.");
             }
         } catch (SQLException ex) {
-            log.error("Failed to delete knowledge from database. StackTrace:", ex);
+            log.error("Failed to delete knowledge from database. ", ex.getMessage());
         }
         return false;
     }
@@ -116,7 +116,7 @@ public final class FactTable {
                 log.error("Received null ResultSet in FactTable.  Cannot retrieve random fact.");
             }
         } catch (SQLException ex) {
-            log.error("SQL Exception has occurred. StackTrace:", ex);
+            log.error("SQL Exception has occurred. ", ex.getMessage());
         }
         return null;
     }
@@ -154,7 +154,7 @@ public final class FactTable {
                 log.error("Received null PreparedStatement in FactTable.  Cannot query for fact info.");
             }
         } catch (SQLException ex) {
-            log.error("SQL Exception.  StackTrace:", ex);
+            log.error("SQL Exception. ", ex.getMessage());
         }
         return null;
     }
@@ -185,7 +185,7 @@ public final class FactTable {
                 log.error("Received null PreparedStatement in FactTable.  Unable to search for fact.");
             }
         } catch (SQLException ex) {
-            log.error("SQL Exception, ", ex);
+            log.error("SQL Exception ", ex.getMessage());
         }
         if (butt.getCommandHandler().getMoreList().size() > 0) {
             return firstResult + " [+" + butt.getCommandHandler().getMoreList().size() + " more]";
@@ -250,7 +250,7 @@ public final class FactTable {
                 log.error("Received null PreparedStatement in FactTable.  Knowledge not appended.");
             }
         } catch (SQLException ex) {
-            log.error("Unable to insert knowledge into SQL database.  Stacktrace: ", ex);
+            log.error("Unable to insert knowledge into SQL database. ", ex.getMessage());
         }
     }
 

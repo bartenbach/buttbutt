@@ -26,7 +26,8 @@ public final class GoogleImageSearchCommand implements Command {
 
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
-        BotResponse response = new BotResponse(BotIntention.CHAT, null, "couldn't get url");
+        BotResponse response = new BotResponse(BotIntention.CHAT, null,
+                butt.getYamlConfigurationFile().getBotNickName() + " couldn't get url");
         try {
             response = new BotResponse(BotIntention.CHAT, null, "https://google.com/search?tbm=isch&q="
                     + URLEncoder.encode(StringUtils.getArgs(cmd), "utf8"));

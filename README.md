@@ -124,6 +124,7 @@ Try `!echo $USER`
 ```
    Bot:
        Name: buttbutt  // the bot's IRC nickname
+       Nickname: butt  // the name the bot uses to refer to itself in some messages
        Login: buttbutt // the bot's IRC "login" value
        Realname: butt  // the bot's IRC "realname" value
        Password:       // the bot's IRC "password" value

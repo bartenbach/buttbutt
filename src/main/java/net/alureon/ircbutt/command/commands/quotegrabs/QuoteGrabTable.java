@@ -127,7 +127,7 @@ public final class QuoteGrabTable {
                 log.error("Received null ResultSet in QuoteGrabTable.  Cannot retrieve quote from the database.");
             }
         } catch (SQLException ex) {
-            log.error("SQL Exception has occurred. StackTrace:", ex);
+            log.error("SQL Exception has occurred. ", ex.getMessage());
         }
         return null;
     }

@@ -74,7 +74,8 @@ public final class GoogleSearchCommand implements Command {
         } catch (IOException ex) {
             log.error("IOException encountered ", ex.getMessage());
         }
-        return new BotResponse(BotIntention.CHAT, null, "butt didnt find nothing");
+        return new BotResponse(BotIntention.CHAT, null,
+                butt.getYamlConfigurationFile().getBotNickName() + " didnt find nothing");
     }
 
     @Override

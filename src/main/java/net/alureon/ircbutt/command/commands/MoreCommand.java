@@ -29,7 +29,7 @@ public final class MoreCommand implements Command {
                         + " [+" + butt.getCommandHandler().getMoreList().size() + " more]");
             }
         } else {
-            return new BotResponse(BotIntention.CHAT, null, butt.getYamlConfigurationFile().getBotName()
+            return new BotResponse(BotIntention.CHAT, null, butt.getYamlConfigurationFile().getBotNickName()
                     + " don't have any more");
         }
     }

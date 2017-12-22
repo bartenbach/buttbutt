@@ -17,7 +17,7 @@ public final class RandomCommand implements Command {
 
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
-        int random = MathUtils.getRandom(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        int random = MathUtils.getRandom(Integer.MIN_VALUE, Integer.MAX_VALUE - 1);
         return new BotResponse(BotIntention.CHAT, null, String.valueOf(random));
     }
 

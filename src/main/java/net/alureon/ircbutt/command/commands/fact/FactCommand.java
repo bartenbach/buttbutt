@@ -62,7 +62,8 @@ public final class FactCommand implements Command {
                 butt.getFactTable().insertKnowledge(item, information, user.getNick());
                 return new BotResponse(BotIntention.HIGHLIGHT, user, "ok got it!");
             } else {
-                return new BotResponse(BotIntention.HIGHLIGHT, user, "butt already know about " + item);
+                return new BotResponse(BotIntention.HIGHLIGHT, user, butt.getYamlConfigurationFile().getBotNickName()
+                        + " already know about " + item);
             }
         }
         return new BotResponse(BotIntention.HIGHLIGHT, user, "!learn key: value");
@@ -95,7 +96,8 @@ public final class FactCommand implements Command {
                 butt.getFactTable().appendKnowledge(item, information);
                 return new BotResponse(BotIntention.HIGHLIGHT, user, "ok got it!");
             } else {
-                return new BotResponse(BotIntention.HIGHLIGHT, user, "butt don't know nothin bout " + item);
+                return new BotResponse(BotIntention.HIGHLIGHT, user, butt.getYamlConfigurationFile().getBotNickName()
+                        + " don't know nothin bout " + item);
             }
         }
         return new BotResponse(BotIntention.HIGHLIGHT, user, "!append key: value");
@@ -187,10 +189,11 @@ public final class FactCommand implements Command {
                         // log to console in event of accidental data loss
                         log.info("Removed fact [" + cmd[1] + "]: " + old);
                         return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(),
-                                "ok butt wont member that no more");
+                                "ok " + butt.getYamlConfigurationFile().getBotNickName()
+                                        + " wont member that no more");
                     } else {
                         return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(),
-                                "butt don't know nothin bout " + cmd[1]);
+                                butt.getYamlConfigurationFile().getBotNickName() + " don't know nothin bout " + cmd[1]);
                     }
                 } else {
                     return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(),
@@ -210,16 +213,17 @@ public final class FactCommand implements Command {
                 return new BotResponse(BotIntention.CHAT, null, info);
             } else {
                 // the only way this should happen is if the bot doesn't know any facts
-                return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "butt dont know any facts yet!");
+                return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(),
+                        butt.getYamlConfigurationFile().getBotNickName() + " dont know any facts yet!");
             }
         } else if (cmd[0].equals("factinfo") || cmd[0].equals("finfo") || cmd[0].equals("fi")) {
             String info = butt.getFactTable().getFactInfo(StringUtils.getArgs(cmd));
-            return getBotResponseForQuery(info);
+            return getBotResponseForQuery(butt, info);
         } else if (cmd[0].equalsIgnoreCase("factfind") || cmd[0].equalsIgnoreCase("factsearch")
                 || cmd[0].equalsIgnoreCase("fsearch") || cmd[0].equalsIgnoreCase("ffind")
                 || cmd[0].equals("ff") || cmd[0].equals("fs")) {
             String info = butt.getFactTable().findFact(StringUtils.getArgs(cmd));
-            return getBotResponseForQuery(info);
+            return getBotResponseForQuery(butt, info);
         } else {
             String info = getFactParseArgs(butt, cmd);
             return getFactResponse(info, event);
@@ -252,14 +256,16 @@ public final class FactCommand implements Command {
     /**
      * A helper method from retrieving fact data from the database.
      *
+     * @param butt The IRCbutt instance for getting the bot's nickname.
      * @param info The potentially null info from the database.
      * @return the bot's response to the query.
      */
-    private BotResponse getBotResponseForQuery(final String info) {
+    private BotResponse getBotResponseForQuery(final IRCbutt butt, final String info) {
         if (info != null) {
             return new BotResponse(BotIntention.CHAT, null, info);
         } else {
-            return new BotResponse(BotIntention.CHAT, null, "butt find nothing");
+            return new BotResponse(BotIntention.CHAT, null,
+                    butt.getYamlConfigurationFile().getBotNickName() + " find nothing");
         }
     }
 
