@@ -46,19 +46,31 @@ public final class AmazonSearchCommand implements Command {
                     .execute();
             Document doc = cResponse.parse();
             Elements items = doc.getElementsByClass("s-result-item");
-            Elements ids = doc.getElementsByAttribute("data-asin");
             int results = items.size();
+            boolean first = true;
             for (int i = 0; i < items.size(); i++) {
-                Elements title = items.get(i).getElementsByClass("s-access-title");
-                if (title.size() > 0) {
-                    if (i == 0) {
-                        response = new BotResponse(BotIntention.CHAT, null, title.get(0).text()
-                                + " [" + results + " more]",
-                                "http://amazon.com/dp/" + ids.get(i).attr("data-asin"));
-                    } else {
-                        butt.getCommandHandler().addMore(title.get(0).text() + " http://amazon.com/dp/"
-                                + ids.get(i).attr("data-asin"));
+                try {
+                    Elements ids = items.get(i).getElementsByAttribute("data-asin");
+                    if (ids.size() == 0) {
+                        continue;
                     }
+                    String url = "http://amazon.com/dp/" + ids.get(0).attr("data-asin");
+                    Elements title = items.get(i).getElementsByClass("s-access-title");
+                    String titleString = title.get(0).text();
+                    //log.info(title + " " + url);
+                    if (title.size() > 0) {
+                        if (first) {
+                            response = new BotResponse(BotIntention.CHAT, null, titleString.replace("[Sponsored", "")
+                                    + " [+" + results + " more]", url);
+                            first = false;
+                        } else {
+                            butt.getCommandHandler().addMore(titleString.replace("[Sponsored]", "") + " " + url);
+                        }
+                    } else {
+                        return new BotResponse(BotIntention.CHAT, null, "No results found");
+                    }
+                } catch (IndexOutOfBoundsException ex) {
+                    log.warn("Index was out of bounds in AmazonSearchCommand.  Skipping...");
                 }
             }
         } catch (IOException e) {
