@@ -43,10 +43,18 @@ The variable `$USER` will be replaced with the user making the request.
 
 Try `!echo $USER`
 
+When used in facts, the variable `$ME` will cause the bot to do a `/me` command in IRC.
+
+The variables `$1`, `$2`, `$3`, `$4`, etc can be used in facts as the corresponding arguments to a fact.
+For example, the fact "Hello $1!" when called with `~hello test` will print "Hello test!".
+
 ### Basic Functionality
+
 `!8 <question>`         -  Ask the Magic 8 Ball a question
 
-`!butt <query`          -  Replace random words in the text with 'butt' (for mature audiences only)
+`!a <query>`            -  Search Amazon for an item.
+
+`!butt <query>`         -  Replace random words in the text with 'butt' (for mature audiences only)
 
 `!check <query>`        -  Get a random response on whether or not something passes or fails (or rarely, something else)
 
@@ -76,14 +84,36 @@ Try `!echo $USER`
 
 `!yt <query>`           -  Search YouTube for `<query>`
 
+### Cryptocurrency Functionality
+
+The bot can get information for many cryptocurrencies such as the current market value, 24 change, and market cap from
+the public CoinMarketCap API. More can easily be added in the future to CryptoCurrencyCommand.
+
+This is done by doing the following:
+
+`!<ticker symbol>`    -  Get all the available information for the specified cryptocurrency.
+
+You can also perform mathematical operations on cryptocurrency values using !eval and such.  This is done by appending the
+letter 'v' (for value) to the ticker symbol, as shown below.
+
+`!<ticker symbol>v`   -  Get only the current market value as an unrounded double.
+
+Currently supported currencies are as follows:
+"btc", "ltc", "eth", "vtc", "xrp", "bch", "dash", "iota", "wtc", "ada", "xem", "btg",, "xmr", "eos", "xlm", "zec", 
+"usdt", "steem", "doge", "bnb", "gnt", "etc", "neo", "ppt", "bcc", "qtum", "waves", "trx", "xvg", "icx", "poe"
+
 ### Math Functionality
+
 `!sqrt <number>`      -  Get the square root of `<number>`
 
 `!pow <num1> <num2>`  -  Get the result of num1^num2
 
 `!eval <expression>`  -  Use Jeval to evaluate an expression. ex: !eval sin(0)
 
+Eval can also be used with other commands.  Ex: `!eval $(ltcv) * 10` to see the value of 10 Litecoins.
+
 ### Fact Functionality
+
 `~<string>`                   -  Any string prefixed with a tilde finds the corresponding fact
 
 `!<string>`                   -  Any string prefixed with an exclamation mark (that has a fact) finds the corresponding fact.
@@ -101,6 +131,7 @@ Try `!echo $USER`
 `!forget <factname>`          -  Delete a fact from the database (MUST BE CHANNEL OP!)
 
 ### Quotegrab Functionality
+
 `!grab <username>`     -  Grab and store the last message from `<user>` in the database
 
 `!rq`                  -  Retrieve a random quote from the database
@@ -114,6 +145,7 @@ Try `!echo $USER`
 `!qsay <quotenum>`     -  Say quote by ID
 
 ### Karma Functionality
+
 `<randomstring>++`      -  Increase the karma of `<whatever>`
 
 `<randomstring>--`      -  Decrease the karma of `<whatever>`
@@ -149,6 +181,7 @@ Try `!echo $USER`
 ```
 
 ## Extensibility
+
 On startup, the bot registers any command within the command package.
 
 You can make your own commands, simply by implementing the Command interface.
@@ -184,6 +217,7 @@ public final class EchoCommand implements Command {
 ```
 
 ## Special Thanks:
+
 - *BullShark* - for ideas, showing me buttbot, and the name 'buttbutt'
 - *Klong* - for tons of contributions and several commits
 - *ebolahats* - for being a rubber duck and for several commits
