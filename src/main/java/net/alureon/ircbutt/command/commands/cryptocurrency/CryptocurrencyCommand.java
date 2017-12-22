@@ -90,6 +90,10 @@ public final class CryptocurrencyCommand implements Command {
             url = "https://api.coinmarketcap.com/v1/ticker/tron/";
         } else if (cmd[0].startsWith("xvg")) {
             url = "https://api.coinmarketcap.com/v1/ticker/verge/";
+        } else if (cmd[0].startsWith("icx")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/icon/";
+        } else if (cmd[0].startsWith("poe")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/poet/";
         }
         try (InputStream is = new URL(url).openStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -98,11 +102,20 @@ public final class CryptocurrencyCommand implements Command {
             List<CoinMarketCapResponse> currency = new Gson().fromJson(jsonText, currencyType);
             NumberFormat nf = NumberFormat.getCurrencyInstance();
             if (!cmd[0].endsWith("v")) {
-                return new BotResponse(BotIntention.CHAT, null, currency.get(0).getName()
-                        + ": " + nf.format(Double.valueOf(currency.get(0).getPriceUsd()))
-                        + " | Rank: " + currency.get(0).getRank(),
-                        "Market Cap: " + nf.format(Double.valueOf(currency.get(0).getMarketCapUsd()))
-                         + " | [" + currency.get(0).getPercentChange24h() + "%] ");
+                if (currency.get(0).getMarketCapUsd() != null) {
+                    return new BotResponse(BotIntention.CHAT, null, currency.get(0).getName()
+                            + ": " + nf.format(Double.valueOf(currency.get(0).getPriceUsd()))
+                            + " | Rank: " + currency.get(0).getRank(),
+                            "Market Cap: " + nf.format(Double.valueOf(currency.get(0).getMarketCapUsd()))
+                                    + " | [" + currency.get(0).getPercentChange24h() + "%] ");
+                } else {
+                    return new BotResponse(BotIntention.CHAT, null, currency.get(0).getName()
+                            + ": " + nf.format(Double.valueOf(currency.get(0).getPriceUsd()))
+                            + " | Rank: " + currency.get(0).getRank()
+                            + " | [" + currency.get(0).getPercentChange24h() + "%] ",
+                            "Market Cap: N/A");
+
+                }
             } else {
                 return new BotResponse(BotIntention.CHAT, null, currency.get(0).getPriceUsd());
             }
@@ -134,7 +147,8 @@ public final class CryptocurrencyCommand implements Command {
                 "bch", "bchv", "dash", "dashv", "iota", "iotav", "wtc", "wtcv", "ada", "adav", "xem", "xemv", "btg",
                 "btgv", "xmr", "xmrv", "eos", "eosv", "xlm", "xlmv", "zec", "zecv", "usdt", "usdtv", "steem", "steemv",
                 "doge", "dogev", "bnb", "bnbv", "gnt", "gntv", "etc", "etcv", "neo", "neov", "ppt", "pptv", "bcc",
-                "bccv", "qtum", "qtumv", "waves", "wavesv", "trx", "trxv", "xvg", "xvgv"));
+                "bccv", "qtum", "qtumv", "waves", "wavesv", "trx", "trxv", "xvg", "xvgv", "icx", "icxv", "poe",
+                "poev"));
     }
 
     @Override
