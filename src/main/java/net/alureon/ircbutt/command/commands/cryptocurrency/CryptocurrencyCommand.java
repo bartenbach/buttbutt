@@ -109,6 +109,10 @@ public final class CryptocurrencyCommand implements Command {
             url = "https://api.coinmarketcap.com/v1/ticker/Decentraland/";
         } else if (cmd[0].startsWith("lsk")) {
             url = "https://api.coinmarketcap.com/v1/ticker/lisk/";
+        } else if (cmd[0].startsWith("tnt")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/Tierion/";
+        } else if (cmd[0].startsWith("fuel")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/Etherparty/";
         }
         try (InputStream is = new URL(url).openStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -174,7 +178,7 @@ public final class CryptocurrencyCommand implements Command {
                 "doge", "dogev", "bnb", "bnbv", "gnt", "gntv", "etc", "etcv", "neo", "neov", "ppt", "pptv", "bcc",
                 "bccv", "qtum", "qtumv", "waves", "wavesv", "trx", "trxv", "xvg", "xvgv", "icx", "icxv", "poe",
                 "poev", "aion", "aionv", "fc2", "fc2v", "cnd", "cndv", "put", "putv", "trump", "trumpv", "mana",
-                "manav", "lsk", "lskv"));
+                "manav", "lsk", "lskv", "tnt", "tntv", "fuel", "fuelv"));
     }
 
     @Override
