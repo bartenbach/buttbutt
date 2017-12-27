@@ -55,7 +55,7 @@ public final class ButtReplaceHandler {
         String[] split = message.split(" ");
 
         // butt several times for longer messages
-        int timesToButt = (int) Math.floor(split.length / WORDS_PER_BUTT);
+        int timesToButt = (int) Math.ceil(split.length / WORDS_PER_BUTT);
         log.debug("Butting " + timesToButt + " times");
         for (int i = 0; i < timesToButt; i++) {
             // get the index of the word to replace
