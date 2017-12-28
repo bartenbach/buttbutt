@@ -144,6 +144,8 @@ Eval can also be used with other commands.  Ex: `!eval $(ltcv) * 10` to see the 
 
 `!qsay <quotenum>`     -  Say quote by ID
 
+`!qdel <id>`           -  Delete a quote from the database (MUST BE CHANNEL OP!)
+
 ### Karma Functionality
 
 `<randomstring>++`      -  Increase the karma of `<whatever>`
