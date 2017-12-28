@@ -133,6 +133,28 @@ public final class QuoteGrabTable {
     }
 
     /**
+     * Removes the quote with the corresponding ID.
+     * @param id The ID of the quote to delete.
+     * @return true if deleted, false if not.
+     */
+    public boolean removeQuote(final int id) {
+        String update = "DELETE FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_quotes` WHERE id=?";
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(update)) {
+            if (ps != null) {
+                ps.setInt(1, id);
+                int rows = ps.executeUpdate();
+                return rows > 0; // if no rows have been updated then we haven't actually deleted anything
+            } else {
+                log.error("Received null PreparedStatement in QuoteGrabTable.  Cannot delete quote.");
+            }
+        } catch (SQLException ex) {
+            log.error("Failed to delete quote from database. ", ex.getMessage());
+        }
+        return false;
+    }
+
+    /**
      * Retrieves a quote from the database by its quote ID.  Quote ID's can be retrieved by
      * using !qinfo.
      * @param id The id of the quote to retrieve.
@@ -169,10 +191,10 @@ public final class QuoteGrabTable {
         butt.getCommandHandler().getMoreList().clear();
         String firstResult = null;
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
-                + "_quotes` WHERE quote LIKE ?";
+                + "_quotes` WHERE (quote REGEXP ?) LIMIT 24";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
             if (ps != null) {
-                ps.setString(1, "%" + search + "%");
+                ps.setString(1, search);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     int id = rs.getInt("id");

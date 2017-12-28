@@ -120,6 +120,29 @@ public final class QuoteGrabCommand implements Command {
                                     + " didnt find nothin", event.getUser(),
                             "Found no quotes matching the search string: " + StringUtils.arrayToString(cmd));
                 }
+            case "qdel":
+            case "qdelete":
+            case "qrm":
+            case "qremove":
+                if (IRCUtils.isOpInBotChannel(butt, event.getUser())) {
+                    try {
+                        int id = Integer.parseInt(StringUtils.getArgs(cmd));
+                        if (butt.getQuoteGrabTable().removeQuote(id)) {
+                            return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "ok "
+                                    + butt.getYamlConfigurationFile().getBotNickName() +  " wont member that no more");
+                        } else {
+                            return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(),
+                                    butt.getYamlConfigurationFile().getBotNickName() + " didn't find no quote"
+                                            + " with that id");
+                        }
+                    } catch (NumberFormatException ex) {
+                        return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "that ain't no number butt"
+                                + " ever heard of");
+                    }
+                } else {
+                    return new BotResponse(BotIntention.PRIVATE_MESSAGE, event.getUser(),
+                            "You must be OP to remove quotes.");
+                }
             default:
                 break;
         }
@@ -167,7 +190,7 @@ public final class QuoteGrabCommand implements Command {
     @Override
     public ArrayList<String> getCommandAliases() {
         return new ArrayList<>(Arrays.asList("qfind", "qsearch", "qf", "rq", "qsay", "qinfo", "qi", "q", "rqn",
-                "rqnouser", "grab"));
+                "rqnouser", "grab", "qdel", "qdelete", "qrm", "qremove"));
     }
 
     @Override
