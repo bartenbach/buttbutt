@@ -24,6 +24,10 @@ final class UrlTitleHandler {
      * A regular expression for detecting URL's.
      */
     private static final String URL_REGEX = "((https?|ftp)://|(www|ftp)\\.)?[a-z0-9-]+(\\.[a-z0-9-]+)+([/?].*)?";
+    /**
+     * The magic number that gets the YouTube title.
+     */
+    private static final int YOUTUBE_MAGIC_NUMBER = 8;
 
     /**
      * Prevent instantiation.
@@ -57,11 +61,23 @@ final class UrlTitleHandler {
      * @param url The URL to attempt to get a title for.
      * @return The title of the URL, or null if an error was encountered.
      */
-    private static String getTitle(final String url) {
+    public static String getTitle(final String url) {
         try {
-            Document doc = Jsoup.connect(url).get();
-            Elements n = doc.select("title");
-            return n.first().text();
+            System.out.println(url);
+            if (url.startsWith("https://youtube") || url.startsWith("http://youtube")
+                    || url.startsWith("http://www.youtube") || url.startsWith("https://www.youtube")) {
+                log.debug("Handling youtube url...");
+                Document doc = Jsoup.connect(url).get();
+                Elements script = doc.select("script");  //to get the script content
+                Pattern p = Pattern.compile("\"title\":\"(.+?)\"");
+                Matcher m = p.matcher(script.html());
+                if (m.find()) {
+                    return m.group().substring(YOUTUBE_MAGIC_NUMBER).replaceAll("\"", "");
+                }
+            } else {
+                Document doc = Jsoup.connect(url).get();
+                return doc.title();
+            }
         } catch (IOException e) {
             log.warn("Failed to get title for URL: " + url + " this may be expected.\n  Reason: " + e.getMessage());
         }
