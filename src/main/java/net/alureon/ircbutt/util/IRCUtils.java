@@ -48,7 +48,7 @@ public final class IRCUtils {
     public static boolean userIsInChannel(final MessageEvent event, final String nickname) {
         ImmutableSortedSet<User> users = event.getChannel().getUsers();
         for (User x : users) {
-            if (x.getNick().equals(nickname)) {
+            if (x.getNick().equalsIgnoreCase(nickname)) {
                 return true;
             }
         }

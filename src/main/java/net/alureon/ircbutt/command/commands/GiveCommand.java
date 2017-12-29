@@ -22,7 +22,8 @@ public final class GiveCommand implements Command {
          if (event instanceof MessageEvent) {
             MessageEvent messageEvent = (MessageEvent) event;
             if (cmd.length > 2 && IRCUtils.userIsInChannel(messageEvent, cmd[1])) {
-                    return new BotResponse(BotIntention.CHAT, null, cmd[1] + ": "
+                String actualNickname = IRCUtils.getActualNickname(cmd[1], event);
+                    return new BotResponse(BotIntention.CHAT, null, actualNickname + ": "
                             + StringUtils.getArgsOverOne(cmd));
             }
         }
