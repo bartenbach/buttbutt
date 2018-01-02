@@ -6,9 +6,11 @@ import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.command.Command;
 import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
+import net.alureon.ircbutt.util.IRCUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.pircbotx.Colors;
+import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.io.*;
@@ -29,6 +31,10 @@ public final class CryptocurrencyCommand implements Command {
      * The logger for this class.
      */
     private static final Logger log = LogManager.getLogger();
+    /**
+     * How many coins to show for '!top' command.
+     */
+    private static final int TOP_COINS = 10;
 
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
@@ -113,6 +119,28 @@ public final class CryptocurrencyCommand implements Command {
             url = "https://api.coinmarketcap.com/v1/ticker/Tierion/";
         } else if (cmd[0].startsWith("fuel")) {
             url = "https://api.coinmarketcap.com/v1/ticker/Etherparty/";
+        } else if (cmd[0].startsWith("zrx")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/0x/";
+        } else if (cmd[0].startsWith("dgb")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/digibyte/";
+        } else if (cmd[0].startsWith("fun")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/funfair/";
+        } else if (cmd[0].startsWith("ethos")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/ethos/";
+        } else if (cmd[0].startsWith("pot")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/potcoin/";
+        } else if (cmd[0].startsWith("1st")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/firstblood/";
+        } else if (cmd[0].startsWith("bts")) {
+            url = "https://coinmarketcap.com/currencies/bitshares/";
+        } else if (cmd[0].startsWith("omg")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/omisego/";
+        } else if (cmd[0].startsWith("ardr")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/ardor/";
+        } else if (cmd[0].startsWith("strat")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/stratis/";
+        } else if (cmd[0].startsWith("top")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/";
         }
         try (InputStream is = new URL(url).openStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -121,6 +149,13 @@ public final class CryptocurrencyCommand implements Command {
             }.getType();
             List<CoinMarketCapResponse> currency = new Gson().fromJson(jsonText, currencyType);
             NumberFormat nf = NumberFormat.getCurrencyInstance();
+            if (cmd[0].equals("top")) {
+                if (event instanceof MessageEvent) {
+                    MessageEvent messageEvent = (MessageEvent) event;
+                    handleTop(currency, nf, messageEvent);
+                }
+                return null;
+            }
             if (!cmd[0].endsWith("v")) {
                 String change;
                 if (currency.get(0).getPercentChange24h().startsWith("-")) {
@@ -143,7 +178,6 @@ public final class CryptocurrencyCommand implements Command {
                             + " | Rank: " + currency.get(0).getRank()
                             + " | [" + change + "] ",
                             "Market Cap: N/A");
-
                 }
             } else {
                 return new BotResponse(BotIntention.CHAT, null, currency.get(0).getPriceUsd());
@@ -151,6 +185,40 @@ public final class CryptocurrencyCommand implements Command {
         } catch (IOException ex) {
             log.error("Error handling CoinMarketCap request: " + ex.getMessage());
             return new BotResponse(BotIntention.NO_REPLY, null, null);
+        }
+    }
+
+    /**
+     * Handles the top coins command portion.
+     * @param currency the list of top currencies from coinmarketcap
+     * @param nf The numberformat instance for formatting currency
+     * @param event The MessageEvent (for sending channel several messages)
+     */
+    private void handleTop(final List<CoinMarketCapResponse> currency, final NumberFormat nf,
+                           final MessageEvent event) {
+        for (int i = 0; i < TOP_COINS; i++) {
+                String change;
+                String message;
+                if (currency.get(i).getPercentChange24h().startsWith("-")) {
+                    change = Colors.RED + currency.get(i).getPercentChange24h() + "%" + Colors.NORMAL + Colors.TEAL;
+                } else {
+                    change = Colors.GREEN + currency.get(i).getPercentChange24h() + "%" + Colors.NORMAL + Colors.TEAL;
+                }
+                if (currency.get(i).getMarketCapUsd() != null) {
+                    message = Colors.CYAN + Colors.BOLD
+                            + currency.get(i).getName() + Colors.NORMAL + Colors.TEAL + ": "
+                            + nf.format(Double.valueOf(currency.get(i).getPriceUsd())) + " | Rank: "
+                            + currency.get(i).getRank() + Colors.TEAL + " | Market Cap: "
+                            + nf.format(Double.valueOf(currency.get(i).getMarketCapUsd()))
+                            + " | [" + change + "] ";
+                } else {
+                    message = Colors.CYAN + Colors.BOLD
+                            + currency.get(i).getName() + Colors.NORMAL + Colors.TEAL + ": "
+                            + nf.format(Double.valueOf(currency.get(i).getPriceUsd()))
+                            + " | Rank: " + currency.get(i).getRank()
+                            + " | [" + change + "] | Market Cap: N/A";
+                }
+            IRCUtils.sendChannelMessage(event.getChannel(), message);
         }
     }
 
@@ -178,7 +246,9 @@ public final class CryptocurrencyCommand implements Command {
                 "doge", "dogev", "bnb", "bnbv", "gnt", "gntv", "etc", "etcv", "neo", "neov", "ppt", "pptv", "bcc",
                 "bccv", "qtum", "qtumv", "waves", "wavesv", "trx", "trxv", "xvg", "xvgv", "icx", "icxv", "poe",
                 "poev", "aion", "aionv", "fc2", "fc2v", "cnd", "cndv", "put", "putv", "trump", "trumpv", "mana",
-                "manav", "lsk", "lskv", "tnt", "tntv", "fuel", "fuelv"));
+                "manav", "lsk", "lskv", "tnt", "tntv", "fuel", "fuelv", "zrx", "zrxv", "dbg", "dbgv", "fun", "funv",
+                "ethos", "ethosv", "pot", "potv", "1st", "1stv", "bts", "btsv", "omg", "omgv", "ardr", "ardrv", "strat",
+                "stratv", "top"));
     }
 
     @Override
