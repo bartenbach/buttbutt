@@ -156,7 +156,7 @@ public final class CryptocurrencyCommand implements Command {
             url = "https://api.coinmarketcap.com/v1/ticker/ardor/";
         } else if (cmd[0].startsWith("strat")) {
             url = "https://api.coinmarketcap.com/v1/ticker/stratis/";
-        } else if (cmd[0].startsWith("top")) {
+        } else if (cmd[0].startsWith("top") || (cmd[0].equals("party")) || (cmd[0].equals("dump"))) {
             url = "https://api.coinmarketcap.com/v1/ticker/";
         }
         try (InputStream is = new URL(url).openStream()) {
@@ -187,6 +187,9 @@ public final class CryptocurrencyCommand implements Command {
                 }
                 return null;
             }
+            if (cmd[0].equals("party") || cmd[0].equals("dump")) {
+                return handleParty(currency, nf, cmd[0]);
+            }
             if (!cmd[0].endsWith("v")) {
                 return formatCoinRequest(currency, nf);
             } else {
@@ -200,8 +203,9 @@ public final class CryptocurrencyCommand implements Command {
 
     /**
      * Handles the formatting for the bot's coin request.
+     *
      * @param currency The list of currencies retrieved from the coinmarketcap API.
-     * @param nf The NumberFormat instance for formatting currencies.
+     * @param nf       The NumberFormat instance for formatting currencies.
      * @return The bot's formatted response.
      */
     private BotResponse formatCoinRequest(final List<CoinMarketCapResponse> currency, final NumberFormat nf) {
@@ -239,6 +243,50 @@ public final class CryptocurrencyCommand implements Command {
             return Colors.RED + change + "%" + Colors.NORMAL + Colors.TEAL;
         }
         return Colors.GREEN + "+" + change + "%" + Colors.NORMAL + Colors.TEAL;
+    }
+
+    /**
+     * Handles the partying coin command.
+     *
+     * @param currencies The list of currencies from CoinMarketCap.
+     * @param nf The NumberFormat instance for formatting currencies.
+     * @param cmd The command issued, either "party" or "dump".
+     * @return the bot's response.
+     */
+    private BotResponse handleParty(final List<CoinMarketCapResponse> currencies, final NumberFormat nf,
+                                    final String cmd) {
+        double result = 0;
+        CoinMarketCapResponse partyCoin = null;
+        for (CoinMarketCapResponse x : currencies) {
+            try {
+                double change = Double.parseDouble(x.getPercentChange24h());
+                if (cmd.equals("party") && change > result) {
+                        partyCoin = x;
+                } else if (cmd.equals("dump") && change < result) {
+                        partyCoin = x;
+                }
+            } catch (NumberFormatException ex) {
+                log.warn("Failed to parse change data: " + x.getPercentChange24h());
+            }
+        }
+        String color;
+        if (cmd.equals("party")) {
+            color = Colors.MAGENTA;
+        } else {
+            color = Colors.BROWN;
+        }
+        if (partyCoin != null) {
+            return new BotResponse(BotIntention.CHAT, null, color + Colors.BOLD
+                    + partyCoin.getName() + Colors.NORMAL + Colors.TEAL + ": "
+                    + nf.format(Double.valueOf(partyCoin.getPriceUsd())) + " | Rank: "
+                    + partyCoin.getRank() + Colors.TEAL + " | Market Cap: "
+                    + nf.format(Double.valueOf(partyCoin.getMarketCapUsd())),
+                    Colors.TEAL
+                            + "[Hour " + getColoredChangeText(partyCoin.getPercentChange24h()) + "]");
+        } else {
+            log.error("Failed to find a partying coin!");
+            return new BotResponse(BotIntention.NO_REPLY, null, null);
+        }
     }
 
     /**
@@ -306,20 +354,21 @@ public final class CryptocurrencyCommand implements Command {
                     // name
                     StringUtils.rightPad(Colors.CYAN + Colors.BOLD + currency.get(i).getName() + Colors.NORMAL
                             + Colors.TEAL, paddingName)
-                    // price
-                    + " | " // no need to be padded
-                    + StringUtils.leftPad(nf.format(Double.valueOf(currency.get(i).getPriceUsd())), paddingPrice)
-                    // rank
-                    + StringUtils.rightPad(" | Rank: " + currency.get(i).getRank() + Colors.TEAL, paddingRank)
-                    // market cap
-                    + StringUtils.rightPad(" | Market Cap: "
-                    + nf.format(Double.valueOf(currency.get(i).getMarketCapUsd())), paddingMarketCap)
-                    // hourly change
-                    + StringUtils.leftPad(" | [Hour " + hourChange + "]", paddingHourChange)
-                    // daily change
-                    + StringUtils.leftPad(" | [Day " + dayChange + "]", paddingDayChange)
-                    // weekly change
-                    + StringUtils.leftPad(" | [Week " + weekChange + "]", paddingWeekChange);
+                            // price
+                            + " | " // no need to be padded
+                            + StringUtils.leftPad(nf.format(Double.valueOf(currency.get(i).getPriceUsd())),
+                            paddingPrice)
+                            // rank
+                            + StringUtils.rightPad(" | Rank: " + currency.get(i).getRank() + Colors.TEAL, paddingRank)
+                            // market cap
+                            + StringUtils.rightPad(" | Market Cap: "
+                            + nf.format(Double.valueOf(currency.get(i).getMarketCapUsd())), paddingMarketCap)
+                            // hourly change
+                            + StringUtils.leftPad(" | [Hour " + hourChange + "]", paddingHourChange)
+                            // daily change
+                            + StringUtils.leftPad(" | [Day " + dayChange + "]", paddingDayChange)
+                            // weekly change
+                            + StringUtils.leftPad(" | [Week " + weekChange + "]", paddingWeekChange);
             IRCUtils.sendChannelMessage(event.getChannel(), message);
         }
     }
@@ -350,7 +399,7 @@ public final class CryptocurrencyCommand implements Command {
                 "poev", "aion", "aionv", "fc2", "fc2v", "cnd", "cndv", "put", "putv", "trump", "trumpv", "mana",
                 "manav", "lsk", "lskv", "tnt", "tntv", "fuel", "fuelv", "zrx", "zrxv", "dbg", "dbgv", "fun", "funv",
                 "ethos", "ethosv", "pot", "potv", "1st", "1stv", "bts", "btsv", "omg", "omgv", "ardr", "ardrv", "strat",
-                "stratv", "top"));
+                "stratv", "top", "party", "dump"));
     }
 
     @Override

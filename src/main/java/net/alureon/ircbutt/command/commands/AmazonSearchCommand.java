@@ -16,7 +16,7 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 
 
 /**
@@ -84,7 +84,7 @@ public final class AmazonSearchCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return new ArrayList<>(Collections.singletonList("a"));
+        return new ArrayList<>(Arrays.asList("a", "amazon"));
     }
 
     @Override
