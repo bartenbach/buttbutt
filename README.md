@@ -76,6 +76,8 @@ For example, the fact "Hello $1!" when called with `~hello test` will print "Hel
 
 `!rot <query>`          -  Get the rot13 equivalent of `<query>`.  Alias: !rot
 
+`!s/search/replace/`    -  This works just like Vim's search and replace feature.
+
 `!uptime`               -  Print the current uptime of the bot
 
 `!version`              -  Get the current bot version
@@ -101,6 +103,10 @@ letter 'v' (for value) to the ticker symbol, as shown below.
 Currently supported currencies are as follows:
 "btc", "ltc", "eth", "vtc", "xrp", "bch", "dash", "iota", "wtc", "ada", "xem", "btg",, "xmr", "eos", "xlm", "zec", 
 "usdt", "steem", "doge", "bnb", "gnt", "etc", "neo", "ppt", "bcc", "qtum", "waves", "trx", "xvg", "icx", "poe"
+
+`!top`                -  Show the top 10 cryptocurrencies on CoinMarketCap and information about them.
+
+`!top 10 20`          -  Show the top cryptocurrencies on CoinMarketCap from rage 10 to 20.
 
 ### Math Functionality
 

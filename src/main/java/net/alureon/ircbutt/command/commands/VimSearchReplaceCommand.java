@@ -15,12 +15,12 @@ public final class VimSearchReplaceCommand {
      * won't work with this because there is no actual command - it's all one string.
      * @param butt The IRCbutt instance.
      * @param event The MessageEvent from PircBotX.
-     * @param cmd The command array from the user.
+     * @param command The command from the user.
      * @return The bot's response, which in this case is a string that has been searched and replaced.
      */
-    public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
+    public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String command) {
         if (butt.getChatStorage().hasQuoteFrom(event.getUser().getNick())) {
-            String replaced = searchAndReplace(cmd[0],
+            String replaced = searchAndReplace(command,
                     butt.getChatStorage().getLastQuoteFrom(event.getUser().getNick()));
             return new BotResponse(BotIntention.CHAT, null, replaced);
         } else {

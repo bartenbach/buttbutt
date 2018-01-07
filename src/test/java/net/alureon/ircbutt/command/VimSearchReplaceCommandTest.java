@@ -30,6 +30,12 @@ public final class VimSearchReplaceCommandTest {
         Assert.assertEquals("i made a lot of mistakes when i made buttbutt", replaced2);
         Assert.assertEquals("i made a lot of mistakes when i has buttbutt", replaced3);
 
+        String command4 = "s/has a lot of/made/";
+        String replaced4 = new VimSearchReplaceCommand().searchAndReplace(command4, lastMessage2);
+        Assert.assertEquals("i made mistakes when i has buttbutt", replaced4);
+
+        String command5 = "s/gluten/the meatloaf/";
+
         Pattern p = Pattern.compile("s/.*/.*/g?");
         Matcher m = p.matcher(command);
         Assert.assertTrue(m.find());
@@ -37,5 +43,9 @@ public final class VimSearchReplaceCommandTest {
         Assert.assertTrue(m2.find());
         Matcher m3 = p.matcher("something the shouldn't match");
         Assert.assertFalse(m3.find());
+        Matcher m4 = p.matcher(command4);
+        Assert.assertTrue(m4.find());
+        Matcher m5 = p.matcher(command5);
+        Assert.assertTrue(m5.find());
     }
 }

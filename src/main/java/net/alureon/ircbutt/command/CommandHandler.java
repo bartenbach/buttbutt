@@ -83,18 +83,18 @@ public final class CommandHandler {
      * @return The bot's intended response in a BotResponse object.
      */
     public BotResponse handleCommand(final GenericMessageEvent event, final String commandString) {
+        /* check for vim search and replace */
+        Pattern p = Pattern.compile("s/.*/.*/g?");
+        Matcher m = p.matcher(commandString.replaceFirst("!", ""));
+        if (m.find()) {
+            return new VimSearchReplaceCommand().executeCommand(butt, event, commandString.replaceFirst("!", ""));
+        }
+
         /* Split the command on whitespace */
         String[] cmd = commandString.split("\\s");
 
         /* remove the '!' from the command */
         cmd[0] = cmd[0].replaceFirst("!", "");
-
-        /* check for vim search and replace */
-        Pattern p = Pattern.compile("s/.*/.*/g?");
-        Matcher m = p.matcher(cmd[0]);
-        if (m.find()) {
-            return new VimSearchReplaceCommand().executeCommand(butt, event, cmd);
-        }
 
         /* Check command map and execute command */
         if (commandMap.containsKey(cmd[0])) {
