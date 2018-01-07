@@ -1,6 +1,7 @@
 package net.alureon.ircbutt.command;
 
 import net.alureon.ircbutt.IRCbutt;
+import net.alureon.ircbutt.command.commands.VimSearchReplaceCommand;
 import net.alureon.ircbutt.command.commands.fact.FactCommand;
 import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.util.StringUtils;
@@ -85,12 +86,15 @@ public final class CommandHandler {
         /* Split the command on whitespace */
         String[] cmd = commandString.split("\\s");
 
-        /* if it's prefixed with a tilde it's a fact request */
-        //if (cmd[0].startsWith("~")) {
-        //}
-
         /* remove the '!' from the command */
         cmd[0] = cmd[0].replaceFirst("!", "");
+
+        /* check for vim search and replace */
+        Pattern p = Pattern.compile("s/.*/.*/g?");
+        Matcher m = p.matcher(cmd[0]);
+        if (m.find()) {
+            return new VimSearchReplaceCommand().executeCommand(butt, event, cmd);
+        }
 
         /* Check command map and execute command */
         if (commandMap.containsKey(cmd[0])) {
