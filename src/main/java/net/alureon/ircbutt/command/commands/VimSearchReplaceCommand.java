@@ -19,8 +19,13 @@ public final class VimSearchReplaceCommand {
      * @return The bot's response, which in this case is a string that has been searched and replaced.
      */
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
-        String replaced = searchAndReplace(cmd[0], butt.getChatStorage().getLastQuoteFrom(event.getUser().getNick()));
-        return new BotResponse(BotIntention.CHAT, null, replaced);
+        if (butt.getChatStorage().hasQuoteFrom(event.getUser().getNick())) {
+            String replaced = searchAndReplace(cmd[0],
+                    butt.getChatStorage().getLastQuoteFrom(event.getUser().getNick()));
+            return new BotResponse(BotIntention.CHAT, null, replaced);
+        } else {
+            return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "butt dont see any message from you");
+        }
     }
 
     /**
