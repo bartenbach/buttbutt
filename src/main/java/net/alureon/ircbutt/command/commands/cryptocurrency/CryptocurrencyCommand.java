@@ -7,6 +7,7 @@ import net.alureon.ircbutt.command.Command;
 import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.util.IRCUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.pircbotx.Colors;
@@ -35,6 +36,22 @@ public final class CryptocurrencyCommand implements Command {
      * How many coins to show for '!top' command.
      */
     private static final int TOP_COINS = 10;
+    /**
+     * This puts a limit on the amount of coins the bot can report in !top.
+     */
+    private static final int MAX_OUTPUT_IN_TOP = 10;
+    /**
+     * The number of extra static characters to pad name with for !top output.
+     */
+    private static final int TOP_NAME_FORMATTING_CHARS = 8;
+    /**
+     * The number of extra static characters to pad rank with in !top output.
+     */
+    private static final int TOP_RANK_FORMATTING_CHARS = 12;
+    /**
+     * The number of extra static characters to pad market cap with in !top output.
+     */
+    private static final int TOP_MARKET_CAP_FORMATTING_CHARS = 21;
 
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
@@ -152,33 +169,26 @@ public final class CryptocurrencyCommand implements Command {
             if (cmd[0].equals("top")) {
                 if (event instanceof MessageEvent) {
                     MessageEvent messageEvent = (MessageEvent) event;
-                    handleTop(currency, nf, messageEvent);
+                    if (cmd.length == 1) {
+                        handleTop(currency, nf, messageEvent, 0, TOP_COINS);
+                    } else if (cmd.length == 3) {
+                        try {
+                            int min = Integer.parseInt(cmd[1]);
+                            int max = Integer.parseInt(cmd[2]);
+                            if (max - min > MAX_OUTPUT_IN_TOP) {
+                                return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(),
+                                        "you tryin to get butt kicked for spam!?!?!");
+                            }
+                            handleTop(currency, nf, messageEvent, min, max);
+                        } catch (NumberFormatException ex) {
+                            return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "!top <min> <max>");
+                        }
+                    }
                 }
                 return null;
             }
             if (!cmd[0].endsWith("v")) {
-                String change;
-                if (currency.get(0).getPercentChange24h().startsWith("-")) {
-                    change = Colors.RED + currency.get(0).getPercentChange24h() + "%" + Colors.NORMAL + Colors.TEAL;
-                } else {
-                    change = Colors.GREEN + currency.get(0).getPercentChange24h() + "%" + Colors.NORMAL + Colors.TEAL;
-                }
-                if (currency.get(0).getMarketCapUsd() != null) {
-
-                    return new BotResponse(BotIntention.CHAT, null, Colors.CYAN + Colors.BOLD
-                            + currency.get(0).getName() + Colors.NORMAL + Colors.TEAL + ": "
-                            + nf.format(Double.valueOf(currency.get(0).getPriceUsd())) + " | Rank: "
-                            + currency.get(0).getRank(), Colors.TEAL + "Market Cap: "
-                            + nf.format(Double.valueOf(currency.get(0).getMarketCapUsd()))
-                            + " | [" + change + "] ");
-                } else {
-                    return new BotResponse(BotIntention.CHAT, null, Colors.CYAN + Colors.BOLD
-                            + currency.get(0).getName() + Colors.NORMAL + Colors.TEAL + ": "
-                            + nf.format(Double.valueOf(currency.get(0).getPriceUsd()))
-                            + " | Rank: " + currency.get(0).getRank()
-                            + " | [" + change + "] ",
-                            "Market Cap: N/A");
-                }
+                return formatCoinRequest(currency, nf);
             } else {
                 return new BotResponse(BotIntention.CHAT, null, currency.get(0).getPriceUsd());
             }
@@ -189,35 +199,127 @@ public final class CryptocurrencyCommand implements Command {
     }
 
     /**
+     * Handles the formatting for the bot's coin request.
+     * @param currency The list of currencies retrieved from the coinmarketcap API.
+     * @param nf The NumberFormat instance for formatting currencies.
+     * @return The bot's formatted response.
+     */
+    private BotResponse formatCoinRequest(final List<CoinMarketCapResponse> currency, final NumberFormat nf) {
+        String dayChange = getColoredChangeText(currency.get(0).getPercentChange24h());
+        String hourChange = getColoredChangeText(currency.get(0).getPercentChange1h());
+        String weekChange = getColoredChangeText(currency.get(0).getPercentChange7d());
+
+        if (currency.get(0).getMarketCapUsd() != null) {
+
+            return new BotResponse(BotIntention.CHAT, null, Colors.CYAN + Colors.BOLD
+                    + currency.get(0).getName() + Colors.NORMAL + Colors.TEAL + ": "
+                    + nf.format(Double.valueOf(currency.get(0).getPriceUsd())) + " | Rank: "
+                    + currency.get(0).getRank() + Colors.TEAL + " | Market Cap: "
+                    + nf.format(Double.valueOf(currency.get(0).getMarketCapUsd())),
+                    Colors.TEAL
+                            + "[Hour " + hourChange + "] | [Day " + dayChange + "] | [Week " + weekChange + "]");
+        } else {
+            return new BotResponse(BotIntention.CHAT, null, Colors.CYAN + Colors.BOLD
+                    + currency.get(0).getName() + Colors.NORMAL + Colors.TEAL + ": "
+                    + nf.format(Double.valueOf(currency.get(0).getPriceUsd()))
+                    + " | Rank: " + currency.get(0).getRank()
+                    + " | [" + dayChange + "] ",
+                    "Market Cap: N/A");
+        }
+    }
+
+    /**
+     * Convenience method for getting colored change text depending on positive or negative change.
+     *
+     * @param change The change for whatever duration of time, be it positive or negative.
+     * @return The formatted string with colors.
+     */
+    private String getColoredChangeText(final String change) {
+        if (change.startsWith("-")) {
+            return Colors.RED + change + "%" + Colors.NORMAL + Colors.TEAL;
+        }
+        return Colors.GREEN + "+" + change + "%" + Colors.NORMAL + Colors.TEAL;
+    }
+
+    /**
      * Handles the top coins command portion.
+     *
      * @param currency the list of top currencies from coinmarketcap
-     * @param nf The numberformat instance for formatting currency
-     * @param event The MessageEvent (for sending channel several messages)
+     * @param nf       The numberformat instance for formatting currency
+     * @param event    The MessageEvent (for sending channel several messages)
+     * @param min      The point in the marketcap rank to start at.
+     * @param max      The point in the marketcap rank to finish at.
      */
     private void handleTop(final List<CoinMarketCapResponse> currency, final NumberFormat nf,
-                           final MessageEvent event) {
-        for (int i = 0; i < TOP_COINS; i++) {
-                String change;
-                String message;
-                if (currency.get(i).getPercentChange24h().startsWith("-")) {
-                    change = Colors.RED + currency.get(i).getPercentChange24h() + "%" + Colors.NORMAL + Colors.TEAL;
-                } else {
-                    change = Colors.GREEN + currency.get(i).getPercentChange24h() + "%" + Colors.NORMAL + Colors.TEAL;
-                }
-                if (currency.get(i).getMarketCapUsd() != null) {
-                    message = Colors.CYAN + Colors.BOLD
-                            + currency.get(i).getName() + Colors.NORMAL + Colors.TEAL + ": "
-                            + nf.format(Double.valueOf(currency.get(i).getPriceUsd())) + " | Rank: "
-                            + currency.get(i).getRank() + Colors.TEAL + " | Market Cap: "
-                            + nf.format(Double.valueOf(currency.get(i).getMarketCapUsd()))
-                            + " | [" + change + "] ";
-                } else {
-                    message = Colors.CYAN + Colors.BOLD
-                            + currency.get(i).getName() + Colors.NORMAL + Colors.TEAL + ": "
-                            + nf.format(Double.valueOf(currency.get(i).getPriceUsd()))
-                            + " | Rank: " + currency.get(i).getRank()
-                            + " | [" + change + "] | Market Cap: N/A";
-                }
+                           final MessageEvent event, final int min, final int max) {
+        int paddingName = 0;
+        int paddingPrice = 0;
+        int paddingRank = 0;
+        int paddingMarketCap = 0;
+        int paddingHourChange = 0;
+        int paddingDayChange = 0;
+        int paddingWeekChange = 0;
+        for (int i = min; i < max; i++) {
+            if (currency.get(i).getName().length() > paddingName) {
+                paddingName = currency.get(i).getName().length();
+            }
+            if (nf.format(Double.valueOf(currency.get(i).getPriceUsd())).length() > paddingPrice) {
+                paddingPrice = nf.format(Double.valueOf(currency.get(i).getPriceUsd())).length();
+            }
+            if (currency.get(i).getRank().length() > paddingRank) {
+                paddingRank = currency.get(i).getRank().length();
+            }
+            if (currency.get(i).getMarketCapUsd().length() > paddingMarketCap) {
+                paddingMarketCap = currency.get(i).getMarketCapUsd().length();
+            }
+            if ((" | [Hour " + getColoredChangeText(currency.get(i).getPercentChange1h()) + "]").length()
+                    > paddingHourChange) {
+                paddingHourChange = (" | [Hour "
+                        + getColoredChangeText(currency.get(i).getPercentChange1h()) + "]").length();
+            }
+            if ((" | [Day " + getColoredChangeText(currency.get(i).getPercentChange24h()) + "]").length()
+                    > paddingDayChange) {
+                paddingDayChange = (" | [Day "
+                        + getColoredChangeText(currency.get(i).getPercentChange24h()) + "]").length();
+            }
+            if ((" | [Week " + getColoredChangeText(currency.get(i).getPercentChange7d()) + "]").length()
+                    > paddingWeekChange) {
+                paddingWeekChange = (" | [Week "
+                        + getColoredChangeText(currency.get(i).getPercentChange7d()) + "]").length();
+            }
+        }
+        paddingName += TOP_NAME_FORMATTING_CHARS;
+        paddingRank += TOP_RANK_FORMATTING_CHARS;
+        paddingMarketCap += TOP_MARKET_CAP_FORMATTING_CHARS;
+        log.debug("Name padding: " + paddingName);
+        log.debug("Value padding: " + paddingPrice);
+        log.debug("Rank padding: " + paddingRank);
+        log.debug("MarketCap padding: " + paddingMarketCap);
+        log.debug("1h padding: " + paddingHourChange);
+        log.debug("1d padding: " + paddingDayChange);
+        log.debug("1w padding: " + paddingWeekChange);
+        for (int i = min; i < max; i++) {
+            String hourChange = getColoredChangeText(currency.get(i).getPercentChange1h());
+            String dayChange = getColoredChangeText(currency.get(i).getPercentChange24h());
+            String weekChange = getColoredChangeText(currency.get(i).getPercentChange7d());
+            String message =
+                    // name
+                    StringUtils.rightPad(Colors.CYAN + Colors.BOLD + currency.get(i).getName() + Colors.NORMAL
+                            + Colors.TEAL, paddingName)
+                    // price
+                    + " | " // no need to be padded
+                    + StringUtils.leftPad(nf.format(Double.valueOf(currency.get(i).getPriceUsd())), paddingPrice)
+                    // rank
+                    + StringUtils.rightPad(" | Rank: " + currency.get(i).getRank() + Colors.TEAL, paddingRank)
+                    // market cap
+                    + StringUtils.rightPad(" | Market Cap: "
+                    + nf.format(Double.valueOf(currency.get(i).getMarketCapUsd())), paddingMarketCap)
+                    // hourly change
+                    + StringUtils.leftPad(" | [Hour " + hourChange + "]", paddingHourChange)
+                    // daily change
+                    + StringUtils.leftPad(" | [Day " + dayChange + "]", paddingDayChange)
+                    // weekly change
+                    + StringUtils.leftPad(" | [Week " + weekChange + "]", paddingWeekChange);
             IRCUtils.sendChannelMessage(event.getChannel(), message);
         }
     }

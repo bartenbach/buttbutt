@@ -38,10 +38,11 @@ dependencies {
     compile 'org.jsoup:jsoup:1.11.2' // for web scraping
     compile 'net.sourceforge.jeval:jeval:0.9.4' // for math operations
     compile 'com.google.code.gson:gson:2.8.2' // for cryptocurrency package
+    compile 'org.apache.commons:commons-lang3:3.7' // for padding strings
 }
 
 sourceCompatibility = 1.8
-version = '0.6.8-indev'
+version = '0.6.9-indev'
 
 jar {
     dependsOn configurations.runtime
