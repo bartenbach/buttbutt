@@ -17,10 +17,10 @@ deploy:
     all_branches: true
 notifications:
   irc:
+    channels:
+      - "chat.freenode.net#afterlunch"
     template:
       - "%{repository_slug}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
       - "Build details : %{build_url}"
-    channels:
-      - "chat.freenode.net#afterlunch"
     use_notice: true
     skip_join: true
