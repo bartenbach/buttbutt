@@ -17,4 +17,7 @@ deploy:
     all_branches: true
 notifications:
   irc:
-    - "chat.freenode.net#afterlunch"
+    channels:
+      - "chat.freenode.net#afterlunch"
+    use_notice: true
+    skip_join: true
