@@ -1,5 +1,7 @@
 plugins {
   id 'io.spring.dependency-management' version '1.0.1.RELEASE'
+  // this spotbugs plugin would be great if it didn't fail the build over system.exit
+  //  id "com.github.spotbugs" version "1.6.0"
 }
 
 apply plugin: 'java'

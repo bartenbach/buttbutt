@@ -147,6 +147,8 @@ public final class FactTable {
                     } catch (NumberFormatException ex) {
                         // we don't really care.  this might not be a number.
                         log.warn("Tried to parse '" + name + "' as an integer.  I guess it's not.  Who knew?");
+                    } finally {
+                        rs.close();
                     }
                 }
                 rs.close();
