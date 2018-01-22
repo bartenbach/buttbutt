@@ -34,7 +34,7 @@ dependencies {
     compile 'org.reflections:reflections:0.9.11' // reflections API for interfaces
     compile 'org.pircbotx:pircbotx:2.1' // the irc bot API
     compile 'org.yaml:snakeyaml:1.14' // for the yaml config file
-    compile 'mysql:mysql-connector-java:5.1.36' // for mysql connection
+    compile 'mysql:mysql-connector-java:5.1.45' // for mysql connection
     compile 'org.jsoup:jsoup:1.11.2' // for web scraping
     compile 'net.sourceforge.jeval:jeval:0.9.4' // for math operations
     compile 'com.google.code.gson:gson:2.8.2' // for cryptocurrency package
@@ -42,7 +42,7 @@ dependencies {
 }
 
 sourceCompatibility = 1.8
-version = '0.7.0-indev'
+version = '0.7.1-indev'
 
 jar {
     dependsOn configurations.runtime

@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <!-- standard maven stuff -->
   <groupId>net.alureon.ircbutt</groupId>
   <artifactId>IRCbutt</artifactId>
-  <version>0.6.6-indev</version>
-
+  <version>0.7.1-indev</version>
   <!-- build properties -->
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
-
   <!-- build plugins (create a jar with manifest) -->
   <build>
     <plugins>
@@ -40,16 +37,28 @@
         <version>1.6</version>
         <executions>
           <execution>
-          <phase>package</phase>
+            <phase>package</phase>
             <goals>
               <goal>shade</goal>
             </goals>
           </execution>
         </executions>
       </plugin>
+      <!-- run dependencycheck -->
+      <plugin>
+        <groupId>org.owasp</groupId>
+        <artifactId>dependency-check-maven</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
-
   <!-- dependencies -->
   <dependencies>
     <dependency>
@@ -91,7 +100,7 @@
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.36</version>
+      <version>5.1.45</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -125,8 +134,6 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-
   <!-- keeps log4j deps in sync -->
   <dependencyManagement>
     <dependencies>
@@ -139,5 +146,4 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
 </project>
