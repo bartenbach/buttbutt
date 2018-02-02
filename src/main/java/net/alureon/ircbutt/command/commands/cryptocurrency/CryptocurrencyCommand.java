@@ -154,6 +154,8 @@ public final class CryptocurrencyCommand implements Command {
             url = "https://api.coinmarketcap.com/v1/ticker/omisego/";
         } else if (cmd[0].startsWith("ardr")) {
             url = "https://api.coinmarketcap.com/v1/ticker/ardor/";
+        } else if (cmd[0].startsWith("mdc")) {
+            url = "https://api.coinmarketcap.com/v1/ticker/madcoin/";
         } else if (cmd[0].startsWith("strat")) {
             url = "https://api.coinmarketcap.com/v1/ticker/stratis/";
         } else if (cmd[0].startsWith("top") || (cmd[0].equals("party")) || (cmd[0].equals("dump"))) {
@@ -282,7 +284,8 @@ public final class CryptocurrencyCommand implements Command {
                     + partyCoin.getRank() + Colors.TEAL + " | Market Cap: "
                     + nf.format(Double.valueOf(partyCoin.getMarketCapUsd())),
                     Colors.TEAL
-                            + "[Hour " + getColoredChangeText(partyCoin.getPercentChange24h()) + "]");
+                            + "[Hour " + getColoredChangeText(partyCoin.getPercentChange1h()) + "] | "
+                            + "[Day " + getColoredChangeText(partyCoin.getPercentChange24h()) + "]");
         } else {
             log.error("Failed to find a partying coin!");
             return new BotResponse(BotIntention.NO_REPLY, null, null);
@@ -399,7 +402,7 @@ public final class CryptocurrencyCommand implements Command {
                 "poev", "aion", "aionv", "fc2", "fc2v", "cnd", "cndv", "put", "putv", "trump", "trumpv", "mana",
                 "manav", "lsk", "lskv", "tnt", "tntv", "fuel", "fuelv", "zrx", "zrxv", "dbg", "dbgv", "fun", "funv",
                 "ethos", "ethosv", "pot", "potv", "1st", "1stv", "bts", "btsv", "omg", "omgv", "ardr", "ardrv", "strat",
-                "stratv", "top", "party", "dump"));
+                "stratv", "top", "party", "dump", "mdc", "mdcv"));
     }
 
     @Override

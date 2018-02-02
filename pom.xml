@@ -4,7 +4,7 @@
   <!-- standard maven stuff -->
   <groupId>net.alureon.ircbutt</groupId>
   <artifactId>IRCbutt</artifactId>
-  <version>0.7.2-indev</version>
+  <version>0.7.4-indev</version>
   <!-- build properties -->
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

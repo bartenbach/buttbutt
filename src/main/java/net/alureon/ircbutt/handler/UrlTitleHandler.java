@@ -67,7 +67,8 @@ final class UrlTitleHandler {
             if (url.startsWith("https://youtube") || url.startsWith("http://youtube")
                     || url.startsWith("http://www.youtube") || url.startsWith("https://www.youtube")
                     || url.startsWith("http://www.youtu.be") || url.startsWith("https://www.youtu.be")
-                    || url.startsWith("http://youtu.be") || url.startsWith("https://youtu.be")) {
+                    || url.startsWith("http://youtu.be") || url.startsWith("https://youtu.be")
+                    || url.startsWith("http://m.youtube") || url.startsWith("https://m.youtube")) {
                 log.debug("Handling youtube url...");
                 Document doc = Jsoup.connect(url).get();
                 Elements script = doc.select("script");  //to get the script content
