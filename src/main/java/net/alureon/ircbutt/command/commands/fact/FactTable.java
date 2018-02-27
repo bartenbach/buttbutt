@@ -59,7 +59,7 @@ public final class FactTable {
      * @param item The KEY we are searching the database for.
      * @return The VALUE the database holds for said key.
      */
-    String queryKnowledge(final String item) {
+    public String queryKnowledge(final String item) {
         String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
                 + "_knowledge` WHERE item=?";
         try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query)) {
@@ -111,6 +111,28 @@ public final class FactTable {
             if (rs != null) {
                 if (rs.next()) {
                     return rs.getString("data");
+                }
+            } else {
+                log.error("Received null ResultSet in FactTable.  Cannot retrieve random fact.");
+            }
+        } catch (SQLException ex) {
+            log.error("SQL Exception has occurred. ", ex.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Retrieves a completely random fact's VALUE from the database.
+     * @return the VALUE of a random fact.
+     */
+    public String getRandomFactName() {
+        String query = "SELECT * FROM `" + butt.getYamlConfigurationFile().getSqlTablePrefix()
+                + "_knowledge` ORDER BY RAND() LIMIT 1";
+        try (PreparedStatement ps = butt.getSqlManager().getPreparedStatement(query);
+             ResultSet rs = butt.getSqlManager().getResultSet(ps)) {
+            if (rs != null) {
+                if (rs.next()) {
+                    return rs.getString("item");
                 }
             } else {
                 log.error("Received null ResultSet in FactTable.  Cannot retrieve random fact.");

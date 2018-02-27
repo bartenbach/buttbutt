@@ -16,6 +16,7 @@ package net.alureon.ircbutt;
  **/
 
 import net.alureon.ircbutt.file.YAMLConfigurationFile;
+import net.alureon.ircbutt.game.GameManager;
 import net.alureon.ircbutt.handler.*;
 import net.alureon.ircbutt.command.CommandHandler;
 import net.alureon.ircbutt.command.commands.MoreCommand;
@@ -62,6 +63,10 @@ public final class IRCbutt {
      * Field for the SqlManager object.
      */
     private SqlManager sqlManager;
+    /**
+     * Field for the GameManager object.
+     */
+    private GameManager gameManager = new GameManager();
     /**
      * Instantiate the FactTable object.
      */
@@ -165,6 +170,14 @@ public final class IRCbutt {
      */
     public CommandHandler getCommandHandler() {
         return this.commandHandler;
+    }
+
+    /**
+     * Returns the GameManager.
+     * @return GameManager
+     */
+    public GameManager getGameManager() {
+        return gameManager;
     }
 
     /**
