@@ -17,9 +17,11 @@ import java.util.Arrays;
 public final class GuessingGameCommand implements Command {
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
-        if (butt.getGameManager().getGameActive()) {
+        if (butt.getGameManager().getGameActive() && butt.getGameManager().getActiveGame() instanceof GuessingGame) {
+            GuessingGame game = (GuessingGame) butt.getGameManager().getActiveGame();
             if (cmd[0].equals("game")) {
-                return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "a game is already active!");
+                return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "a game is already active!",
+                        "Current hint is: " + game.getCurrentHint());
             } else if (cmd[0].equals("endgame")) {
                 // print game results
                 StringBuilder sb = new StringBuilder();
@@ -42,10 +44,11 @@ public final class GuessingGameCommand implements Command {
                 butt.getGameManager().setActiveGame(guessingGame);
                 butt.getGameManager().setGameActive(true);
                 String fact = butt.getFactTable().getRandomFactName();
+                String hint = butt.getFactTable().queryKnowledge(fact);
                 guessingGame.setCurrentMysteryFactName(fact);
+                guessingGame.setCurrentHint(hint);
                 return new BotResponse(BotIntention.CHAT, null,
-                        "Guessing Game Started!  The first mystery fact is...",
-                        butt.getFactTable().queryKnowledge(fact));
+                        "Guessing Game Started!  The first mystery fact is...", hint);
             } else {
                 return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "!game <player1> <player2>");
             }

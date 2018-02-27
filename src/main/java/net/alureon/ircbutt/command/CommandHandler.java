@@ -4,6 +4,7 @@ import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.command.commands.VimSearchReplaceCommand;
 import net.alureon.ircbutt.command.commands.fact.FactCommand;
 import net.alureon.ircbutt.game.GuessingGame;
+import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.util.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -97,6 +98,14 @@ public final class CommandHandler {
         /* remove the '!' from the command */
         cmd[0] = cmd[0].replaceFirst("!", "");
 
+        if (butt.getGameManager().getGameActive()) {
+            if (cmd[0].equals("fs") || cmd[0].equals("ff")
+                    || cmd[0].equals("factfind") || cmd[0].equals("factsearch")) {
+                return new BotResponse(BotIntention.CHAT, null,
+                        "FactFind disabled while game is in session!  To search facts, end game with !endgame");
+            }
+        }
+
         /* Check command map and execute command */
         if (commandMap.containsKey(cmd[0])) {
             Command command = commandMap.get(cmd[0]);
@@ -108,6 +117,7 @@ public final class CommandHandler {
             }
             return command.executeCommand(butt, event, cmd);
         } else {
+            // check if the command is the answer to a game in session
             if (butt.getGameManager().getGameActive()
                     && butt.getGameManager().getActiveGame() instanceof GuessingGame) {
                 GuessingGame game = (GuessingGame) butt.getGameManager().getActiveGame();
@@ -116,8 +126,6 @@ public final class CommandHandler {
                 }
             }
             return new FactCommand().executeCommand(butt, event, cmd);
-            //log.info("Received unregistered command: " + StringUtils.arrayToString(cmd));
-            //return new BotResponse(BotIntention.NO_REPLY, null, null);
         }
     }
 

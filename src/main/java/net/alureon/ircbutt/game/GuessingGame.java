@@ -27,6 +27,10 @@ public final class GuessingGame implements Game {
      * The current name of the fact users will guess.
      */
     private String currentMysteryFactName;
+    /**
+     * The current hint.
+     */
+    private String currentHint;
 
     /**
      * Creates a new Guessing Game.
@@ -56,6 +60,22 @@ public final class GuessingGame implements Game {
     }
 
     /**
+     * Get the current hint.
+     * @return String - the current hint
+     */
+    public String getCurrentHint() {
+        return this.currentHint;
+    }
+
+    /**
+     * Set the current hint.
+     * @param hint The hint
+     */
+    public void setCurrentHint(final String hint) {
+        this.currentHint = hint;
+    }
+
+    /**
      * Return the current mystery fact name.
      * @return the current name players are guessing.
      */
@@ -71,9 +91,11 @@ public final class GuessingGame implements Game {
     public BotResponse givePlayerPoint(final String player) {
         this.scoreboard.put(player, this.scoreboard.get(player) + 1);
         String newItem = butt.getFactTable().getRandomFactName();
+        String newHint = butt.getFactTable().queryKnowledge(newItem);
         this.currentMysteryFactName = newItem;
+        this.currentHint = newHint;
         return new BotResponse(BotIntention.CHAT, null, player + " got it!  The next fact is...",
-                butt.getFactTable().queryKnowledge(newItem));
+                newHint);
     }
 
     /**
