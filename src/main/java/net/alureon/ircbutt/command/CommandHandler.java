@@ -98,12 +98,10 @@ public final class CommandHandler {
         /* remove the '!' from the command */
         cmd[0] = cmd[0].replaceFirst("!", "");
 
-        if (butt.getGameManager().getGameActive()) {
-            if (cmd[0].equals("fs") || cmd[0].equals("ff")
-                    || cmd[0].equals("factfind") || cmd[0].equals("factsearch")) {
-                return new BotResponse(BotIntention.CHAT, null,
-                        "FactFind disabled while game is in session!  To search facts, end game with !endgame");
-            }
+        if (butt.getGameManager().getGameActive() && (cmd[0].equals("fs") || cmd[0].equals("ff")
+                || cmd[0].equals("factfind") || cmd[0].equals("factsearch"))) {
+            return new BotResponse(BotIntention.CHAT, null,
+                    "FactFind disabled while game is in session!  To search facts, end game with !endgame");
         }
 
         /* Check command map and execute command */
