@@ -19,6 +19,9 @@ public final class GameManager {
      * @param bool true if a game is active, otherwise false.
      */
     public void setGameActive(final boolean bool) {
+        if (!bool) {
+            this.game = null;
+        }
         this.gameActive = bool;
     }
 
@@ -35,7 +38,13 @@ public final class GameManager {
      * @param gameparam the game to set active
      */
     public void setActiveGame(final Game gameparam) {
-        this.game = gameparam;
+        if (gameparam == null) {
+            this.gameActive = false;
+            this.game = null;
+        } else {
+            this.game = gameparam;
+            this.gameActive = true;
+        }
     }
 
     /**

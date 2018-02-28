@@ -23,26 +23,19 @@ public final class GuessingGameCommand implements Command {
                 return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "a game is already active!",
                         "Current hint is: " + game.getCurrentHint());
             } else if (cmd[0].equals("endgame")) {
-                // print game results
-                StringBuilder sb = new StringBuilder();
-                sb.append("Game Ended!  Final Scores: ");
-                for (String x : butt.getGameManager().getActiveGame().getPlayers()) {
-                    sb.append(x)
-                            .append(": ")
-                            .append(butt.getGameManager().getActiveGame().getScoreboard().get(x))
-                            .append(" | ");
-                }
+                String scores = game.getScores();
                 butt.getGameManager().setGameActive(false);
-                butt.getGameManager().setActiveGame(null);
-                return new BotResponse(BotIntention.CHAT, null, sb.toString());
+                return new BotResponse(BotIntention.CHAT, null, "Game ended!", scores);
+            } else if (cmd[0].equals("stumped")) {
+                return game.addStumpedPlayer(event.getUser().getNick());
             }
         } else {
             if (cmd.length > 1) {
                 System.out.println("Starting new Guessing game with players: "
-                        + StringUtils.arrayToString(StringUtils.getArgsArray(cmd)));
+                        + StringUtils.arrayToString(StringUtils.getArgsArray(cmd)) + " "
+                        + butt.getYamlConfigurationFile().getBotNickName());
                 GuessingGame guessingGame = new GuessingGame(butt, StringUtils.getArgsArray(cmd));
                 butt.getGameManager().setActiveGame(guessingGame);
-                butt.getGameManager().setGameActive(true);
                 String fact = butt.getFactTable().getRandomFactName();
                 String hint = butt.getFactTable().queryKnowledge(fact);
                 guessingGame.setCurrentMysteryFactName(fact);
@@ -58,7 +51,7 @@ public final class GuessingGameCommand implements Command {
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return new ArrayList<>(Arrays.asList("game", "endgame"));
+        return new ArrayList<>(Arrays.asList("game", "endgame", "stumped"));
     }
 
     @Override
