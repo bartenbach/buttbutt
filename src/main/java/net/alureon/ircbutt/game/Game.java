@@ -7,12 +7,6 @@ import java.util.HashMap;
  */
 public interface Game {
     /**
-     * Get the players in the game.
-     * @return the players.
-     */
-    String[] getPlayers();
-
-    /**
      * Get the scoreboard of the game.
      * @return a hashmap containing every player's score
      */

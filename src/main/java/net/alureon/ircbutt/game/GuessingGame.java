@@ -17,10 +17,6 @@ public final class GuessingGame implements Game {
      */
     private IRCbutt butt;
     /**
-     * The players in this guessing game.
-     */
-    private String[] players;
-    /**
      * Players who have given up on the current round.
      */
     private ArrayList<String> stumpedPlayers;
@@ -43,28 +39,20 @@ public final class GuessingGame implements Game {
 
     /**
      * Creates a new Guessing Game.
+     *
      * @param butt the ircbutt instance needed for sql table access.
-     * @param players the players in this game.
      */
-    public GuessingGame(final IRCbutt butt, final String[] players) {
+    public GuessingGame(final IRCbutt butt) {
         this.butt = butt;
-        this.players = players;
         this.scoreboard = new HashMap<>();
         this.stumpedPlayers = new ArrayList<>();
-        for (String x : players) { // all players start with zero points
-            this.scoreboard.put(x, 0);
-        }
         // if everyone gives up, the bot gets a point
         this.scoreboard.put(butt.getYamlConfigurationFile().getBotNickName(), 0);
     }
 
-    @Override
-    public String[] getPlayers() {
-        return this.players;
-    }
-
     /**
      * Returns the stumped players array.
+     *
      * @return the stumped players array
      */
     private ArrayList<String> getStumpedPlayers() {
@@ -73,6 +61,7 @@ public final class GuessingGame implements Game {
 
     /**
      * Set the current mystery fact name.
+     *
      * @param mysteryFactName The fact name to guess.
      */
     public void setCurrentMysteryFactName(final String mysteryFactName) {
@@ -81,6 +70,7 @@ public final class GuessingGame implements Game {
 
     /**
      * Get the current hint.
+     *
      * @return String - the current hint
      */
     public String getCurrentHint() {
@@ -89,6 +79,7 @@ public final class GuessingGame implements Game {
 
     /**
      * Set the current hint.
+     *
      * @param hint The hint
      */
     public void setCurrentHint(final String hint) {
@@ -97,6 +88,7 @@ public final class GuessingGame implements Game {
 
     /**
      * Return the current mystery fact name.
+     *
      * @return the current name players are guessing.
      */
     public String getCurrentMysteryFactName() {
@@ -105,10 +97,15 @@ public final class GuessingGame implements Game {
 
     /**
      * Increments a players score.
+     *
      * @param player the player to give one point to.
      * @return The bot's response to a correct guess.
      */
     public BotResponse givePlayerPoint(final String player) {
+        // if the player hasn't answered a question yet, just add them to the game
+        if (!this.scoreboard.containsKey(player)) {
+            scoreboard.put(player, 0);
+        }
         this.scoreboard.put(player, this.scoreboard.get(player) + 1);
         if (scoreboard.get(player) >= WINNING_SCORE) {
             BotResponse response = announceVictory(player);
@@ -120,6 +117,7 @@ public final class GuessingGame implements Game {
 
     /**
      * Announces the winner of the latest game.
+     *
      * @param player The player who scored the winning point.
      * @return the bot's response
      */
@@ -130,24 +128,25 @@ public final class GuessingGame implements Game {
 
     /**
      * Gets a string that contains all player scores from the current game in the scoreboard.
+     *
      * @return A string containing all player scores
      */
     public String getScores() {
         StringBuilder sb = new StringBuilder();
         sb.append("Final Scores: ");
-        for (int i = 0; i < players.length; i++) {
-            sb.append(players[i])
+        // append all players
+        for (String x : this.scoreboard.keySet()) {
+            sb.append(x)
                     .append(": ")
-                    .append(this.scoreboard.get(players[i]));
-            if (i != players.length - 1) {
-               sb.append(" | ");
-            }
+                    .append(this.scoreboard.get(x))
+                    .append(" | ");
         }
         return sb.toString();
     }
 
     /**
      * Starts a new round of the guessing game.
+     *
      * @param player The player who guessed the previous fact name.
      * @return The Bot's Response
      */
@@ -163,6 +162,7 @@ public final class GuessingGame implements Game {
 
     /**
      * Retrieves the scoreboard for this game.
+     *
      * @return (hashmap) the scoreboard.
      */
     public HashMap<String, Integer> getScoreboard() {
@@ -171,6 +171,7 @@ public final class GuessingGame implements Game {
 
     /**
      * Adds a player to the stumped players list.
+     *
      * @param nick The nick to add to the stumped players list.
      * @return the bot's response
      */
@@ -190,20 +191,16 @@ public final class GuessingGame implements Game {
                             + ".  The next fact is...", newHint);
         } else {
             return new BotResponse(BotIntention.CHAT, null, nick + " is stumped on this one!",
-                    this.players.length - this.getStumpedPlayers().size() + " players remain");
+                    this.scoreboard.size() - this.getStumpedPlayers().size() + " players remain");
         }
     }
 
     /**
      * Checks to see if all players have been stumped.
+     *
      * @return true if all players have given up
      */
     private boolean checkAllPlayersStumped() {
-        for (String x : this.players) {
-            if (!this.stumpedPlayers.contains(x) && !x.equals(butt.getYamlConfigurationFile().getBotNickName())) {
-                return false;
-            }
-        }
-        return true;
+        return this.stumpedPlayers.size() == this.scoreboard.size() - 1;
     }
 }

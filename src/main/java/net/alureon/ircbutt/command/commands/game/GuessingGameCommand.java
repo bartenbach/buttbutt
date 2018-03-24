@@ -19,10 +19,10 @@ public final class GuessingGameCommand implements Command {
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
         if (butt.getGameManager().getGameActive() && butt.getGameManager().getActiveGame() instanceof GuessingGame) {
             GuessingGame game = (GuessingGame) butt.getGameManager().getActiveGame();
-            if (cmd[0].equals("game")) {
+            if (cmd[0].equals("guessinggame")) {
                 return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "a game is already active!",
                         "Current hint is: " + game.getCurrentHint());
-            } else if (cmd[0].equals("endgame")) {
+            } else if (cmd[0].equals("endguessinggame")) {
                 String scores = game.getScores();
                 butt.getGameManager().setGameActive(false);
                 return new BotResponse(BotIntention.CHAT, null, "Game ended!", scores);
@@ -30,11 +30,10 @@ public final class GuessingGameCommand implements Command {
                 return game.addStumpedPlayer(event.getUser().getNick());
             }
         } else {
-            if (cmd.length > 1) {
                 System.out.println("Starting new Guessing game with players: "
                         + StringUtils.arrayToString(StringUtils.getArgsArray(cmd)) + " "
                         + butt.getYamlConfigurationFile().getBotNickName());
-                GuessingGame guessingGame = new GuessingGame(butt, StringUtils.getArgsArray(cmd));
+                GuessingGame guessingGame = new GuessingGame(butt);
                 butt.getGameManager().setActiveGame(guessingGame);
                 String fact = butt.getFactTable().getRandomFactName();
                 String hint = butt.getFactTable().queryKnowledge(fact);
@@ -42,16 +41,13 @@ public final class GuessingGameCommand implements Command {
                 guessingGame.setCurrentHint(hint);
                 return new BotResponse(BotIntention.CHAT, null,
                         "Guessing Game Started!  The first mystery fact is...", hint);
-            } else {
-                return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "!game <player1> <player2>");
-            }
         }
         return new BotResponse(BotIntention.NO_REPLY, null, null);
     }
 
     @Override
     public ArrayList<String> getCommandAliases() {
-        return new ArrayList<>(Arrays.asList("game", "endgame", "stumped"));
+        return new ArrayList<>(Arrays.asList("guessinggame", "endguessinggame", "stumped"));
     }
 
     @Override

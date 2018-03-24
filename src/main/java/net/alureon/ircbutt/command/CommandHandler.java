@@ -4,6 +4,7 @@ import net.alureon.ircbutt.IRCbutt;
 import net.alureon.ircbutt.command.commands.VimSearchReplaceCommand;
 import net.alureon.ircbutt.command.commands.fact.FactCommand;
 import net.alureon.ircbutt.game.GuessingGame;
+import net.alureon.ircbutt.game.RegexGame;
 import net.alureon.ircbutt.response.BotIntention;
 import net.alureon.ircbutt.response.BotResponse;
 import net.alureon.ircbutt.util.StringUtils;
@@ -98,10 +99,26 @@ public final class CommandHandler {
         /* remove the '!' from the command */
         cmd[0] = cmd[0].replaceFirst("!", "");
 
+        /* guessing game */
         if (butt.getGameManager().getGameActive() && (cmd[0].equals("fs") || cmd[0].equals("ff")
                 || cmd[0].equals("factfind") || cmd[0].equals("factsearch"))) {
             return new BotResponse(BotIntention.CHAT, null,
                     "FactFind disabled while game is in session!  To search facts, end game with !endgame");
+        }
+
+        /* regex game */
+        if (butt.getGameManager().getGameActive() && butt.getGameManager().getActiveGame() instanceof RegexGame) {
+            RegexGame regexGame = (RegexGame) butt.getGameManager().getActiveGame();
+            String regex = commandString.replaceFirst("!", "");
+            Pattern p2 = Pattern.compile(regex);
+            Matcher m2 = p2.matcher(regexGame.getShouldMatch());
+            if (m2.find()) {
+                Matcher m3 = p.matcher(regexGame.getShouldNotMatch());
+                if (!m3.find()) {
+                    butt.getGameManager().setActiveGame(null);
+                    return new BotResponse(BotIntention.HIGHLIGHT, event.getUser(), "Nice job!");
+                }
+            }
         }
 
         /* Check command map and execute command */
@@ -116,8 +133,7 @@ public final class CommandHandler {
             return command.executeCommand(butt, event, cmd);
         } else {
             // check if the command is the answer to a game in session
-            if (butt.getGameManager().getGameActive()
-                    && butt.getGameManager().getActiveGame() instanceof GuessingGame) {
+            if (butt.getGameManager().getGameActive() && butt.getGameManager().getActiveGame() instanceof GuessingGame) {
                 GuessingGame game = (GuessingGame) butt.getGameManager().getActiveGame();
                 if (cmd[0].equals("~" + game.getCurrentMysteryFactName())) {
                     return game.givePlayerPoint(event.getUser().getNick());
