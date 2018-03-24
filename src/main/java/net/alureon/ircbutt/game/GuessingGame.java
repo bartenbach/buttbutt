@@ -141,7 +141,7 @@ public final class GuessingGame implements Game {
                     .append(this.scoreboard.get(x))
                     .append(" | ");
         }
-        return sb.toString();
+        return sb.substring(0, sb.length() - 2);
     }
 
     /**
@@ -201,6 +201,6 @@ public final class GuessingGame implements Game {
      * @return true if all players have given up
      */
     private boolean checkAllPlayersStumped() {
-        return this.stumpedPlayers.size() == this.scoreboard.size() - 1;
+        return this.stumpedPlayers.size() >= this.scoreboard.size() - 1;
     }
 }
