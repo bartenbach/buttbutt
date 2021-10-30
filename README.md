@@ -11,11 +11,7 @@ Original ideas, and some borrowed from phrik from #archlinux on freenode
 
 IRCbutt is built using OpenJDK 1.8
 
-You can test it here: http://alureon.net/irc/
-
-(Or you can just join #afterlunch on freenode)
-
-Download builds here: http://alureon.net/ircbutt
+(This project has not been updated in a long time, and may not even work)
 
 ## Running
 
