@@ -13,7 +13,7 @@ Channels:
     - '#afterlunch'
     - '##anotherchannel'
 Server:
-    Hostname: 'chat.freenode.net'
+    Hostname: 'irc.libera.chat'
     SSL: false
     Port: 6667
     Auto-Reconnect: true
