@@ -7,6 +7,8 @@ Bot:
     Message-Delay: 0
     No-Verify: false
     Random-Response-Frequency: 100
+API:
+   CoinMarketCap: 'c08ee199-caf0-4efc-8399-9bcb90c8960a'
 Channels:
     - '#afterlunch'
     - '##anotherchannel'

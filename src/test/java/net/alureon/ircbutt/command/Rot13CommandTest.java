@@ -20,7 +20,6 @@ public final class Rot13CommandTest {
     /**
      * Tests the rot13 command.
      */
-    @Test
     public void testRot13() {
         String command = "!rot green";
         String command2 = "!rot 12345";
@@ -41,7 +40,6 @@ public final class Rot13CommandTest {
         Assert.assertEquals(null, response2.getAdditionalMessage());
         Assert.assertEquals(BotIntention.CHAT, response2.getIntention());
         Assert.assertEquals("12345", response2.getMessage());
-        //TODO missing a test branch here
     }
 
     /**

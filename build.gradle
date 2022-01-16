@@ -44,7 +44,7 @@ dependencies {
 }
 
 sourceCompatibility = 1.17
-version = '0.7.5-indev'
+version = '0.8-indev'
 
 jar {
     dependsOn configurations.runtimeClasspath

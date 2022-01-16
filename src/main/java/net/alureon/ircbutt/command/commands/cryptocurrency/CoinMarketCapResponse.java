@@ -1,342 +1,462 @@
 package net.alureon.ircbutt.command.commands.cryptocurrency;
 
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Represents a response from the CoinMarketCap API.
- */
-public final class CoinMarketCapResponse {
+public class CoinMarketCapResponse {
 
-    /**
-     * This is the same as the name.
-     */
-    @SerializedName("id")
+    @SerializedName("status")
     @Expose
-    private String id;
-    /**
-     * The cryptocurrencies name.
-     */
-    @SerializedName("name")
+    private Status status;
+    @SerializedName("data")
     @Expose
-    private String name;
-    /**
-     * The cryptocurrencies symbol.
-     */
-    @SerializedName("symbol")
-    @Expose
-    private String symbol;
-    /**
-     * The cryptocurrencies rank in CoinMarketCap.
-     */
-    @SerializedName("rank")
-    @Expose
-    private String rank;
-    /**
-     * The current price in USD.
-     */
-    @SerializedName("price_usd")
-    @Expose
-    private String priceUsd;
-    /**
-     * The crypto's price compared to BTC.
-     */
-    @SerializedName("price_btc")
-    @Expose
-    private String priceBtc;
-    /**
-     * The 24hr volume.
-     */
-    @SerializedName("24h_volume_usd")
-    @Expose
-    private String t24hVolumeUsd;
-    /**
-     * The coin's market cap.
-     */
-    @SerializedName("market_cap_usd")
-    @Expose
-    private String marketCapUsd;
-    /**
-     * The available supply.
-     */
-    @SerializedName("available_supply")
-    @Expose
-    private String availableSupply;
-    /**
-     * The total supply.
-     */
-    @SerializedName("total_supply")
-    @Expose
-    private String totalSupply;
-    /**
-     * The max supply.
-     */
-    @SerializedName("max_supply")
-    @Expose
-    private String maxSupply;
-    /**
-     * Change in 1 hour.
-     */
-    @SerializedName("percent_change_1h")
-    @Expose
-    private String percentChange1h;
-    /**
-     * Change in 24 hours.
-     */
-    @SerializedName("percent_change_24h")
-    @Expose
-    private String percentChange24h;
-    /**
-     * Change in 7 days.
-     */
-    @SerializedName("percent_change_7d")
-    @Expose
-    private String percentChange7d;
-    /**
-     * Last updated.
-     */
-    @SerializedName("last_updated")
-    @Expose
-    private String lastUpdated;
+    private Data data;
 
-    /**
-     * Returns the ID.
-     * @return String - the ID.
-     */
-    public String getId() {
-        return id;
+    public Status getStatus() {
+        return status;
     }
 
-    /**
-     * Sets the ID.
-     * @param id The crypto's ID.
-     */
-    public void setId(final String id) {
-        this.id = id;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
-    /**
-     * Gets the name.
-     * @return The crypto name.
-     */
-    public String getName() {
-        return name;
+    public Data getData() {
+        return data;
     }
 
-    /**
-     * Sets the name.
-     * @param name The name to set.
-     */
-    public void setName(final String name) {
-        this.name = name;
+    public void setData(Data data) {
+        this.data = data;
     }
 
-    /**
-     * Get the symbol.
-     * @return The symbol.
-     */
-    public String getSymbol() {
-        return symbol;
+    public class Btc {
+
+        @SerializedName("id")
+        @Expose
+        private Integer id;
+        @SerializedName("name")
+        @Expose
+        private String name;
+        @SerializedName("symbol")
+        @Expose
+        private String symbol;
+        @SerializedName("slug")
+        @Expose
+        private String slug;
+        @SerializedName("num_market_pairs")
+        @Expose
+        private Integer numMarketPairs;
+        @SerializedName("date_added")
+        @Expose
+        private String dateAdded;
+        @SerializedName("tags")
+        @Expose
+        private List<String> tags = null;
+        @SerializedName("max_supply")
+        @Expose
+        private Integer maxSupply;
+        @SerializedName("circulating_supply")
+        @Expose
+        private Integer circulatingSupply;
+        @SerializedName("total_supply")
+        @Expose
+        private Integer totalSupply;
+        @SerializedName("is_active")
+        @Expose
+        private Integer isActive;
+        @SerializedName("platform")
+        @Expose
+        private Object platform;
+        @SerializedName("cmc_rank")
+        @Expose
+        private Integer cmcRank;
+        @SerializedName("is_fiat")
+        @Expose
+        private Integer isFiat;
+        @SerializedName("last_updated")
+        @Expose
+        private String lastUpdated;
+        @SerializedName("quote")
+        @Expose
+        private Quote quote;
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getSymbol() {
+            return symbol;
+        }
+
+        public void setSymbol(String symbol) {
+            this.symbol = symbol;
+        }
+
+        public String getSlug() {
+            return slug;
+        }
+
+        public void setSlug(String slug) {
+            this.slug = slug;
+        }
+
+        public Integer getNumMarketPairs() {
+            return numMarketPairs;
+        }
+
+        public void setNumMarketPairs(Integer numMarketPairs) {
+            this.numMarketPairs = numMarketPairs;
+        }
+
+        public String getDateAdded() {
+            return dateAdded;
+        }
+
+        public void setDateAdded(String dateAdded) {
+            this.dateAdded = dateAdded;
+        }
+
+        public List<String> getTags() {
+            return tags;
+        }
+
+        public void setTags(List<String> tags) {
+            this.tags = tags;
+        }
+
+        public Integer getMaxSupply() {
+            return maxSupply;
+        }
+
+        public void setMaxSupply(Integer maxSupply) {
+            this.maxSupply = maxSupply;
+        }
+
+        public Integer getCirculatingSupply() {
+            return circulatingSupply;
+        }
+
+        public void setCirculatingSupply(Integer circulatingSupply) {
+            this.circulatingSupply = circulatingSupply;
+        }
+
+        public Integer getTotalSupply() {
+            return totalSupply;
+        }
+
+        public void setTotalSupply(Integer totalSupply) {
+            this.totalSupply = totalSupply;
+        }
+
+        public Integer getIsActive() {
+            return isActive;
+        }
+
+        public void setIsActive(Integer isActive) {
+            this.isActive = isActive;
+        }
+
+        public Object getPlatform() {
+            return platform;
+        }
+
+        public void setPlatform(Object platform) {
+            this.platform = platform;
+        }
+
+        public Integer getCmcRank() {
+            return cmcRank;
+        }
+
+        public void setCmcRank(Integer cmcRank) {
+            this.cmcRank = cmcRank;
+        }
+
+        public Integer getIsFiat() {
+            return isFiat;
+        }
+
+        public void setIsFiat(Integer isFiat) {
+            this.isFiat = isFiat;
+        }
+
+        public String getLastUpdated() {
+            return lastUpdated;
+        }
+
+        public void setLastUpdated(String lastUpdated) {
+            this.lastUpdated = lastUpdated;
+        }
+
+        public Quote getQuote() {
+            return quote;
+        }
+
+        public void setQuote(Quote quote) {
+            this.quote = quote;
+        }
+
     }
 
-    /**
-     * Set the symbol.
-     * @param symbol The symbol.
-     */
-    public void setSymbol(final String symbol) {
-        this.symbol = symbol;
+    public class Data {
+
+        @SerializedName("BTC")
+        @Expose
+        private Btc btc;
+
+        public Btc getBtc() {
+            return btc;
+        }
+
+        public void setBtc(Btc btc) {
+            this.btc = btc;
+        }
+
     }
 
-    /**
-     * Get the rank.
-     * @return the rank.
-     */
-    public String getRank() {
-        return rank;
+    public class Quote {
+
+        @SerializedName("USD")
+        @Expose
+        private Usd usd;
+
+        public Usd getUsd() {
+            return usd;
+        }
+
+        public void setUsd(Usd usd) {
+            this.usd = usd;
+        }
+
     }
 
-    /**
-     * Set the rank.
-     * @param rank the rank
-     */
-    public void setRank(final String rank) {
-        this.rank = rank;
+    public class Status {
+
+        @SerializedName("timestamp")
+        @Expose
+        private String timestamp;
+        @SerializedName("error_code")
+        @Expose
+        private Integer errorCode;
+        @SerializedName("error_message")
+        @Expose
+        private Object errorMessage;
+        @SerializedName("elapsed")
+        @Expose
+        private Integer elapsed;
+        @SerializedName("credit_count")
+        @Expose
+        private Integer creditCount;
+        @SerializedName("notice")
+        @Expose
+        private Object notice;
+
+        public String getTimestamp() {
+            return timestamp;
+        }
+
+        public void setTimestamp(String timestamp) {
+            this.timestamp = timestamp;
+        }
+
+        public Integer getErrorCode() {
+            return errorCode;
+        }
+
+        public void setErrorCode(Integer errorCode) {
+            this.errorCode = errorCode;
+        }
+
+        public Object getErrorMessage() {
+            return errorMessage;
+        }
+
+        public void setErrorMessage(Object errorMessage) {
+            this.errorMessage = errorMessage;
+        }
+
+        public Integer getElapsed() {
+            return elapsed;
+        }
+
+        public void setElapsed(Integer elapsed) {
+            this.elapsed = elapsed;
+        }
+
+        public Integer getCreditCount() {
+            return creditCount;
+        }
+
+        public void setCreditCount(Integer creditCount) {
+            this.creditCount = creditCount;
+        }
+
+        public Object getNotice() {
+            return notice;
+        }
+
+        public void setNotice(Object notice) {
+            this.notice = notice;
+        }
     }
 
-    /**
-     * Get the price in USD.
-     * @return the price.
-     */
-    public String getPriceUsd() {
-        return priceUsd;
-    }
+    public class Usd {
 
-    /**
-     * Set the price in USD.
-     * @param priceUsd the price.
-     */
-    public void setPriceUsd(final String priceUsd) {
-        this.priceUsd = priceUsd;
-    }
+        @SerializedName("price")
+        @Expose
+        private Double price;
+        @SerializedName("volume_24h")
+        @Expose
+        private Double volume24h;
+        @SerializedName("volume_change_24h")
+        @Expose
+        private Double volumeChange24h;
+        @SerializedName("percent_change_1h")
+        @Expose
+        private Double percentChange1h;
+        @SerializedName("percent_change_24h")
+        @Expose
+        private Double percentChange24h;
+        @SerializedName("percent_change_7d")
+        @Expose
+        private Double percentChange7d;
+        @SerializedName("percent_change_30d")
+        @Expose
+        private Double percentChange30d;
+        @SerializedName("percent_change_60d")
+        @Expose
+        private Double percentChange60d;
+        @SerializedName("percent_change_90d")
+        @Expose
+        private Double percentChange90d;
+        @SerializedName("market_cap")
+        @Expose
+        private Double marketCap;
+        @SerializedName("market_cap_dominance")
+        @Expose
+        private Double marketCapDominance;
+        @SerializedName("fully_diluted_market_cap")
+        @Expose
+        private Double fullyDilutedMarketCap;
+        @SerializedName("last_updated")
+        @Expose
+        private String lastUpdated;
 
-    /**
-     * Get the price in BTC.
-     * @return the price in BTC.
-     */
-    public String getPriceBtc() {
-        return priceBtc;
-    }
+        public Double getPrice() {
+            return price;
+        }
 
-    /**
-     * Set the price in BTC.
-     * @param priceBtc The price in BTC.
-     */
-    public void setPriceBtc(final String priceBtc) {
-        this.priceBtc = priceBtc;
-    }
+        public void setPrice(Double price) {
+            this.price = price;
+        }
 
-    /**
-     * Get the 24hr volume.
-     * @return the 24hr volume
-     */
-    public String get24hVolumeUsd() {
-        return t24hVolumeUsd;
-    }
+        public Double getVolume24h() {
+            return volume24h;
+        }
 
-    /**
-     * Set the 24hr volume.
-     * @param d24hVolumeUsd The 24 hour volume
-     */
-    public void set24hVolumeUsd(final String d24hVolumeUsd) {
-        this.t24hVolumeUsd = d24hVolumeUsd;
-    }
+        public void setVolume24h(Double volume24h) {
+            this.volume24h = volume24h;
+        }
 
-    /**
-     * Get the coin market cap in USD.
-     * @return the coin market cap in USD.
-     */
-    public String getMarketCapUsd() {
-        return marketCapUsd;
-    }
+        public Double getVolumeChange24h() {
+            return volumeChange24h;
+        }
 
-    /**
-     * Set the coin market cap in USD.
-     * @param marketCapUsd the coin market cap in USD.
-     */
-    public void setMarketCapUsd(final String marketCapUsd) {
-        this.marketCapUsd = marketCapUsd;
-    }
+        public void setVolumeChange24h(Double volumeChange24h) {
+            this.volumeChange24h = volumeChange24h;
+        }
 
-    /**
-     * Get the available supply.
-     * @return the available supply.
-     */
-    public String getAvailableSupply() {
-        return availableSupply;
-    }
+        public Double getPercentChange1h() {
+            return percentChange1h;
+        }
 
-    /**
-     * Set the available supply.
-     * @param availableSupply the available supply.
-     */
-    public void setAvailableSupply(final String availableSupply) {
-        this.availableSupply = availableSupply;
-    }
+        public void setPercentChange1h(Double percentChange1h) {
+            this.percentChange1h = percentChange1h;
+        }
 
-    /**
-     * Get total supply.
-     * @return the total supply.
-     */
-    public String getTotalSupply() {
-        return totalSupply;
-    }
+        public Double getPercentChange24h() {
+            return percentChange24h;
+        }
 
-    /**
-     * Set the total supply.
-     * @param totalSupply the total supply
-     */
-    public void setTotalSupply(final String totalSupply) {
-        this.totalSupply = totalSupply;
-    }
+        public void setPercentChange24h(Double percentChange24h) {
+            this.percentChange24h = percentChange24h;
+        }
 
-    /**
-     * Get the max supply.
-     * @return the max supply.
-     */
-    public String getMaxSupply() {
-        return maxSupply;
-    }
+        public Double getPercentChange7d() {
+            return percentChange7d;
+        }
 
-    /**
-     * Set the max supply.
-     * @param maxSupply the max supply
-     */
-    public void setMaxSupply(final String maxSupply) {
-        this.maxSupply = maxSupply;
-    }
+        public void setPercentChange7d(Double percentChange7d) {
+            this.percentChange7d = percentChange7d;
+        }
 
-    /**
-     * Get percent change in 1 hr.
-     * @return the percent change in 1hr.
-     */
-    public String getPercentChange1h() {
-        return percentChange1h;
-    }
+        public Double getPercentChange30d() {
+            return percentChange30d;
+        }
 
-    /**
-     * Set the percent change in 1hr.
-     * @param percentChange1h the percent change in 1hr.
-     */
-    public void setPercentChange1h(final String percentChange1h) {
-        this.percentChange1h = percentChange1h;
-    }
+        public void setPercentChange30d(Double percentChange30d) {
+            this.percentChange30d = percentChange30d;
+        }
 
-    /**
-     * Gets the percent change in 24hr.
-     * @return the percent change in 24hr.
-     */
-    public String getPercentChange24h() {
-        return percentChange24h;
-    }
+        public Double getPercentChange60d() {
+            return percentChange60d;
+        }
 
-    /**
-     * Sets the percent change in 24hr.
-     * @param percentChange24h the percent change in 24hr.
-     */
-    public void setPercentChange24h(final String percentChange24h) {
-        this.percentChange24h = percentChange24h;
-    }
+        public void setPercentChange60d(Double percentChange60d) {
+            this.percentChange60d = percentChange60d;
+        }
 
-    /**
-     * Gets the percent change in 7d.
-     * @return The percent change in 7d.
-     */
-    public String getPercentChange7d() {
-        return percentChange7d;
-    }
+        public Double getPercentChange90d() {
+            return percentChange90d;
+        }
 
-    /**
-     * Set the percent change in 7d.
-     * @param percentChange7d the percent change in 7d.
-     */
-    public void setPercentChange7d(final String percentChange7d) {
-        this.percentChange7d = percentChange7d;
-    }
+        public void setPercentChange90d(Double percentChange90d) {
+            this.percentChange90d = percentChange90d;
+        }
 
-    /**
-     * Gets last updated.
-     * @return when last updated.
-     */
-    public String getLastUpdated() {
-        return lastUpdated;
-    }
+        public Double getMarketCap() {
+            return marketCap;
+        }
 
-    /**
-     * Sets when last updated.
-     * @param lastUpdated when last updated.
-     */
-    public void setLastUpdated(final String lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
+        public void setMarketCap(Double marketCap) {
+            this.marketCap = marketCap;
+        }
 
+        public Double getMarketCapDominance() {
+            return marketCapDominance;
+        }
+
+        public void setMarketCapDominance(Double marketCapDominance) {
+            this.marketCapDominance = marketCapDominance;
+        }
+
+        public Double getFullyDilutedMarketCap() {
+            return fullyDilutedMarketCap;
+        }
+
+        public void setFullyDilutedMarketCap(Double fullyDilutedMarketCap) {
+            this.fullyDilutedMarketCap = fullyDilutedMarketCap;
+        }
+
+        public String getLastUpdated() {
+            return lastUpdated;
+        }
+
+        public void setLastUpdated(String lastUpdated) {
+            this.lastUpdated = lastUpdated;
+        }
+
+    }
 }

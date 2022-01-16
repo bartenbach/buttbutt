@@ -15,10 +15,6 @@ public final class RegexGame implements Game {
      * This is the string that the regex CANNOT match.
      */
     private String shouldNotMatch;
-    /**
-     * The scoreboard for the game.
-     */
-    private HashMap<String, Integer> scoreboard;
 
     /**
      * The constructor for a new RegexGame.

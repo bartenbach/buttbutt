@@ -103,6 +103,10 @@ public final class YAMLConfigurationFile {
      * The random response frequency of the bot.  1 in this many chances of buttifying a sentence.
      */
     private int randomResponseFrequency;
+    /**
+     * API key used to interface with the CoinMarketCap API.
+     */
+    private String coinMarketCapApiKey;
 
 
     /**
@@ -126,6 +130,7 @@ public final class YAMLConfigurationFile {
         try (InputStream is = new FileInputStream(CONFIG)) {
             Map<String, Object> map = (Map<String, Object>) yaml.load(is);
             Map<String, Object> botSettings = (Map<String, Object>) map.get("Bot");
+            Map<String, Object> apiSettings = (Map<String, Object>) map.get("API");
             Map<String, Object> serverSettings = (Map<String, Object>) map.get("Server");
             Map<String, Object> sqlSettings = (Map<String, Object>) map.get("SQL");
             this.channelList = (List<String>) map.get("Channels");
@@ -138,6 +143,7 @@ public final class YAMLConfigurationFile {
             this.noVerify = Boolean.parseBoolean(String.valueOf(botSettings.get("No-Verify")));
             this.randomResponseFrequency =
                     Integer.parseInt(String.valueOf(botSettings.get("Random-Response-Frequency")));
+            this.coinMarketCapApiKey = (String) apiSettings.get("CoinMarketCap");
             this.serverHostname = (String) serverSettings.get("Hostname");
             this.serverPort = Integer.parseInt(String.valueOf(serverSettings.get("Port")));
             this.serverAutoReconnect = Boolean.parseBoolean(String.valueOf(serverSettings.get("Auto-Reconnect")));
@@ -339,5 +345,13 @@ public final class YAMLConfigurationFile {
      */
     public int getRandomResponseFrequency() {
         return randomResponseFrequency;
+    }
+
+    /**
+     * Returns the coinmarketcap API key from the configuration file
+     * @return the coinmarketcap API key
+     */
+    public String getCoinMarketCapApiKey() {
+        return this.coinMarketCapApiKey;
     }
 }

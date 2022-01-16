@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/proxa/IRCbutt.svg?branch=master)](https://travis-ci.org/proxa/IRCbutt)
-
 # IRCbutt
 A Java IRC bot inspired by buttbot, with various other functionality.
 
@@ -9,9 +7,7 @@ Original ideas, and some borrowed from phrik from #archlinux on freenode
 
 ## Download
 
-IRCbutt is built using OpenJDK 1.8
-
-(This project has not been updated in a long time, and may not even work)
+IRCbutt is built using OpenJDK 17
 
 ## Running
 

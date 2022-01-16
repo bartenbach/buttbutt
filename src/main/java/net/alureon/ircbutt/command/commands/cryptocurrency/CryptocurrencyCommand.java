@@ -52,114 +52,23 @@ public final class CryptocurrencyCommand implements Command {
      * The number of extra static characters to pad market cap with in !top output.
      */
     private static final int TOP_MARKET_CAP_FORMATTING_CHARS = 21;
+    /**
+     * The root URL for the CoinMarketCap API endpoint.
+     */
+    private static final String MARKETCAP_ENDPOINT = "https://pro-api.coinmarketcap.com/v1/";
 
     @Override
     public BotResponse executeCommand(final IRCbutt butt, final GenericMessageEvent event, final String[] cmd) {
         String url = "";
-        if (cmd[0].startsWith("vtc")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/vertcoin/";
-        } else if (cmd[0].startsWith("btc")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/bitcoin/";
-        } else if (cmd[0].startsWith("eth")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/ethereum/";
-        } else if (cmd[0].startsWith("ltc")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/litecoin/";
-        } else if (cmd[0].startsWith("wtc")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/walton/";
-        } else if (cmd[0].startsWith("xrp")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/ripple/";
-        } else if (cmd[0].startsWith("bch")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/bitcoin-cash/";
-        } else if (cmd[0].startsWith("dash")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/dash/";
-        } else if (cmd[0].startsWith("iota")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/iota/";
-        } else if (cmd[0].startsWith("ada")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/cardano/";
-        } else if (cmd[0].startsWith("xem")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/nem/";
-        } else if (cmd[0].startsWith("btg")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/bitcoin-gold/";
-        } else if (cmd[0].startsWith("xmr")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/monero/";
-        } else if (cmd[0].startsWith("eos")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/eos/";
-        } else if (cmd[0].startsWith("xlm")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/stellar/";
-        } else if (cmd[0].startsWith("zec")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/zcash/";
-        } else if (cmd[0].startsWith("usdt")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/tether/";
-        } else if (cmd[0].startsWith("steem")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/steem/";
-        } else if (cmd[0].startsWith("doge")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/dogecoin/";
-        } else if (cmd[0].startsWith("bnb")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/binance-coin/";
-        } else if (cmd[0].startsWith("gnt")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/golem/";
-        } else if (cmd[0].startsWith("etc")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/ethereum-classic/";
-        } else if (cmd[0].startsWith("neo")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/neo/";
-        } else if (cmd[0].startsWith("ppt")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/populous/";
-        } else if (cmd[0].startsWith("bcc")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/bitconnect/";
-        } else if (cmd[0].startsWith("qtum")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/qtum/";
-        } else if (cmd[0].startsWith("waves")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/waves/";
-        } else if (cmd[0].startsWith("trx")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/tron/";
-        } else if (cmd[0].startsWith("xvg")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/verge/";
-        } else if (cmd[0].startsWith("icx")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/icon/";
-        } else if (cmd[0].startsWith("poe")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/poet/";
-        } else if (cmd[0].startsWith("aion")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/aion/";
-        } else if (cmd[0].startsWith("fc2")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/fuelcoin/";
-        } else if (cmd[0].startsWith("cnd")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/Cindicator/";
-        } else if (cmd[0].startsWith("put")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/putincoin/";
-        } else if (cmd[0].startsWith("trump")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/trumpcoin/";
-        } else if (cmd[0].startsWith("mana")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/Decentraland/";
-        } else if (cmd[0].startsWith("lsk")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/lisk/";
-        } else if (cmd[0].startsWith("tnt")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/Tierion/";
-        } else if (cmd[0].startsWith("fuel")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/Etherparty/";
-        } else if (cmd[0].startsWith("zrx")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/0x/";
-        } else if (cmd[0].startsWith("dgb")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/digibyte/";
-        } else if (cmd[0].startsWith("fun")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/funfair/";
-        } else if (cmd[0].startsWith("ethos")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/ethos/";
-        } else if (cmd[0].startsWith("pot")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/potcoin/";
-        } else if (cmd[0].startsWith("1st")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/firstblood/";
-        } else if (cmd[0].startsWith("bts")) {
-            url = "https://coinmarketcap.com/currencies/bitshares/";
-        } else if (cmd[0].startsWith("omg")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/omisego/";
-        } else if (cmd[0].startsWith("ardr")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/ardor/";
-        } else if (cmd[0].startsWith("mdc")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/madcoin/";
-        } else if (cmd[0].startsWith("strat")) {
-            url = "https://api.coinmarketcap.com/v1/ticker/stratis/";
-        } else if (cmd[0].startsWith("top") || (cmd[0].equals("party")) || (cmd[0].equals("dump"))) {
-            url = "https://api.coinmarketcap.com/v1/ticker/";
+        if (cmd[0].startsWith("top") || (cmd[0].equals("party")) || (cmd[0].equals("dump"))) {
+            url = MARKETCAP_ENDPOINT + "cryptocurrency/listings/latest";
+        } else {
+            for (String x : this.getCommandAliases()) {
+                if (cmd[0].equalsIgnoreCase(x)) {
+                    url = MARKETCAP_ENDPOINT + "quotes/latest/?symbol=" + x;
+                    break;
+                }
+            } 
         }
         try (InputStream is = new URL(url).openStream()) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -195,7 +104,7 @@ public final class CryptocurrencyCommand implements Command {
             if (!cmd[0].endsWith("v")) {
                 return formatCoinRequest(currency, nf);
             } else {
-                return new BotResponse(BotIntention.CHAT, null, currency.get(0).getPriceUsd());
+                return new BotResponse(BotIntention.CHAT, null, String.valueOf(currency.get(0).getData().getBtc().getQuote().getUsd().getPrice()));
             }
         } catch (IOException ex) {
             log.error("Error handling CoinMarketCap request: " + ex.getMessage());
@@ -211,24 +120,24 @@ public final class CryptocurrencyCommand implements Command {
      * @return The bot's formatted response.
      */
     private BotResponse formatCoinRequest(final List<CoinMarketCapResponse> currency, final NumberFormat nf) {
-        String dayChange = getColoredChangeText(currency.get(0).getPercentChange24h());
-        String hourChange = getColoredChangeText(currency.get(0).getPercentChange1h());
-        String weekChange = getColoredChangeText(currency.get(0).getPercentChange7d());
+        String dayChange = getColoredChangeText(currency.get(0).getData().getBtc().getQuote().getUsd().getPercentChange24h());
+        String hourChange = getColoredChangeText(currency.get(0).getData().getBtc().getQuote().getUsd().getPercentChange1h());
+        String weekChange = getColoredChangeText(currency.get(0).getData().getBtc().getQuote().getUsd().getPercentChange7d());
 
-        if (currency.get(0).getMarketCapUsd() != null) {
+        if (currency.get(0).getData().getBtc().getQuote().getUsd().getMarketCap() != null) {
 
             return new BotResponse(BotIntention.CHAT, null, Colors.CYAN + Colors.BOLD
-                    + currency.get(0).getName() + Colors.NORMAL + Colors.TEAL + ": "
-                    + nf.format(Double.valueOf(currency.get(0).getPriceUsd())) + " | Rank: "
-                    + currency.get(0).getRank() + Colors.TEAL + " | Market Cap: "
-                    + nf.format(Double.valueOf(currency.get(0).getMarketCapUsd())),
+                    + currency.get(0).getData().getBtc().getName() + Colors.NORMAL + Colors.TEAL + ": "
+                    + nf.format(currency.get(0).getData().getBtc().getQuote().getUsd().getPrice()) + " | Rank: "
+                    + currency.get(0).getData().getBtc().getCmcRank() + Colors.TEAL + " | Market Cap: "
+                    + nf.format(currency.get(0).getData().getBtc().getQuote().getUsd().getMarketCap()),
                     Colors.TEAL
                             + "[Hour " + hourChange + "] | [Day " + dayChange + "] | [Week " + weekChange + "]");
         } else {
             return new BotResponse(BotIntention.CHAT, null, Colors.CYAN + Colors.BOLD
-                    + currency.get(0).getName() + Colors.NORMAL + Colors.TEAL + ": "
-                    + nf.format(Double.valueOf(currency.get(0).getPriceUsd()))
-                    + " | Rank: " + currency.get(0).getRank()
+                    + currency.get(0).getData().getBtc().getName() + Colors.NORMAL + Colors.TEAL + ": "
+                    + nf.format(Double.valueOf(currency.get(0).getData().getBtc().getQuote().getUsd().getPrice()))
+                    + " | Rank: " + currency.get(0).getData().getBtc().getCmcRank()
                     + " | [" + dayChange + "] ",
                     "Market Cap: N/A");
         }
@@ -240,8 +149,8 @@ public final class CryptocurrencyCommand implements Command {
      * @param change The change for whatever duration of time, be it positive or negative.
      * @return The formatted string with colors.
      */
-    private String getColoredChangeText(final String change) {
-        if (change.startsWith("-")) {
+    private String getColoredChangeText(final double change) {
+    if (change < 0) {
             return Colors.RED + change + "%" + Colors.NORMAL + Colors.TEAL;
         }
         return Colors.GREEN + "+" + change + "%" + Colors.NORMAL + Colors.TEAL;
@@ -261,14 +170,14 @@ public final class CryptocurrencyCommand implements Command {
         CoinMarketCapResponse partyCoin = null;
         for (CoinMarketCapResponse x : currencies) {
             try {
-                double change = Double.parseDouble(x.getPercentChange24h());
+                double change = x.getData().getBtc().getQuote().getUsd().getPercentChange24h();
                 if (cmd.equals("party") && change > result) {
                         partyCoin = x;
                 } else if (cmd.equals("dump") && change < result) {
                         partyCoin = x;
                 }
             } catch (NumberFormatException ex) {
-                log.warn("Failed to parse change data: " + x.getPercentChange24h());
+                log.warn("Failed to parse change data: " + x.getData().getBtc().getQuote().getUsd().getPercentChange24h());
             }
         }
         String color;
@@ -279,13 +188,13 @@ public final class CryptocurrencyCommand implements Command {
         }
         if (partyCoin != null) {
             return new BotResponse(BotIntention.CHAT, null, color + Colors.BOLD
-                    + partyCoin.getName() + Colors.NORMAL + Colors.TEAL + ": "
-                    + nf.format(Double.valueOf(partyCoin.getPriceUsd())) + " | Rank: "
-                    + partyCoin.getRank() + Colors.TEAL + " | Market Cap: "
-                    + nf.format(Double.valueOf(partyCoin.getMarketCapUsd())),
+                    + partyCoin.getData().getBtc().getName() + Colors.NORMAL + Colors.TEAL + ": "
+                    + nf.format(partyCoin.getData().getBtc().getQuote().getUsd().getPrice()) + " | Rank: "
+                    + partyCoin.getData().getBtc().getCmcRank() + Colors.TEAL + " | Market Cap: "
+                    + nf.format(Double.valueOf(partyCoin.getData().getBtc().getQuote().getUsd().getMarketCap())),
                     Colors.TEAL
-                            + "[Hour " + getColoredChangeText(partyCoin.getPercentChange1h()) + "] | "
-                            + "[Day " + getColoredChangeText(partyCoin.getPercentChange24h()) + "]");
+                            + "[Hour " + getColoredChangeText(partyCoin.getData().getBtc().getQuote().getUsd().getPercentChange1h()) + "] | "
+                            + "[Day " + getColoredChangeText(partyCoin.getData().getBtc().getQuote().getUsd().getVolume24h()) + "]");
         } else {
             log.error("Failed to find a partying coin!");
             return new BotResponse(BotIntention.NO_REPLY, null, null);
@@ -311,32 +220,32 @@ public final class CryptocurrencyCommand implements Command {
         int paddingDayChange = 0;
         int paddingWeekChange = 0;
         for (int i = min; i < max; i++) {
-            if (currency.get(i).getName().length() > paddingName) {
-                paddingName = currency.get(i).getName().length();
+            if (currency.get(i).getData().getBtc().getName().length() > paddingName) {
+                paddingName = currency.get(i).getData().getBtc().getName().length();
             }
-            if (nf.format(Double.valueOf(currency.get(i).getPriceUsd())).length() > paddingPrice) {
-                paddingPrice = nf.format(Double.valueOf(currency.get(i).getPriceUsd())).length();
+            if (nf.format(Double.valueOf(currency.get(i).getData().getBtc().getQuote().getUsd().getPrice())).length() > paddingPrice) {
+                paddingPrice = nf.format(Double.valueOf(currency.get(i).getData().getBtc().getQuote().getUsd().getPrice())).length();
             }
-            if (currency.get(i).getRank().length() > paddingRank) {
-                paddingRank = currency.get(i).getRank().length();
+            if (String.valueOf(currency.get(i).getData().getBtc().getCmcRank()).length() > paddingRank) {
+                paddingRank = String.valueOf(currency.get(i).getData().getBtc().getCmcRank()).length();
             }
-            if (currency.get(i).getMarketCapUsd().length() > paddingMarketCap) {
-                paddingMarketCap = currency.get(i).getMarketCapUsd().length();
+            if (String.valueOf(currency.get(i).getData().getBtc().getQuote().getUsd().getMarketCap()).length() > paddingMarketCap) {
+                paddingMarketCap = String.valueOf(currency.get(i).getData().getBtc().getQuote().getUsd().getMarketCap()).length();
             }
-            if ((" | [Hour " + getColoredChangeText(currency.get(i).getPercentChange1h()) + "]").length()
+            if ((" | [Hour " + getColoredChangeText(currency.get(i).getData().getBtc().getQuote().getUsd().getPercentChange1h()) + "]").length()
                     > paddingHourChange) {
                 paddingHourChange = (" | [Hour "
-                        + getColoredChangeText(currency.get(i).getPercentChange1h()) + "]").length();
+                        + getColoredChangeText(currency.get(i).getData().getBtc().getQuote().getUsd().getPercentChange1h()) + "]").length();
             }
-            if ((" | [Day " + getColoredChangeText(currency.get(i).getPercentChange24h()) + "]").length()
+            if ((" | [Day " + getColoredChangeText(currency.get(i).getData().getBtc().getQuote().getUsd().getPercentChange24h()) + "]").length()
                     > paddingDayChange) {
                 paddingDayChange = (" | [Day "
-                        + getColoredChangeText(currency.get(i).getPercentChange24h()) + "]").length();
+                        + getColoredChangeText(currency.get(i).getData().getBtc().getQuote().getUsd().getPercentChange24h()) + "]").length();
             }
-            if ((" | [Week " + getColoredChangeText(currency.get(i).getPercentChange7d()) + "]").length()
+            if ((" | [Week " + getColoredChangeText(currency.get(i).getData().getBtc().getQuote().getUsd().getPercentChange7d()) + "]").length()
                     > paddingWeekChange) {
                 paddingWeekChange = (" | [Week "
-                        + getColoredChangeText(currency.get(i).getPercentChange7d()) + "]").length();
+                        + getColoredChangeText(currency.get(i).getData().getBtc().getQuote().getUsd().getPercentChange7d()) + "]").length();
             }
         }
         paddingName += TOP_NAME_FORMATTING_CHARS;
@@ -350,22 +259,22 @@ public final class CryptocurrencyCommand implements Command {
         log.debug("1d padding: " + paddingDayChange);
         log.debug("1w padding: " + paddingWeekChange);
         for (int i = min; i < max; i++) {
-            String hourChange = getColoredChangeText(currency.get(i).getPercentChange1h());
-            String dayChange = getColoredChangeText(currency.get(i).getPercentChange24h());
-            String weekChange = getColoredChangeText(currency.get(i).getPercentChange7d());
+            String hourChange = getColoredChangeText(currency.get(i).getData().getBtc().getQuote().getUsd().getPercentChange1h());
+            String dayChange = getColoredChangeText(currency.get(i).getData().getBtc().getQuote().getUsd().getPercentChange24h());
+            String weekChange = getColoredChangeText(currency.get(i).getData().getBtc().getQuote().getUsd().getPercentChange7d());
             String message =
                     // name
-                    StringUtils.rightPad(Colors.CYAN + Colors.BOLD + currency.get(i).getName() + Colors.NORMAL
+                    StringUtils.rightPad(Colors.CYAN + Colors.BOLD + currency.get(i).getData().getBtc().getName() + Colors.NORMAL
                             + Colors.TEAL, paddingName)
                             // price
                             + " | " // no need to be padded
-                            + StringUtils.leftPad(nf.format(Double.valueOf(currency.get(i).getPriceUsd())),
+                            + StringUtils.leftPad(nf.format(Double.valueOf(currency.get(i).getData().getBtc().getQuote().getUsd().getPrice())),
                             paddingPrice)
                             // rank
-                            + StringUtils.rightPad(" | Rank: " + currency.get(i).getRank() + Colors.TEAL, paddingRank)
+                            + StringUtils.rightPad(" | Rank: " + currency.get(i).getData().getBtc().getCmcRank() + Colors.TEAL, paddingRank)
                             // market cap
                             + StringUtils.rightPad(" | Market Cap: "
-                            + nf.format(Double.valueOf(currency.get(i).getMarketCapUsd())), paddingMarketCap)
+                            + nf.format(Double.valueOf(currency.get(i).getData().getBtc().getQuote().getUsd().getMarketCap())), paddingMarketCap)
                             // hourly change
                             + StringUtils.leftPad(" | [Hour " + hourChange + "]", paddingHourChange)
                             // daily change

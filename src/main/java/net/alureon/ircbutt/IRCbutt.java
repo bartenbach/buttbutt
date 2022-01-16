@@ -37,7 +37,7 @@ import org.pircbotx.hooks.managers.ThreadedListenerManager;
 /**
  * The main class for IRCbutt.  This class instantiates the bot.
  */
-public final class IRCbutt {
+public class IRCbutt {
 
     /**
      * Grabs the current program version from the build.gradle file.
